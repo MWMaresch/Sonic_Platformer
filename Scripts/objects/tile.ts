@@ -32,8 +32,8 @@ module objects {
         public onFloorCollisionU(player:Player, sensor:Vector2):void {}
         public onFloorCollisionL(player:Player, sensor:Vector2):void {}
 
-        public onCeilingCollision(player:Player):void {}
-
+        public onCeilingCollision(player:Player, sensor:Vector2):void {}
+        
         public onLeftWallCollision(player:Player, sensor:Vector2):boolean { return false; }
 
         public onRightWallCollision(player:Player, sensor:Vector2):boolean { return false; }

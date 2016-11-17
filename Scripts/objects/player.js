@@ -33,6 +33,8 @@ var objects;
             this._gSpeed = 0;
             this._angle = 0;
             this._hcLockTimer = 0;
+            this._higherGround = new objects.Vector2(0, 0);
+            this._lowerGround = new objects.Vector2(0, 0);
             this.x = x;
             this.y = y;
             this.width = this.getBounds().width;
@@ -51,8 +53,8 @@ var objects;
             super.update();
             this._sensorsInAir = 0;
             this._accelerating = false;
-            this._higherGround = 90000;
-            this._lowerGround = -90000;
+            this._higherGround.y = 90000;
+            this._lowerGround.y = -90000;
             if (this._hcLockTimer > 0)
                 this._hcLockTimer--;
             console.log("frame advance");
@@ -122,7 +124,6 @@ var objects;
                 if (this._angle >= 45 && this._angle < 315 && Math.abs(this._gSpeed) < 2.5 && this._hcLockTimer <= 0) {
                     console.log("start falling off of the wall");
                     this._hcLockTimer = 30;
-                    this._startFalling();
                 }
             }
             if (Math.abs(this._velY) > this._TERMINALVELOCITY) {
@@ -157,13 +158,10 @@ var objects;
         checkCollisions(tileGrid) {
             //a lot of the time a sensor's tile will be empty and its method won't even run any code     
             //only do wall collisions if we're moving forwards
-            //if (Math.abs(this._angle) < 10)
-            //{
             if (this._velX < 0)
                 tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)].onLeftWallCollision(this, this._sideSensorL);
             else if (this._velX > 0)
                 tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)].onRightWallCollision(this, this._sideSensorR);
-            //}
             //only check head collision if we're in the air
             if (!this._isGrounded) {
                 this._checkHeadCollision(-this._footRayCastLength, this._topSensorR, tileGrid);
@@ -250,7 +248,6 @@ var objects;
                     this._setAirSensor();
                 }
             }
-            //this._updateSensors();
         }
         _checkHeadCollision(length, sensorPos, tileGrid) {
             var px = Math.floor(sensorPos.x / 16);
@@ -258,16 +255,16 @@ var objects;
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
             //I should remove brackets to save lines
             if (!tileGrid[px][py].isEmpty) {
-                tileGrid[px][py].onCeilingCollision(this);
+                tileGrid[px][py].onCeilingCollision(this, sensorPos);
             }
             else if (!tileGrid[px][Math.floor(py + (length * 0.3) / 16)].isEmpty) {
-                tileGrid[px][Math.floor(py + (length * 0.3) / 16)].onCeilingCollision(this);
+                tileGrid[px][Math.floor(py + (length * 0.3) / 16)].onCeilingCollision(this, sensorPos);
             }
             else if (!tileGrid[px][Math.floor(py + (length * 0.6) / 16)].isEmpty) {
-                tileGrid[px][Math.floor(py + (length * 0.6) / 16)].onCeilingCollision(this);
+                tileGrid[px][Math.floor(py + (length * 0.6) / 16)].onCeilingCollision(this, sensorPos);
             }
             else if (!tileGrid[px][Math.floor(py + length / 16)].isEmpty) {
-                tileGrid[px][Math.floor(py + length / 16)].onCeilingCollision(this);
+                tileGrid[px][Math.floor(py + length / 16)].onCeilingCollision(this, sensorPos);
             }
             this._updateSensors();
         }
@@ -276,8 +273,8 @@ var objects;
             this.x += distance * 16;
         }
         collideWithRightGround(groundHeight, angle) {
-            if (groundHeight < this._higherGround) {
-                this._higherGround = groundHeight;
+            if (groundHeight < this._higherGround.y) {
+                this._higherGround.y = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
                 this.x = groundHeight - 20;
@@ -286,8 +283,8 @@ var objects;
             }
         }
         collideWithLeftGround(groundHeight, angle) {
-            if (groundHeight > this._lowerGround) {
-                this._lowerGround = groundHeight;
+            if (groundHeight > this._lowerGround.y) {
+                this._lowerGround.y = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
                 this.x = groundHeight + 20;
@@ -296,8 +293,8 @@ var objects;
             }
         }
         collideWithUpperGround(groundHeight, angle) {
-            if (groundHeight > this._lowerGround) {
-                this._lowerGround = groundHeight;
+            if (groundHeight > this._lowerGround.y) {
+                this._lowerGround.y = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
                 this.y = groundHeight + 20;
@@ -306,8 +303,8 @@ var objects;
             }
         }
         collideWithGround(groundHeight, angle) {
-            if (groundHeight < this._higherGround) {
-                this._higherGround = groundHeight;
+            if (groundHeight < this._higherGround.y) {
+                this._higherGround.y = groundHeight;
                 this._footRayCastLength = 36;
                 this.y = groundHeight - 20;
                 this._angle = angle;
@@ -330,8 +327,8 @@ var objects;
             }
         }
         collideWithCeiling(ceilingHeight) {
-            if (this.y < ceilingHeight + 10) {
-                this.y = ceilingHeight + 10;
+            if (this.y < ceilingHeight + 16) {
+                this.y = ceilingHeight + 16;
                 if (this._velY < 0)
                     this._velY = 0;
             }

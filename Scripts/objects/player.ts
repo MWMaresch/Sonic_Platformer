@@ -44,8 +44,10 @@ module objects {
         private _hcLockTimer : number = 0;
 
         private _sensorsInAir : number;
-        private _higherGround : number;
-        private _lowerGround : number;
+        private _higherGround : Vector2 = new Vector2(0,0);
+        private _lowerGround : Vector2 = new Vector2(0,0);
+        private _leftMostGround : number;
+        private _rightMostGround : number;
 
         constructor(imageString:string, x:number, y:number) {
             super(imageString, "");
@@ -73,8 +75,9 @@ module objects {
             super.update();
             this._sensorsInAir = 0;
             this._accelerating = false;
-            this._higherGround = 90000;
-            this._lowerGround = -90000;
+            this._higherGround.y = 90000;
+            this._lowerGround.y = -90000;
+
             if (this._hcLockTimer > 0)
                 this._hcLockTimer --;
             console.log("frame advance");
@@ -159,7 +162,7 @@ module objects {
                 {
                     console.log("start falling off of the wall");
                     this._hcLockTimer = 30;
-                    this._startFalling();
+                    //this._startFalling();
                 }
             }
 
@@ -206,13 +209,10 @@ module objects {
             //a lot of the time a sensor's tile will be empty and its method won't even run any code     
 
             //only do wall collisions if we're moving forwards
-            //if (Math.abs(this._angle) < 10)
-            //{
-                if (this._velX < 0)
-                    tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)].onLeftWallCollision(this, this._sideSensorL);
-                else if (this._velX > 0)
-                    tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)].onRightWallCollision(this, this._sideSensorR);
-            //}
+            if (this._velX < 0)
+                tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)].onLeftWallCollision(this, this._sideSensorL);
+            else if (this._velX > 0)
+                tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)].onRightWallCollision(this, this._sideSensorR);
 
             //only check head collision if we're in the air
             if (!this._isGrounded)
@@ -329,7 +329,6 @@ module objects {
                     this._setAirSensor();
                 }
             }
-            //this._updateSensors();
         }
 
         private _checkHeadCollision(length : number, sensorPos : Vector2 , tileGrid:Tile[][]){
@@ -340,19 +339,19 @@ module objects {
             //I should remove brackets to save lines
             if (!tileGrid[px][py].isEmpty)
             {
-                tileGrid[px][py].onCeilingCollision(this);
+                tileGrid[px][py].onCeilingCollision(this, sensorPos);
             }
             else if (!tileGrid[px][Math.floor(py + (length * 0.3)/16)].isEmpty)
             {
-                tileGrid[px][Math.floor(py + (length * 0.3)/16)].onCeilingCollision(this);
+                tileGrid[px][Math.floor(py + (length * 0.3)/16)].onCeilingCollision(this, sensorPos);
             }
             else if (!tileGrid[px][Math.floor(py + (length * 0.6)/16)].isEmpty)
             {
-                tileGrid[px][Math.floor(py + (length * 0.6)/16)].onCeilingCollision(this);
+                tileGrid[px][Math.floor(py + (length * 0.6)/16)].onCeilingCollision(this, sensorPos);
             }
             else if (!tileGrid[px][Math.floor(py + length/16)].isEmpty)
             {
-                tileGrid[px][Math.floor(py + length/16)].onCeilingCollision(this);
+                tileGrid[px][Math.floor(py + length/16)].onCeilingCollision(this, sensorPos);
             }
             this._updateSensors();
         }
@@ -364,9 +363,9 @@ module objects {
 
         public collideWithRightGround(groundHeight : number, angle : number) : void
         {
-            if (groundHeight < this._higherGround)
+            if (groundHeight < this._higherGround.y)
             {
-                this._higherGround = groundHeight;
+                this._higherGround.y = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
                 this.x = groundHeight - 20;
@@ -377,9 +376,9 @@ module objects {
 
         public collideWithLeftGround(groundHeight : number, angle : number) : void
         {
-            if (groundHeight > this._lowerGround)
+            if (groundHeight > this._lowerGround.y)
             {
-                this._lowerGround = groundHeight;
+                this._lowerGround.y = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
                 this.x = groundHeight + 20;
@@ -390,9 +389,9 @@ module objects {
 
         public collideWithUpperGround(groundHeight : number, angle : number) : void
         {
-            if (groundHeight > this._lowerGround)//this._angle >= this._angleThreshold * 3)
+            if (groundHeight > this._lowerGround.y)//this._angle >= this._angleThreshold * 3)
             {
-                this._lowerGround = groundHeight;
+                this._lowerGround.y = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
                 this.y = groundHeight + 20;
@@ -402,15 +401,15 @@ module objects {
         }
 
         public collideWithGround(groundHeight : number, angle : number) : void {
-            if (groundHeight < this._higherGround)
+            if (groundHeight < this._higherGround.y)
             {
-                this._higherGround = groundHeight;
+                this._higherGround.y = groundHeight;
                 this._footRayCastLength = 36;
                 this.y = groundHeight - 20;
                 this._angle = angle;
                 this.rotation = -angle;
             }
-            if (!this._isGrounded)
+            if (!this._isGrounded)//when we land on the ground
             {
                 if (this._angle <= 22 || this._angle >= 338)
                 {
@@ -433,9 +432,9 @@ module objects {
         }
 
         public collideWithCeiling(ceilingHeight : number) : void {
-            if (this.y < ceilingHeight + 10)
+            if (this.y < ceilingHeight + 16)
             {
-                this.y = ceilingHeight + 10;
+                this.y = ceilingHeight + 16;
                 if (this._velY < 0)
                     this._velY = 0;
             }

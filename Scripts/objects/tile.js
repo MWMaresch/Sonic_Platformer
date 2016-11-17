@@ -18,7 +18,7 @@ var objects;
         onFloorCollisionR(player, sensor) { }
         onFloorCollisionU(player, sensor) { }
         onFloorCollisionL(player, sensor) { }
-        onCeilingCollision(player) { }
+        onCeilingCollision(player, sensor) { }
         onLeftWallCollision(player, sensor) { return false; }
         onRightWallCollision(player, sensor) { return false; }
         reverseHeightMap() { }

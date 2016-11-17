@@ -62,19 +62,15 @@ var objects;
         //bottom means the bottom of the player, not the bottom of this tile
         //the player is standing on this block
         onFloorCollision(player, sensor) {
-            //if they're moving downward
             var px = sensor.x / 16;
             var h = (px - Math.floor(px)) * 16;
             player.collideWithGround(this.y + this._topHeightmap[Math.floor(h)], this._topAngle);
-            //console.log("collided with floor tile at angle " + this._topAngle);
         }
         //the player is running on the left side of this block
         onFloorCollisionR(player, sensor) {
             var py = sensor.y / 16;
             var h = (py - Math.floor(py)) * 16;
-            //console.log(Math.floor(h));
             player.collideWithRightGround(this.x + this._leftHeightmap[Math.floor(h)], this._lSideAngle);
-            //console.log("collided with right tile at angle " + this._lSideAngle);
         }
         //the player is running on the bottom of this block
         onFloorCollisionU(player, sensor) {
@@ -87,11 +83,12 @@ var objects;
             var py = sensor.y / 16;
             var h = (py - Math.floor(py)) * 16;
             player.collideWithLeftGround(this.x + this._rightHeightmap[Math.floor(h)], this._rSideAngle);
-            //console.log("collided with left tile at angle " + this._rSideAngle);
         }
         //the player jumped into this block from below
-        onCeilingCollision(player) {
-            player.collideWithCeiling(this.y + this.getBounds().height);
+        onCeilingCollision(player, sensor) {
+            var px = sensor.x / 16;
+            var h = (px - Math.floor(px)) * 16;
+            player.collideWithCeiling(this.y + this._bottomHeightmap[Math.floor(h)]);
         }
         //the player moved into this block from the side
         onLeftWallCollision(player, sensor) {
