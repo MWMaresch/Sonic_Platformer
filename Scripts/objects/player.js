@@ -78,6 +78,7 @@ var objects;
         _startFalling() {
             console.log("fall");
             this._isGrounded = false;
+            //slowly interpolate angles in the future: do not set it directly to 0
             this._angle = 0;
             this.rotation = 0;
             this._gSpeed = 0;
@@ -169,8 +170,10 @@ var objects;
                 this._checkHeadCollision(-this._footRayCastLength, this._topSensorL, tileGrid);
             }
             //always check if our feet would hit something
-            this._checkFootCollision(this._footRayCastLength, this._footSensorR, tileGrid);
-            this._checkFootCollision(this._footRayCastLength, this._footSensorL, tileGrid);
+            if (this._velY >= 0 || this._isGrounded) {
+                this._checkFootCollision(this._footRayCastLength, this._footSensorR, tileGrid);
+                this._checkFootCollision(this._footRayCastLength, this._footSensorL, tileGrid);
+            }
         }
         _checkFootCollision(length, sensorPos, tileGrid) {
             var px = Math.floor(sensorPos.x / 16);
@@ -273,7 +276,7 @@ var objects;
             this.x += distance * 16;
         }
         collideWithRightGround(groundHeight, angle) {
-            if ((this._velY >= 0 || this._isGrounded) && groundHeight < this._higherGround) {
+            if (groundHeight < this._higherGround) {
                 this._higherGround = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
@@ -283,7 +286,7 @@ var objects;
             }
         }
         collideWithLeftGround(groundHeight, angle) {
-            if ((this._velY >= 0 || this._isGrounded) && groundHeight > this._lowerGround) {
+            if (groundHeight > this._lowerGround) {
                 this._lowerGround = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
@@ -303,7 +306,7 @@ var objects;
             }
         }
         collideWithGround(groundHeight, angle) {
-            if ((this._velY >= 0 || this._isGrounded) && groundHeight < this._higherGround) {
+            if (groundHeight < this._higherGround) {
                 this._higherGround = groundHeight;
                 this._footRayCastLength = 36;
                 this.y = groundHeight - 20;

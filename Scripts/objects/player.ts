@@ -106,6 +106,7 @@ module objects {
         private _startFalling():void{
             console.log("fall");
             this._isGrounded = false;
+            //slowly interpolate angles in the future: do not set it directly to 0
             this._angle = 0;
             this.rotation = 0;
             this._gSpeed = 0;
@@ -221,8 +222,11 @@ module objects {
             }
 
             //always check if our feet would hit something
-            this._checkFootCollision(this._footRayCastLength, this._footSensorR, tileGrid);
-            this._checkFootCollision(this._footRayCastLength, this._footSensorL, tileGrid);
+            if (this._velY >= 0 || this._isGrounded)
+            {
+                this._checkFootCollision(this._footRayCastLength, this._footSensorR, tileGrid);
+                this._checkFootCollision(this._footRayCastLength, this._footSensorL, tileGrid);
+            }
         }
 
         private _checkFootCollision(length : number, sensorPos : Vector2 , tileGrid:Tile[][]){
@@ -360,7 +364,7 @@ module objects {
 
         public collideWithRightGround(groundHeight : number, angle : number) : void
         {
-            if ((this._velY >= 0 || this._isGrounded) && groundHeight < this._higherGround)
+            if (groundHeight < this._higherGround)
             {
                 this._higherGround = groundHeight;
                 this._isGrounded = true;
@@ -373,7 +377,7 @@ module objects {
 
         public collideWithLeftGround(groundHeight : number, angle : number) : void
         {
-            if ((this._velY >= 0 || this._isGrounded) && groundHeight > this._lowerGround)
+            if (groundHeight > this._lowerGround)
             {
                 this._lowerGround = groundHeight;
                 this._isGrounded = true;
@@ -398,7 +402,7 @@ module objects {
         }
 
         public collideWithGround(groundHeight : number, angle : number) : void {
-            if ((this._velY >= 0 || this._isGrounded) && groundHeight < this._higherGround)
+            if (groundHeight < this._higherGround)
             {
                 this._higherGround = groundHeight;
                 this._footRayCastLength = 36;
