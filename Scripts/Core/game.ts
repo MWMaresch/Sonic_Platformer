@@ -19,6 +19,14 @@ var exitBtn : objects.Button;
 var pauseBg : createjs.Bitmap;
 var canPause : boolean = false;
 
+//to simplify sonic's loop behaviour
+enum Quadrant {
+    Floor = 1,
+    RightWall = 2,
+    Ceiling = 3,
+    LeftWall = 4
+}
+
 // Preload Assets required
 var assetData:objects.Asset[] = [
     {id: "Pause", src:"../../Assets/images/pause.png"},

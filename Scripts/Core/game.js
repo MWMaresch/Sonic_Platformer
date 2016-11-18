@@ -13,6 +13,14 @@ var paused = false;
 var exitBtn;
 var pauseBg;
 var canPause = false;
+//to simplify sonic's loop behaviour
+var Quadrant;
+(function (Quadrant) {
+    Quadrant[Quadrant["Floor"] = 1] = "Floor";
+    Quadrant[Quadrant["RightWall"] = 2] = "RightWall";
+    Quadrant[Quadrant["Ceiling"] = 3] = "Ceiling";
+    Quadrant[Quadrant["LeftWall"] = 4] = "LeftWall";
+})(Quadrant || (Quadrant = {}));
 // Preload Assets required
 var assetData = [
     { id: "Pause", src: "../../Assets/images/pause.png" },

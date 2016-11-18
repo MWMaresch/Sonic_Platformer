@@ -7,6 +7,7 @@ var objects;
             //if only the const or readonly keywords could be used here
             this._GROUNDACCELERATION = 0.046875; //applied when moving left or right
             this._AIRACCELERATION = 0.09375; //applied when moving left or right
+            this._AIRDRAG = 0.96875; //applied when moving left or right
             this._DECELERATION = 0.5; //applied when turning around
             this._FRICTION = 0.046875; //applied when no horizontal input is detected
             this._MAXRUNSPEED = 6; //should never be more than the size of a single tile, which is 16
@@ -35,6 +36,7 @@ var objects;
             this._hcLockTimer = 0;
             this._higherGround = new objects.Vector2(0, 0);
             this._lowerGround = new objects.Vector2(0, 0);
+            this._mode = Quadrant.Floor;
             this.x = x;
             this.y = y;
             this.width = this.getBounds().width;
@@ -76,11 +78,13 @@ var objects;
                     this._velY = -this._SHORTJUMPVELOCITY;
             }
             this.updateMovement();
+            this._updateSensors();
         }
         _startFalling() {
             console.log("fall");
             this._isGrounded = false;
             //slowly interpolate angles in the future: do not set it directly to 0
+            this._mode = Quadrant.Floor;
             this._angle = 0;
             this.rotation = 0;
             this._gSpeed = 0;
@@ -90,8 +94,14 @@ var objects;
             //check for and apply air movement
             if (!this._isGrounded) {
                 this._velY += this._GRAVITY;
-                if (Math.abs(this._velX) >= this._MAXRUNSPEED)
+                //we should never go too fast to pass through blocks
+                if (Math.abs(this._velX) > this._MAXRUNSPEED)
                     this._velX = this._MAXRUNSPEED * Math.sign(this._velX);
+                if (Math.abs(this._velY) > this._TERMINALVELOCITY)
+                    this._velY = this._TERMINALVELOCITY * Math.sign(this._velY);
+                //weird air drag
+                if (this._velY < 0 && this._velY > -4 && Math.abs(this._velX) >= 0.125)
+                    this._velX *= this._AIRDRAG;
             }
             else {
                 if (!this._accelerating) {
@@ -124,29 +134,30 @@ var objects;
                 if (this._angle >= 45 && this._angle < 315 && Math.abs(this._gSpeed) < 2.5 && this._hcLockTimer <= 0) {
                     console.log("start falling off of the wall");
                     this._hcLockTimer = 30;
+                    this._startFalling();
                 }
-            }
-            if (Math.abs(this._velY) > this._TERMINALVELOCITY) {
-                this._velY = this._TERMINALVELOCITY * Math.sign(this._velY);
             }
             this.x += this._velX;
             this.y += this._velY;
-            this._updateSensors();
         }
         _updateSensors() {
             if (this._angle < this._angleThreshold && this._angle >= -this._angleThreshold || this._angle >= 315) {
+                this._mode = Quadrant.Floor;
                 this._footSensorL = new objects.Vector2(this.x - this._footOffset.x, this.y + this._footOffset.y);
                 this._footSensorR = new objects.Vector2(this.x + this._footOffset.x, this.y + this._footOffset.y);
             }
             else if (this._angle < this._angleThreshold * 3) {
+                this._mode = Quadrant.RightWall;
                 this._footSensorL = new objects.Vector2(this.x + this._footOffset.y, this.y + this._footOffset.x);
                 this._footSensorR = new objects.Vector2(this.x + this._footOffset.y, this.y - this._footOffset.x);
             }
             else if (this._angle < this._angleThreshold * 5) {
+                this._mode = Quadrant.Ceiling;
                 this._footSensorL = new objects.Vector2(this.x + this._footOffset.x, this.y - this._footOffset.y);
                 this._footSensorR = new objects.Vector2(this.x - this._footOffset.x, this.y - this._footOffset.y);
             }
             else {
+                this._mode = Quadrant.LeftWall;
                 this._footSensorL = new objects.Vector2(this.x - this._footOffset.y, this.y + this._footOffset.x);
                 this._footSensorR = new objects.Vector2(this.x - this._footOffset.y, this.y - this._footOffset.x);
             }
@@ -178,75 +189,55 @@ var objects;
             var py = Math.floor(sensorPos.y / 16);
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
             //I should remove brackets to save lines
-            if (this._angle < this._angleThreshold && this._angle >= -this._angleThreshold || this._angle >= 315) {
-                if (!tileGrid[px][py].isEmpty) {
+            if (this._mode == Quadrant.Floor) {
+                if (!tileGrid[px][py].isEmpty)
                     tileGrid[px][py].onFloorCollision(this, sensorPos);
-                }
-                else if (!tileGrid[px][Math.floor(py + (length * 0.3) / 16)].isEmpty) {
+                else if (!tileGrid[px][Math.floor(py + (length * 0.3) / 16)].isEmpty)
                     tileGrid[px][Math.floor(py + (length * 0.3) / 16)].onFloorCollision(this, sensorPos);
-                }
-                else if (!tileGrid[px][Math.floor(py + (length * 0.6) / 16)].isEmpty) {
+                else if (!tileGrid[px][Math.floor(py + (length * 0.6) / 16)].isEmpty)
                     tileGrid[px][Math.floor(py + (length * 0.6) / 16)].onFloorCollision(this, sensorPos);
-                }
-                else if (!tileGrid[px][Math.floor(py + length / 16)].isEmpty) {
+                else if (!tileGrid[px][Math.floor(py + length / 16)].isEmpty)
                     tileGrid[px][Math.floor(py + length / 16)].onFloorCollision(this, sensorPos);
-                }
-                else {
+                else
                     this._setAirSensor();
-                }
             }
-            else if (this._angle < this._angleThreshold * 3) {
-                if (!tileGrid[px][py].isEmpty) {
+            else if (this._mode == Quadrant.RightWall) {
+                if (!tileGrid[px][py].isEmpty)
                     tileGrid[px][py].onFloorCollisionR(this, sensorPos);
-                }
-                else if (!tileGrid[Math.floor(px + (length * 0.3) / 16)][py].isEmpty) {
+                else if (!tileGrid[Math.floor(px + (length * 0.3) / 16)][py].isEmpty)
                     tileGrid[Math.floor(px + (length * 0.3) / 16)][py].onFloorCollisionR(this, sensorPos);
-                }
-                else if (!tileGrid[Math.floor(px + (length * 0.6) / 16)][py].isEmpty) {
+                else if (!tileGrid[Math.floor(px + (length * 0.6) / 16)][py].isEmpty)
                     tileGrid[Math.floor(px + (length * 0.6) / 16)][py].onFloorCollisionR(this, sensorPos);
-                }
-                else if (!tileGrid[Math.floor(px + (length) / 16)][py].isEmpty) {
+                else if (!tileGrid[Math.floor(px + (length) / 16)][py].isEmpty)
                     tileGrid[Math.floor(px + (length) / 16)][py].onFloorCollisionR(this, sensorPos);
-                }
-                else {
+                else
                     this._setAirSensor();
-                }
             }
-            else if (this._angle < this._angleThreshold * 5) {
+            else if (this._mode == Quadrant.Ceiling) {
                 length *= -1;
-                if (!tileGrid[px][py].isEmpty) {
+                if (!tileGrid[px][py].isEmpty)
                     tileGrid[px][py].onFloorCollisionU(this, sensorPos);
-                }
-                else if (!tileGrid[px][Math.floor(py + (length * 0.3) / 16)].isEmpty) {
+                else if (!tileGrid[px][Math.floor(py + (length * 0.3) / 16)].isEmpty)
                     tileGrid[px][Math.floor(py + (length * 0.3) / 16)].onFloorCollisionU(this, sensorPos);
-                }
-                else if (!tileGrid[px][Math.floor(py + (length * 0.6) / 16)].isEmpty) {
+                else if (!tileGrid[px][Math.floor(py + (length * 0.6) / 16)].isEmpty)
                     tileGrid[px][Math.floor(py + (length * 0.6) / 16)].onFloorCollisionU(this, sensorPos);
-                }
-                else if (!tileGrid[px][Math.floor(py + length / 16)].isEmpty) {
+                else if (!tileGrid[px][Math.floor(py + length / 16)].isEmpty)
                     tileGrid[px][Math.floor(py + length / 16)].onFloorCollisionU(this, sensorPos);
-                }
-                else {
+                else
                     this._setAirSensor();
-                }
             }
             else {
                 length *= -1;
-                if (!tileGrid[px][py].isEmpty) {
+                if (!tileGrid[px][py].isEmpty)
                     tileGrid[px][py].onFloorCollisionL(this, sensorPos);
-                }
-                else if (!tileGrid[Math.floor(px + (length * 0.3) / 16)][py].isEmpty) {
+                else if (!tileGrid[Math.floor(px + (length * 0.3) / 16)][py].isEmpty)
                     tileGrid[Math.floor(px + (length * 0.3) / 16)][py].onFloorCollisionL(this, sensorPos);
-                }
-                else if (!tileGrid[Math.floor(px + (length * 0.6) / 16)][py].isEmpty) {
+                else if (!tileGrid[Math.floor(px + (length * 0.6) / 16)][py].isEmpty)
                     tileGrid[Math.floor(px + (length * 0.6) / 16)][py].onFloorCollisionL(this, sensorPos);
-                }
-                else if (!tileGrid[Math.floor(px + (length) / 16)][py].isEmpty) {
+                else if (!tileGrid[Math.floor(px + (length) / 16)][py].isEmpty)
                     tileGrid[Math.floor(px + (length) / 16)][py].onFloorCollisionL(this, sensorPos);
-                }
-                else {
+                else
                     this._setAirSensor();
-                }
             }
         }
         _checkHeadCollision(length, sensorPos, tileGrid) {
@@ -254,18 +245,14 @@ var objects;
             var py = Math.floor(sensorPos.y / 16);
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
             //I should remove brackets to save lines
-            if (!tileGrid[px][py].isEmpty) {
+            if (!tileGrid[px][py].isEmpty)
                 tileGrid[px][py].onCeilingCollision(this, sensorPos);
-            }
-            else if (!tileGrid[px][Math.floor(py + (length * 0.3) / 16)].isEmpty) {
+            else if (!tileGrid[px][Math.floor(py + (length * 0.3) / 16)].isEmpty)
                 tileGrid[px][Math.floor(py + (length * 0.3) / 16)].onCeilingCollision(this, sensorPos);
-            }
-            else if (!tileGrid[px][Math.floor(py + (length * 0.6) / 16)].isEmpty) {
+            else if (!tileGrid[px][Math.floor(py + (length * 0.6) / 16)].isEmpty)
                 tileGrid[px][Math.floor(py + (length * 0.6) / 16)].onCeilingCollision(this, sensorPos);
-            }
-            else if (!tileGrid[px][Math.floor(py + length / 16)].isEmpty) {
+            else if (!tileGrid[px][Math.floor(py + length / 16)].isEmpty)
                 tileGrid[px][Math.floor(py + length / 16)].onCeilingCollision(this, sensorPos);
-            }
             this._updateSensors();
         }
         //this is hardcoded only for now
@@ -311,19 +298,19 @@ var objects;
                 this.rotation = -angle;
             }
             if (!this._isGrounded) {
-                if (this._angle <= 22 || this._angle >= 338) {
+                if (this._angle <= 22 || this._angle >= 338)
                     this._gSpeed = this._velX;
-                }
                 else if (this._angle >= 314 || this._angle <= 45) {
-                    if (Math.abs(this._velX) > this._velY) {
+                    if (Math.abs(this._velX) > this._velY)
                         this._gSpeed = this._velX;
-                    }
                     else {
+                        //sonic physics guide says this should be cos, not sin, but only sin works here for some reason
                         this._angleRadians = this._angle * (Math.PI / 180);
                         this._gSpeed = this._velY * 0.5 * -Math.sign(Math.sin(this._angleRadians));
                     }
                 }
                 this._isGrounded = true;
+                this._velY = 0;
             }
         }
         collideWithCeiling(ceilingHeight) {

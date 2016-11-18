@@ -7,6 +7,7 @@ module objects {
         //if only the const or readonly keywords could be used here
         private _GROUNDACCELERATION : number = 0.046875; //applied when moving left or right
         private _AIRACCELERATION : number = 0.09375; //applied when moving left or right
+        private _AIRDRAG : number = 0.96875; //applied when moving left or right
         private _DECELERATION : number = 0.5; //applied when turning around
         private _FRICTION : number = 0.046875; //applied when no horizontal input is detected
         private _MAXRUNSPEED : number = 6; //should never be more than the size of a single tile, which is 16
@@ -48,6 +49,7 @@ module objects {
         private _lowerGround : Vector2 = new Vector2(0,0);
         private _leftMostGround : number;
         private _rightMostGround : number;
+        private _mode : number = Quadrant.Floor;
 
         constructor(imageString:string, x:number, y:number) {
             super(imageString, "");
@@ -61,17 +63,15 @@ module objects {
             window.onkeyup = this._onKeyUp;
         }
 
-        private _setAirSensor() : void{
+        private _setAirSensor() : void {
             this._sensorsInAir ++;
-            if (this._sensorsInAir >= 2)
-            {
+            if (this._sensorsInAir >= 2) {
                 console.log("sensors detected air");
                 this._startFalling();
             }
         }
 
         public update() : void {
-
             super.update();
             this._sensorsInAir = 0;
             this._accelerating = false;
@@ -88,8 +88,7 @@ module objects {
             if(controls.DOWN) 
                 this.crouch();
 
-            if (this._hcLockTimer <= 0)
-            {
+            if (this._hcLockTimer <= 0) {
                 if(controls.LEFT) 
                     this.moveLeft();
                 else if(controls.RIGHT) 
@@ -97,46 +96,48 @@ module objects {
             }
             if(controls.JUMP)
                 this.jump();
-            else
-            {
+            else {
                 this._pressedJump = false;
                 if (this._velY < -this._SHORTJUMPVELOCITY)
                     this._velY = -this._SHORTJUMPVELOCITY;
             }
             this.updateMovement();
+            this._updateSensors();
         }
 
-        private _startFalling():void{
+        private _startFalling():void {
             console.log("fall");
             this._isGrounded = false;
             //slowly interpolate angles in the future: do not set it directly to 0
+            this._mode = Quadrant.Floor;
             this._angle = 0;
             this.rotation = 0;
             this._gSpeed = 0;
             this._footRayCastLength = 20;
         }
 
-        protected updateMovement(){
+        protected updateMovement() {
             //check for and apply air movement
-            if (!this._isGrounded)
-            {
+            if (!this._isGrounded) {
                 this._velY += this._GRAVITY;
-                if (Math.abs(this._velX) >= this._MAXRUNSPEED)
+                //we should never go too fast to pass through blocks
+                if (Math.abs(this._velX) > this._MAXRUNSPEED)
                     this._velX = this._MAXRUNSPEED * Math.sign(this._velX);
+                if (Math.abs(this._velY) > this._TERMINALVELOCITY)
+                    this._velY = this._TERMINALVELOCITY * Math.sign(this._velY);
+                //weird air drag
+                if (this._velY < 0 && this._velY > -4 && Math.abs(this._velX) >= 0.125)
+                    this._velX *= this._AIRDRAG;
             }
-            else
-            {
-                if (!this._accelerating)
-                {
+            else {
+                if (!this._accelerating) {
                     if (Math.abs(this._gSpeed) < this._FRICTION)
                         this._gSpeed = 0;
                     else
                         this._gSpeed -= this._FRICTION * Math.sign(this._gSpeed);
                 }
-                if (this._gSpeed != 0)
-                {
-                    if (Math.abs(this._gSpeed) >= this._MAXRUNSPEED)
-                    {
+                if (this._gSpeed != 0) {
+                    if (Math.abs(this._gSpeed) >= this._MAXRUNSPEED) {
                         if (this.currentAnimation!="run")
                             this.gotoAndPlay("run");
                         this.spriteSheet.getAnimation("run").speed = 1 / Math.max(8 - Math.abs(this._gSpeed), 1);
@@ -146,8 +147,7 @@ module objects {
                         this.gotoAndPlay("walk");
                     this.spriteSheet.getAnimation("walk").speed = 1 / Math.max(8 - Math.abs(this._gSpeed), 1);
                 }
-                else //we're standing still if the other check wasn't true
-                {
+                else { //we're standing still if the other check wasn't true
                     if (this.currentAnimation!="stand")
                         this.gotoAndPlay("stand");
                 } 
@@ -158,44 +158,34 @@ module objects {
                 this._velY = this._gSpeed*-Math.sin(this._angleRadians);
                 
                 //if we're too slow when running on walls, we fall
-                if (this._angle >= 45 && this._angle < 315 && Math.abs(this._gSpeed) < 2.5 && this._hcLockTimer <= 0)
-                {
+                if (this._angle >= 45 && this._angle < 315 && Math.abs(this._gSpeed) < 2.5 && this._hcLockTimer <= 0) {
                     console.log("start falling off of the wall");
                     this._hcLockTimer = 30;
-                    //this._startFalling();
+                    this._startFalling();
                 }
-            }
-
-            if (Math.abs(this._velY) > this._TERMINALVELOCITY)
-            {
-                this._velY = this._TERMINALVELOCITY * Math.sign(this._velY);
-            }
-            
+            }            
             this.x += this._velX;
-            this.y += this._velY;
-            
-            
-            this._updateSensors();
+            this.y += this._velY;            
         }
 
         private _updateSensors() : void {
-            if (this._angle < this._angleThreshold && this._angle >= -this._angleThreshold || this._angle >= 315)
-            {
+            if (this._angle < this._angleThreshold && this._angle >= -this._angleThreshold || this._angle >= 315) {
+                this._mode = Quadrant.Floor;
                 this._footSensorL = new Vector2(this.x - this._footOffset.x, this.y + this._footOffset.y);
                 this._footSensorR = new Vector2(this.x + this._footOffset.x, this.y + this._footOffset.y);
             }
-            else if (this._angle < this._angleThreshold * 3)
-            {
+            else if (this._angle < this._angleThreshold * 3) {
+                this._mode = Quadrant.RightWall;
                 this._footSensorL = new Vector2(this.x + this._footOffset.y, this.y + this._footOffset.x);
                 this._footSensorR = new Vector2(this.x + this._footOffset.y, this.y - this._footOffset.x);
             }
-            else if (this._angle < this._angleThreshold * 5)
-            {
+            else if (this._angle < this._angleThreshold * 5) {
+                this._mode = Quadrant.Ceiling;
                 this._footSensorL = new Vector2(this.x + this._footOffset.x, this.y - this._footOffset.y);
                 this._footSensorR = new Vector2(this.x - this._footOffset.x, this.y - this._footOffset.y);
             }
-            else //quadrant 4, here I come
-            {
+            else {
+                this._mode = Quadrant.LeftWall;
                 this._footSensorL = new Vector2(this.x - this._footOffset.y, this.y + this._footOffset.x);
                 this._footSensorR = new Vector2(this.x - this._footOffset.y, this.y - this._footOffset.x);
             }
@@ -205,7 +195,7 @@ module objects {
             this._topSensorR = new Vector2(this.x + this._headOffset.x, this.y - this._headOffset.y);
         }
 
-        public checkCollisions(tileGrid:Tile[][]){
+        public checkCollisions(tileGrid:Tile[][]) {
             //a lot of the time a sensor's tile will be empty and its method won't even run any code     
 
             //only do wall collisions if we're moving forwards
@@ -229,142 +219,87 @@ module objects {
             }
         }
 
-        private _checkFootCollision(length : number, sensorPos : Vector2 , tileGrid:Tile[][]){
+        private _checkFootCollision(length : number, sensorPos : Vector2 , tileGrid:Tile[][]) {
             var px = Math.floor(sensorPos.x / 16);
             var py = Math.floor(sensorPos.y / 16);
-
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
             //I should remove brackets to save lines
-            if (this._angle < this._angleThreshold && this._angle >= -this._angleThreshold || this._angle >= 315)
-            {
+            if (this._mode == Quadrant.Floor) {
                 if (!tileGrid[px][py].isEmpty)
-                {
                     tileGrid[px][py].onFloorCollision(this, sensorPos);
-                }
                 else if (!tileGrid[px][Math.floor(py + (length * 0.3)/16)].isEmpty)
-                {
                     tileGrid[px][Math.floor(py + (length * 0.3)/16)].onFloorCollision(this, sensorPos);
-                }
                 else if (!tileGrid[px][Math.floor(py + (length * 0.6)/16)].isEmpty)
-                {
                     tileGrid[px][Math.floor(py + (length * 0.6)/16)].onFloorCollision(this, sensorPos);
-                }
                 else if (!tileGrid[px][Math.floor(py + length/16)].isEmpty)
-                {
                     tileGrid[px][Math.floor(py + length/16)].onFloorCollision(this, sensorPos);
-                }
                 else
-                {
                     this._setAirSensor();
-                }
             }
-            else if (this._angle < this._angleThreshold * 3)
-            {
+            else if (this._mode == Quadrant.RightWall) {
                 if (!tileGrid[px][py].isEmpty)
-                {
                     tileGrid[px][py].onFloorCollisionR(this, sensorPos);
-                }
                 else if (!tileGrid[Math.floor(px + (length * 0.3)/16)][py].isEmpty)
-                {
                     tileGrid[Math.floor(px + (length * 0.3)/16)][py].onFloorCollisionR(this, sensorPos);
-                }
                 else if (!tileGrid[Math.floor(px + (length * 0.6)/16)][py].isEmpty)
-                {
                     tileGrid[Math.floor(px + (length * 0.6)/16)][py].onFloorCollisionR(this, sensorPos);
-                }
                 else if (!tileGrid[Math.floor(px + (length)/16)][py].isEmpty)
-                {
                     tileGrid[Math.floor(px + (length)/16)][py].onFloorCollisionR(this, sensorPos);
-                }
                 else
-                {
                     this._setAirSensor();
-                }
             }
-            else if (this._angle < this._angleThreshold * 5)
-            {
+            else if (this._mode == Quadrant.Ceiling) {
                 length *= -1;
                 if (!tileGrid[px][py].isEmpty)
-                {
                     tileGrid[px][py].onFloorCollisionU(this, sensorPos);
-                }
                 else if (!tileGrid[px][Math.floor(py + (length * 0.3)/16)].isEmpty)
-                {
                     tileGrid[px][Math.floor(py + (length * 0.3)/16)].onFloorCollisionU(this, sensorPos);
-                }
                 else if (!tileGrid[px][Math.floor(py + (length * 0.6)/16)].isEmpty)
-                {
                     tileGrid[px][Math.floor(py + (length * 0.6)/16)].onFloorCollisionU(this, sensorPos);
-                }
                 else if (!tileGrid[px][Math.floor(py + length/16)].isEmpty)
-                {
                     tileGrid[px][Math.floor(py + length/16)].onFloorCollisionU(this, sensorPos);
-                }
                 else
-                {
                     this._setAirSensor();
-                }
             }
-            else
-            {
+            else { //quadrant must be left wall
                 length *= -1;
                 if (!tileGrid[px][py].isEmpty)
-                {
                     tileGrid[px][py].onFloorCollisionL(this, sensorPos);
-                }
                 else if (!tileGrid[Math.floor(px + (length * 0.3)/16)][py].isEmpty)
-                {
                     tileGrid[Math.floor(px + (length * 0.3)/16)][py].onFloorCollisionL(this, sensorPos);
-                }
                 else if (!tileGrid[Math.floor(px + (length * 0.6)/16)][py].isEmpty)
-                {
                     tileGrid[Math.floor(px + (length * 0.6)/16)][py].onFloorCollisionL(this, sensorPos);
-                }
                 else if (!tileGrid[Math.floor(px + (length)/16)][py].isEmpty)
-                {
                     tileGrid[Math.floor(px + (length)/16)][py].onFloorCollisionL(this, sensorPos);
-                }
                 else
-                {
                     this._setAirSensor();
-                }
             }
         }
 
-        private _checkHeadCollision(length : number, sensorPos : Vector2 , tileGrid:Tile[][]){
+        private _checkHeadCollision(length : number, sensorPos : Vector2 , tileGrid:Tile[][]) {
             var px = Math.floor(sensorPos.x / 16);
             var py = Math.floor(sensorPos.y / 16);
 
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
             //I should remove brackets to save lines
             if (!tileGrid[px][py].isEmpty)
-            {
                 tileGrid[px][py].onCeilingCollision(this, sensorPos);
-            }
             else if (!tileGrid[px][Math.floor(py + (length * 0.3)/16)].isEmpty)
-            {
                 tileGrid[px][Math.floor(py + (length * 0.3)/16)].onCeilingCollision(this, sensorPos);
-            }
             else if (!tileGrid[px][Math.floor(py + (length * 0.6)/16)].isEmpty)
-            {
                 tileGrid[px][Math.floor(py + (length * 0.6)/16)].onCeilingCollision(this, sensorPos);
-            }
             else if (!tileGrid[px][Math.floor(py + length/16)].isEmpty)
-            {
                 tileGrid[px][Math.floor(py + length/16)].onCeilingCollision(this, sensorPos);
-            }
             this._updateSensors();
         }
 
         //this is hardcoded only for now
-        public warpRight(distance : number){
+        public warpRight(distance : number) {
             this.x += distance * 16;
         }
 
-        public collideWithRightGround(groundHeight : number, angle : number) : void
-        {
-            if (groundHeight < this._higherGround.y)
-            {
+        public collideWithRightGround(groundHeight : number, angle : number) : void {
+            if (groundHeight < this._higherGround.y) {
                 this._higherGround.y = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
@@ -374,10 +309,8 @@ module objects {
             }
         }
 
-        public collideWithLeftGround(groundHeight : number, angle : number) : void
-        {
-            if (groundHeight > this._lowerGround.y)
-            {
+        public collideWithLeftGround(groundHeight : number, angle : number) : void {
+            if (groundHeight > this._lowerGround.y) {
                 this._lowerGround.y = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
@@ -387,10 +320,8 @@ module objects {
             }
         }
 
-        public collideWithUpperGround(groundHeight : number, angle : number) : void
-        {
-            if (groundHeight > this._lowerGround.y)//this._angle >= this._angleThreshold * 3)
-            {
+        public collideWithUpperGround(groundHeight : number, angle : number) : void {
+            if (groundHeight > this._lowerGround.y) {//this._angle >= this._angleThreshold * 3)
                 this._lowerGround.y = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 36;
@@ -401,39 +332,32 @@ module objects {
         }
 
         public collideWithGround(groundHeight : number, angle : number) : void {
-            if (groundHeight < this._higherGround.y)
-            {
+            if (groundHeight < this._higherGround.y) {
                 this._higherGround.y = groundHeight;
                 this._footRayCastLength = 36;
                 this.y = groundHeight - 20;
                 this._angle = angle;
                 this.rotation = -angle;
             }
-            if (!this._isGrounded)//when we land on the ground
-            {
+            if (!this._isGrounded) { //when we land on the ground 
                 if (this._angle <= 22 || this._angle >= 338)
-                {
                     this._gSpeed = this._velX;
-                }
-                else if (this._angle >= 314 || this._angle <= 45)
-                {
+                else if (this._angle >= 314 || this._angle <= 45) {
                     if (Math.abs(this._velX) > this._velY)
-                    {
                         this._gSpeed = this._velX;
-                    }
-                    else
-                    {   //sonic physics guide says this should be cos, not sin, but only sin works here for some reason
+                    else {   
+                        //sonic physics guide says this should be cos, not sin, but only sin works here for some reason
                         this._angleRadians = this._angle * (Math.PI / 180);
                         this._gSpeed = this._velY * 0.5 * -Math.sign(Math.sin(this._angleRadians));
                     }
                 }
                 this._isGrounded = true;
+                this._velY = 0;
             }
         }
 
         public collideWithCeiling(ceilingHeight : number) : void {
-            if (this.y < ceilingHeight + 16)
-            {
+            if (this.y < ceilingHeight + 16) {
                 this.y = ceilingHeight + 16;
                 if (this._velY < 0)
                     this._velY = 0;
@@ -463,15 +387,13 @@ module objects {
         }
 
         public moveRight() {
-            if (this._isGrounded)
-            {
+            if (this._isGrounded) {
                 if (this._gSpeed < 0)
                     this._gSpeed += this._DECELERATION;
                 else
                     this._gSpeed += this._GROUNDACCELERATION;
             }
-            else
-            {
+            else {
                 this._velX += this._AIRACCELERATION;
                 this._gSpeed += this._AIRACCELERATION;
             }
@@ -480,15 +402,13 @@ module objects {
         }
 
         public moveLeft() {
-            if (this._isGrounded)
-            {
+            if (this._isGrounded) {
                 if (this._gSpeed > 0)
                     this._gSpeed -= this._DECELERATION;
                 else
                     this._gSpeed -= this._GROUNDACCELERATION;
             }
-            else
-            {
+            else {
                 this._velX -= this._AIRACCELERATION;
                 this._gSpeed -= this._AIRACCELERATION;
             }
@@ -497,8 +417,7 @@ module objects {
         }
 
         public jump() {
-            if (this._isGrounded && !this._pressedJump)
-            {
+            if (this._isGrounded && !this._pressedJump) {
                 this._startFalling();
                 this._velX -= this._JUMPVELOCITY * Math.sin(this._angleRadians);
                 this._velY -= this._JUMPVELOCITY * Math.cos(this._angleRadians);
