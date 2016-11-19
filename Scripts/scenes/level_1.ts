@@ -66,8 +66,10 @@ module scenes {
             for (var x = 0; x < this._stringGrid[0].length; x++){
                 this._tileGrid[x] = [];
                 for (var y = 0; y < this._stringGrid.length; y++){
-                    if (this._stringGrid[y].charAt(x) == ' ')
+                    if (this._stringGrid[y].charAt(x) == ' '){
                         this._tileGrid[x][y] = new objects.Tile("blank", 0, 0, 0, 0);
+                        //this._tileGrid[x][y].visible = false;
+                    }
                     else if (this._stringGrid[y].charAt(x) == 'x')
                         this._tileGrid[x][y] = new objects.Warp("portal", 0);
                     else if (this._stringGrid[y].charAt(x) == 'y')
@@ -97,10 +99,18 @@ module scenes {
                     this._tileGrid[x][y].x = x * 16;
                     this._tileGrid[x][y].y = y * 16;
                     this.addChild(this._tileGrid[x][y]);
+                    this._tileGrid[x][y].visible = false;
                 }
-                this._camRightBoundary = this._tileGrid.length * -16 + config.Screen.WIDTH;
-                this._camBottomBoundary = this._tileGrid[0].length * -16 + config.Screen.HEIGHT;
+
             }
+            this._camRightBoundary = this._tileGrid.length * -16 + config.Screen.WIDTH;
+            this._camBottomBoundary = this._tileGrid[0].length * -16 + config.Screen.HEIGHT;
+            for (var x = 0; x < 21; x++){
+                for (var y = 0; y < this._tileGrid[0].length; y++) {
+                    this._tileGrid[x][y].visible = true;
+                }
+            }
+            console.log("tilegrid created");
         }
 
         private _convertAngle(hex_angle):number{
@@ -119,6 +129,9 @@ module scenes {
         }
 
         public update() : void {
+            //console.log(this.x);
+            //console.log(Math.floor((config.Screen.WIDTH + (this.x * -1)) / 16));
+
             this._player.update();
             this._player.checkCollisions(this._tileGrid);
             //console.log(this._player.x);
@@ -129,11 +142,31 @@ module scenes {
         private _updateCameraPosition() : void{
             this._camDifR = this.x - Math.floor(-this._player.x + this._rightCamBorder );
             this._camDifL = this.x - Math.floor(-this._player.x + this._leftCamBorder );
-            if (this._camDifR > 0) 
+            if (this._camDifR > 0) {
                 this.x -= Math.min(this._camDifR, this._maxCamSpeed)
+                //make offscreen things invisible, and onscreen things visible
+                for (var y = 0; y < this._tileGrid[0].length; y++)
+                {
+                    var screenTilePos = Math.floor((this.x * -1) / 16);
+                    if (config.Screen.WIDTH/16 + screenTilePos < this._tileGrid.length && this._tileGrid[(config.Screen.WIDTH/16 + screenTilePos)][y].isEmpty == false)
+                        this._tileGrid[(config.Screen.WIDTH/16 + screenTilePos)][y].visible = true;
+                    if (screenTilePos - 1 >= 0)
+                        this._tileGrid[screenTilePos - 1][y].visible = false;
+                }
+            }
             
-            else if (this._camDifL < 0)
+            else if (this._camDifL < 0) {
                 this.x -= Math.max(this._camDifL, -this._maxCamSpeed)
+                //make offscreen things invisible, and onscreen things visible
+                for (var y = 0; y < this._tileGrid[0].length; y++)
+                {
+                    var screenTilePos = Math.floor((this.x * -1) / 16);
+                    if (screenTilePos - 1 >= 0 && this._tileGrid[screenTilePos - 1][y].isEmpty == false)
+                        this._tileGrid[screenTilePos - 1][y].visible = true;
+                    if (config.Screen.WIDTH/16 + screenTilePos + 1 < this._tileGrid.length)
+                        this._tileGrid[(config.Screen.WIDTH/16 + screenTilePos + 1)][y].visible = false;
+                }
+            }
             
             if (this._player.isGrounded()) {
                 if (this._player.velY() <= this._maxCamSpeed - 10) {
