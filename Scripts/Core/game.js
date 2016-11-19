@@ -70,7 +70,7 @@ function init() {
     pauseBg = new createjs.Bitmap(assets.getResult("Pause"));
     exitBtn = new objects.Button("ExitBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y + 150, 177, 84);
     canvas = document.getElementById("canvas");
-    stage = new createjs.SpriteStage("canvas");
+    stage = new createjs.SpriteStage("canvas", false, false);
     stage.enableMouseOver(20);
     createjs.Ticker.setFPS(config.Game.FPS);
     createjs.Ticker.on("tick", this.gameLoop, this);
@@ -127,6 +127,7 @@ function init() {
     changeScene();
 }
 function gameLoop(event) {
+    console.log("Framerate: " + Math.round(createjs.Ticker.framerate));
     if (!paused) {
         // Update whatever scene is currently active.
         currentScene.update();

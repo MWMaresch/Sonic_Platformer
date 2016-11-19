@@ -83,7 +83,7 @@ function init() {
     canvas = document.getElementById("canvas");
 
 
-    stage = new createjs.SpriteStage("canvas");
+    stage = new createjs.SpriteStage("canvas",false, false);
     stage.enableMouseOver(20);
 
 
@@ -156,6 +156,7 @@ function init() {
 }
 
 function gameLoop(event: createjs.Event): void {
+    console.log("Framerate: " + Math.round(createjs.Ticker.framerate));
     if (!paused)
     {
         // Update whatever scene is currently active.

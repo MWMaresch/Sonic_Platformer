@@ -47,7 +47,7 @@ module scenes {
             quadrant 1: ground and left lower slope
                 315 up to 44
                 -45
-                        
+
             quadrant 2: right lower slope and right wall
                 45 up to 134
 
@@ -124,6 +124,9 @@ module scenes {
             console.log("tilegrid created");
             this._tileSpriteContainer.tickEnabled = false;
             this._tileSpriteContainer.tickChildren = false;
+            this._playerSpriteContainer.snapToPixel = true;
+            this._tileSpriteContainer.snapToPixel = true;
+            stage.snapToPixelEnabled = true;
         }
 
         private _convertAngle(hex_angle):number{
@@ -152,8 +155,8 @@ module scenes {
         }
 
         private _updateCameraPosition() : void{ 
-            this._camDifR = this._playerSpriteContainer.x - Math.floor(-this._player.x + this._rightCamBorder );
-            this._camDifL = this._playerSpriteContainer.x - Math.floor(-this._player.x + this._leftCamBorder );
+            this._camDifR = this._playerSpriteContainer.x -(-this._player.x + this._rightCamBorder );
+            this._camDifL = this._playerSpriteContainer.x -(-this._player.x + this._leftCamBorder );
             if (this._camDifR > 0) {
                 this._playerSpriteContainer.x -= Math.min(this._camDifR, this._maxCamSpeed)
                 //make offscreen things invisible, and onscreen things visible
@@ -182,14 +185,14 @@ module scenes {
             
             if (this._player.isGrounded()) {
                 if (this._player.velY() <= this._maxCamSpeed - 10) {
-                    this._camDifU = this._playerSpriteContainer.y - Math.floor(-this._player.y + this._groundCamBorder );
+                    this._camDifU = this._playerSpriteContainer.y - (-this._player.y + this._groundCamBorder );
                     if (Math.abs(this._camDifU) < this._maxCamSpeed - 10)
                         this._playerSpriteContainer.y -= this._camDifU;
                     else
                         this._playerSpriteContainer.y -= (this._maxCamSpeed - 10) * Math.sign(this._camDifU);
                 }
                 else {
-                    this._camDifU = this._playerSpriteContainer.y - Math.floor(-this._player.y + this._groundCamBorder );
+                    this._camDifU = this._playerSpriteContainer.y - (-this._player.y + this._groundCamBorder );
                     if (Math.abs(this._camDifU) < this._maxCamSpeed)
                         this._playerSpriteContainer.y -= this._camDifU;
                     else
@@ -197,8 +200,8 @@ module scenes {
                 }
             }
             else {
-                this._camDifU = this._playerSpriteContainer.y - Math.floor(-this._player.y + this._topCamBorder);
-                this._camDifD = this._playerSpriteContainer.y - Math.floor(-this._player.y + this._bottomCamBorder);
+                this._camDifU = this._playerSpriteContainer.y - (-this._player.y + this._topCamBorder);
+                this._camDifD = this._playerSpriteContainer.y - (-this._player.y + this._bottomCamBorder);
             if (this._camDifU < 0) 
                 this._playerSpriteContainer.y -= Math.min(this._camDifU, this._maxCamSpeed)
             

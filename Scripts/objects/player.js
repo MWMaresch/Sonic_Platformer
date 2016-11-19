@@ -396,27 +396,27 @@ var objects;
         _onKeyDown(event) {
             switch (event.keyCode) {
                 case keys.W:
-                    console.log("W key pressed");
+                    //console.log("W key pressed");
                     controls.UP = true;
                     break;
                 case keys.S:
-                    console.log("S key pressed");
+                    //console.log("S key pressed");
                     controls.DOWN = true;
                     break;
                 case keys.A:
-                    console.log("A key pressed");
+                    //console.log("A key pressed");
                     controls.LEFT = true;
                     break;
                 case keys.D:
-                    console.log("D key pressed");
+                    //console.log("D key pressed");
                     controls.RIGHT = true;
                     break;
                 case keys.SPACE:
-                    console.log("SPACEBAR pressed");
+                    //console.log("SPACEBAR pressed");
                     controls.JUMP = true;
                     break;
                 case keys.ESC:
-                    console.log("ESC key pressed");
+                    //console.log("ESC key pressed");
                     togglePause();
                     break;
             }
