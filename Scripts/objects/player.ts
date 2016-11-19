@@ -66,9 +66,17 @@ module objects {
         private _setAirSensor() : void {
             this._sensorsInAir ++;
             if (this._sensorsInAir >= 2) {
-                console.log("sensors detected air");
+                //console.log("sensors detected air");
                 this._startFalling();
             }
+        }
+
+        public isGrounded() : boolean {
+            return this._isGrounded;
+        }
+
+        public velY() : number {
+            return this._velY;
         }
 
         public update() : void {
@@ -80,7 +88,7 @@ module objects {
 
             if (this._hcLockTimer > 0)
                 this._hcLockTimer --;
-            console.log("frame advance");
+            //console.log("frame advance");
 
             if(controls.UP) 
                 this.lookUp();      
@@ -106,7 +114,7 @@ module objects {
         }
 
         private _startFalling():void {
-            console.log("fall");
+            //console.log("fall");
             this._isGrounded = false;
             //slowly interpolate angles in the future: do not set it directly to 0
             this._mode = Quadrant.Floor;
@@ -152,20 +160,24 @@ module objects {
                         this.gotoAndPlay("stand");
                 } 
                 //updating ground speed based on our slope angle
-                this._angleRadians = this._angle * (Math.PI / 180);
+                this._angleRadians = this._toRadians(this._angle);
                 this._gSpeed += this._SLOPEFACTOR * -Math.sin(this._angleRadians);
                 this._velX = this._gSpeed*Math.cos(this._angleRadians);
                 this._velY = this._gSpeed*-Math.sin(this._angleRadians);
                 
                 //if we're too slow when running on walls, we fall
                 if (this._angle >= 45 && this._angle < 315 && Math.abs(this._gSpeed) < 2.5 && this._hcLockTimer <= 0) {
-                    console.log("start falling off of the wall");
+                    //console.log("start falling off of the wall");
                     this._hcLockTimer = 30;
                     this._startFalling();
                 }
             }            
             this.x += this._velX;
             this.y += this._velY;            
+        }
+
+        private _toRadians (angle : number){
+            return angle * (Math.PI / 180);
         }
 
         private _updateSensors() : void {
@@ -223,7 +235,6 @@ module objects {
             var px = Math.floor(sensorPos.x / 16);
             var py = Math.floor(sensorPos.y / 16);
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
-            //I should remove brackets to save lines
             if (this._mode == Quadrant.Floor) {
                 if (!tileGrid[px][py].isEmpty)
                     tileGrid[px][py].onFloorCollision(this, sensorPos);
@@ -281,7 +292,6 @@ module objects {
             var py = Math.floor(sensorPos.y / 16);
 
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
-            //I should remove brackets to save lines
             if (!tileGrid[px][py].isEmpty)
                 tileGrid[px][py].onCeilingCollision(this, sensorPos);
             else if (!tileGrid[px][Math.floor(py + (length * 0.3)/16)].isEmpty)
@@ -291,11 +301,6 @@ module objects {
             else if (!tileGrid[px][Math.floor(py + length/16)].isEmpty)
                 tileGrid[px][Math.floor(py + length/16)].onCeilingCollision(this, sensorPos);
             this._updateSensors();
-        }
-
-        //this is hardcoded only for now
-        public warpRight(distance : number) {
-            this.x += distance * 16;
         }
 
         public collideWithRightGround(groundHeight : number, angle : number) : void {
@@ -320,6 +325,44 @@ module objects {
             }
         }
 
+
+        public collideWithGround(groundHeight : number, angle : number) : void {
+            if (groundHeight < this._higherGround.y) {
+                this._higherGround.y = groundHeight;
+                this._footRayCastLength = 36;
+                this.y = groundHeight - 20;
+                this._angle = angle;
+                this.rotation = -angle;
+            }
+            if (!this._isGrounded) { //when we land on the ground 
+                //on very flat surfaces, just carry over X velocity
+                if (this._angle <= 22 || this._angle >= 338)
+                    this._gSpeed = this._velX;
+                //on steeper surfaces:
+                else if (this._angle >= 314 || this._angle <= 45) {
+                    if (Math.abs(this._velX) > this._velY)
+                        this._gSpeed = this._velX;
+                    else {   
+                        //sonic physics guide says this should be cos, not sin, but only sin works here for some reason
+                        this._angleRadians = this._angle * (Math.PI / 180);
+                        this._gSpeed = this._velY * 0.5 * -Math.sign(Math.sin(this._angleRadians));
+                    }
+                }
+                else if (this._angle <= 90 || this._angle >= 271) {
+                    if (Math.abs(this._velX) > this._velY)
+                        this._gSpeed = this._velX;
+                    else {   
+                        //same cos/sin phenomenon as above
+                        this._angleRadians = this._angle * (Math.PI / 180);
+                        this._gSpeed = this._velY * -Math.sign(Math.sin(this._angleRadians));
+                    }
+                }
+
+                this._isGrounded = true;
+                this._velY = 0;
+            }
+        }
+        
         public collideWithUpperGround(groundHeight : number, angle : number) : void {
             if (groundHeight > this._lowerGround.y) {//this._angle >= this._angleThreshold * 3)
                 this._lowerGround.y = groundHeight;
@@ -331,36 +374,17 @@ module objects {
             }
         }
 
-        public collideWithGround(groundHeight : number, angle : number) : void {
-            if (groundHeight < this._higherGround.y) {
-                this._higherGround.y = groundHeight;
-                this._footRayCastLength = 36;
-                this.y = groundHeight - 20;
-                this._angle = angle;
-                this.rotation = -angle;
-            }
-            if (!this._isGrounded) { //when we land on the ground 
-                if (this._angle <= 22 || this._angle >= 338)
-                    this._gSpeed = this._velX;
-                else if (this._angle >= 314 || this._angle <= 45) {
-                    if (Math.abs(this._velX) > this._velY)
-                        this._gSpeed = this._velX;
-                    else {   
-                        //sonic physics guide says this should be cos, not sin, but only sin works here for some reason
-                        this._angleRadians = this._angle * (Math.PI / 180);
-                        this._gSpeed = this._velY * 0.5 * -Math.sign(Math.sin(this._angleRadians));
-                    }
-                }
-                this._isGrounded = true;
-                this._velY = 0;
-            }
-        }
-
-        public collideWithCeiling(ceilingHeight : number) : void {
+        public collideWithCeiling(ceilingHeight : number, angle : number) : void {
             if (this.y < ceilingHeight + 16) {
                 this.y = ceilingHeight + 16;
-                if (this._velY < 0)
-                    this._velY = 0;
+                if (this._velY < 0) {
+                    if (angle >= 224 || angle <= 135) {
+                        this.collideWithUpperGround(ceilingHeight, 180);
+                        this._gSpeed = this._velY * -Math.sign(Math.sin(this._toRadians(angle)));
+                    }
+                    else
+                       this._velY = 0;
+                }
             }
         }
 
@@ -422,6 +446,7 @@ module objects {
                 this._velX -= this._JUMPVELOCITY * Math.sin(this._angleRadians);
                 this._velY -= this._JUMPVELOCITY * Math.cos(this._angleRadians);
                 this.gotoAndPlay("jump");
+                this.spriteSheet.getAnimation("jump").speed = 1 / (5-Math.abs(this._gSpeed));
             }
             this._pressedJump = true;
         }

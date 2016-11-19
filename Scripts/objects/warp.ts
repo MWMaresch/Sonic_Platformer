@@ -2,7 +2,7 @@ module objects {
     export class Warp extends Tile {
 
         constructor(imageString : string, angle : number) {
-            super(imageString, 0);
+            super(imageString, 0,0,0,0);
             this.start();
         }
 
@@ -21,7 +21,7 @@ module objects {
         public onLeftWallCollision(player:Player, sensor:Vector2):boolean { return false; }
 
         public onRightWallCollision(player:Player, sensor:Vector2):boolean {
-            player.warpRight(19);
+            //player.warpRight(19);
             return false;        
         }
 

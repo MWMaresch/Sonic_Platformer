@@ -10,6 +10,7 @@ var objects;
             this._lSideAngle = angleL;
             this._bottomAngle = angleBottom;
             this._layer = 1;
+            this.tickEnabled = false;
         }
         start() { }
         update() { }

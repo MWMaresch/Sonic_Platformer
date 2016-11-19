@@ -2,7 +2,7 @@ var objects;
 (function (objects) {
     class Warp extends objects.Tile {
         constructor(imageString, angle) {
-            super(imageString, 0);
+            super(imageString, 0, 0, 0, 0);
             this.isEmpty = false;
             this.start();
         }
@@ -16,7 +16,7 @@ var objects;
         onCeilingCollision(player) { }
         onLeftWallCollision(player, sensor) { return false; }
         onRightWallCollision(player, sensor) {
-            player.warpRight(19);
+            //player.warpRight(19);
             return false;
         }
     }

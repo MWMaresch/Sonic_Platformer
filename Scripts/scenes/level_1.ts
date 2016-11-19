@@ -5,6 +5,18 @@ module scenes {
         private _returnBtn : objects.Button;
 
         private _player : objects.Player;
+        private _maxCamSpeed : number = 16;
+        private _leftCamBorder : number = 144;
+        private _rightCamBorder : number = 160;
+        private _topCamBorder : number = 64;
+        private _groundCamBorder : number = 96;
+        private _bottomCamBorder : number = 128;
+        private _camDifR : number;
+        private _camDifL : number;
+        private _camDifU : number;
+        private _camDifD : number;
+        private _camRightBoundary : number;
+        private _camBottomBoundary : number;
 
         private _tileGrid : objects.Tile[][] = [];
         private _stringGrid : string[] =
@@ -50,7 +62,6 @@ module scenes {
 
             this._player = new objects.Player("stand",90,90);
             this.addChild(this._player);
-            console.log('1');
 
             for (var x = 0; x < this._stringGrid[0].length; x++){
                 this._tileGrid[x] = [];
@@ -87,6 +98,8 @@ module scenes {
                     this._tileGrid[x][y].y = y * 16;
                     this.addChild(this._tileGrid[x][y]);
                 }
+                this._camRightBoundary = this._tileGrid.length * -16 + config.Screen.WIDTH;
+                this._camBottomBoundary = this._tileGrid[0].length * -16 + config.Screen.HEIGHT;
             }
         }
 
@@ -114,9 +127,58 @@ module scenes {
         }
 
         private _updateCameraPosition() : void{
-            this.x = Math.floor(((-this._player.x * this._SCALE) + config.Screen.CENTER_X * this._SCALE) );
+            this._camDifR = this.x - Math.floor(-this._player.x + this._rightCamBorder );
+            this._camDifL = this.x - Math.floor(-this._player.x + this._leftCamBorder );
+            if (this._camDifR > 0) 
+                this.x -= Math.min(this._camDifR, this._maxCamSpeed)
+            
+            else if (this._camDifL < 0)
+                this.x -= Math.max(this._camDifL, -this._maxCamSpeed)
+            
+            if (this._player.isGrounded()) {
+                if (this._player.velY() <= this._maxCamSpeed - 10) {
+                    this._camDifU = this.y - Math.floor(-this._player.y + this._groundCamBorder );
+                    if (Math.abs(this._camDifU) < this._maxCamSpeed - 10)
+                        this.y -= this._camDifU;
+                    else
+                        this.y -= (this._maxCamSpeed - 10) * Math.sign(this._camDifU);
+                }
+                else {
+                    this._camDifU = this.y - Math.floor(-this._player.y + this._groundCamBorder );
+                    if (Math.abs(this._camDifU) < this._maxCamSpeed)
+                        this.y -= this._camDifU;
+                    else
+                        this.y -= this._maxCamSpeed * Math.sign(this._camDifU);
+                }
+            }
+            else {
+                this._camDifU = this.y - Math.floor(-this._player.y + this._topCamBorder);
+                this._camDifD = this.y - Math.floor(-this._player.y + this._bottomCamBorder);
+            if (this._camDifU < 0) 
+                this.y -= Math.min(this._camDifU, this._maxCamSpeed)
+            
+            else if (this._camDifD > 0)
+                this.y -= Math.max(this._camDifD, -this._maxCamSpeed)
+            }
+            //side wall boundarys
             if (this.x > 0)
                 this.x = 0;
+            else if (this.x < this._camRightBoundary)
+                this.x = this._camRightBoundary;
+            //upper and lower boundarys
+            if (this.y > 0)
+                this.y = 0;
+            else if (this.y < this._camBottomBoundary)
+                this.y = this._camBottomBoundary;
+            
+        }
+
+        private _moveCamRight(amount : number) : void {
+            this.x -= amount;
+        }
+
+        private _moveCamLeft(amount : number) : void {
+            this.x += amount;
         }
 
         private _returnBtnClick(event : createjs.MouseEvent) {

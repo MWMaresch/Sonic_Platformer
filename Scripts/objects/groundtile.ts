@@ -110,7 +110,7 @@ module objects {
         public onCeilingCollision(player:Player, sensor:Vector2):void {
             var px = sensor.x / 16;
             var h = (px - Math.floor(px)) * 16;
-            player.collideWithCeiling(this.y + this._bottomHeightmap[Math.floor(h)]);
+            player.collideWithCeiling(this.y + this._bottomHeightmap[Math.floor(h)], this._bottomAngle);
         }
         
         //the player moved into this block from the side

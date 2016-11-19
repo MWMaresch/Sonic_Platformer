@@ -47,9 +47,15 @@ var objects;
         _setAirSensor() {
             this._sensorsInAir++;
             if (this._sensorsInAir >= 2) {
-                console.log("sensors detected air");
+                //console.log("sensors detected air");
                 this._startFalling();
             }
+        }
+        isGrounded() {
+            return this._isGrounded;
+        }
+        velY() {
+            return this._velY;
         }
         update() {
             super.update();
@@ -59,7 +65,7 @@ var objects;
             this._lowerGround.y = -90000;
             if (this._hcLockTimer > 0)
                 this._hcLockTimer--;
-            console.log("frame advance");
+            //console.log("frame advance");
             if (controls.UP)
                 this.lookUp();
             if (controls.DOWN)
@@ -81,7 +87,7 @@ var objects;
             this._updateSensors();
         }
         _startFalling() {
-            console.log("fall");
+            //console.log("fall");
             this._isGrounded = false;
             //slowly interpolate angles in the future: do not set it directly to 0
             this._mode = Quadrant.Floor;
@@ -126,19 +132,22 @@ var objects;
                         this.gotoAndPlay("stand");
                 }
                 //updating ground speed based on our slope angle
-                this._angleRadians = this._angle * (Math.PI / 180);
+                this._angleRadians = this._toRadians(this._angle);
                 this._gSpeed += this._SLOPEFACTOR * -Math.sin(this._angleRadians);
                 this._velX = this._gSpeed * Math.cos(this._angleRadians);
                 this._velY = this._gSpeed * -Math.sin(this._angleRadians);
                 //if we're too slow when running on walls, we fall
                 if (this._angle >= 45 && this._angle < 315 && Math.abs(this._gSpeed) < 2.5 && this._hcLockTimer <= 0) {
-                    console.log("start falling off of the wall");
+                    //console.log("start falling off of the wall");
                     this._hcLockTimer = 30;
                     this._startFalling();
                 }
             }
             this.x += this._velX;
             this.y += this._velY;
+        }
+        _toRadians(angle) {
+            return angle * (Math.PI / 180);
         }
         _updateSensors() {
             if (this._angle < this._angleThreshold && this._angle >= -this._angleThreshold || this._angle >= 315) {
@@ -188,7 +197,6 @@ var objects;
             var px = Math.floor(sensorPos.x / 16);
             var py = Math.floor(sensorPos.y / 16);
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
-            //I should remove brackets to save lines
             if (this._mode == Quadrant.Floor) {
                 if (!tileGrid[px][py].isEmpty)
                     tileGrid[px][py].onFloorCollision(this, sensorPos);
@@ -244,7 +252,6 @@ var objects;
             var px = Math.floor(sensorPos.x / 16);
             var py = Math.floor(sensorPos.y / 16);
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
-            //I should remove brackets to save lines
             if (!tileGrid[px][py].isEmpty)
                 tileGrid[px][py].onCeilingCollision(this, sensorPos);
             else if (!tileGrid[px][Math.floor(py + (length * 0.3) / 16)].isEmpty)
@@ -254,10 +261,6 @@ var objects;
             else if (!tileGrid[px][Math.floor(py + length / 16)].isEmpty)
                 tileGrid[px][Math.floor(py + length / 16)].onCeilingCollision(this, sensorPos);
             this._updateSensors();
-        }
-        //this is hardcoded only for now
-        warpRight(distance) {
-            this.x += distance * 16;
         }
         collideWithRightGround(groundHeight, angle) {
             if (groundHeight < this._higherGround.y) {
@@ -279,16 +282,6 @@ var objects;
                 this.rotation = -angle;
             }
         }
-        collideWithUpperGround(groundHeight, angle) {
-            if (groundHeight > this._lowerGround.y) {
-                this._lowerGround.y = groundHeight;
-                this._isGrounded = true;
-                this._footRayCastLength = 36;
-                this.y = groundHeight + 20;
-                this._angle = angle;
-                this.rotation = -angle;
-            }
-        }
         collideWithGround(groundHeight, angle) {
             if (groundHeight < this._higherGround.y) {
                 this._higherGround.y = groundHeight;
@@ -298,6 +291,7 @@ var objects;
                 this.rotation = -angle;
             }
             if (!this._isGrounded) {
+                //on very flat surfaces, just carry over X velocity
                 if (this._angle <= 22 || this._angle >= 338)
                     this._gSpeed = this._velX;
                 else if (this._angle >= 314 || this._angle <= 45) {
@@ -309,15 +303,40 @@ var objects;
                         this._gSpeed = this._velY * 0.5 * -Math.sign(Math.sin(this._angleRadians));
                     }
                 }
+                else if (this._angle <= 90 || this._angle >= 271) {
+                    if (Math.abs(this._velX) > this._velY)
+                        this._gSpeed = this._velX;
+                    else {
+                        //same cos/sin phenomenon as above
+                        this._angleRadians = this._angle * (Math.PI / 180);
+                        this._gSpeed = this._velY * -Math.sign(Math.sin(this._angleRadians));
+                    }
+                }
                 this._isGrounded = true;
                 this._velY = 0;
             }
         }
-        collideWithCeiling(ceilingHeight) {
+        collideWithUpperGround(groundHeight, angle) {
+            if (groundHeight > this._lowerGround.y) {
+                this._lowerGround.y = groundHeight;
+                this._isGrounded = true;
+                this._footRayCastLength = 36;
+                this.y = groundHeight + 20;
+                this._angle = angle;
+                this.rotation = -angle;
+            }
+        }
+        collideWithCeiling(ceilingHeight, angle) {
             if (this.y < ceilingHeight + 16) {
                 this.y = ceilingHeight + 16;
-                if (this._velY < 0)
-                    this._velY = 0;
+                if (this._velY < 0) {
+                    if (angle >= 224 || angle <= 135) {
+                        this.collideWithUpperGround(ceilingHeight, 180);
+                        this._gSpeed = this._velY * -Math.sign(Math.sin(this._toRadians(angle)));
+                    }
+                    else
+                        this._velY = 0;
+                }
             }
         }
         collideWithLeftWall(x) {
@@ -370,6 +389,7 @@ var objects;
                 this._velX -= this._JUMPVELOCITY * Math.sin(this._angleRadians);
                 this._velY -= this._JUMPVELOCITY * Math.cos(this._angleRadians);
                 this.gotoAndPlay("jump");
+                this.spriteSheet.getAnimation("jump").speed = 1 / (5 - Math.abs(this._gSpeed));
             }
             this._pressedJump = true;
         }
