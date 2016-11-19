@@ -17,6 +17,9 @@ module scenes {
         private _camDifD : number;
         private _camRightBoundary : number;
         private _camBottomBoundary : number;
+        private _tileSpriteContainer : createjs.SpriteContainer;
+        private _playerSpriteContainer : createjs.SpriteContainer;
+        private _camera : createjs.Container;
 
         private _tileGrid : objects.Tile[][] = [];
         private _stringGrid : string[] =
@@ -60,14 +63,17 @@ module scenes {
         constructor() {
             super();
 
+            this._tileSpriteContainer = new createjs.SpriteContainer(tileSpriteSheet);
+            this._playerSpriteContainer = new createjs.SpriteContainer(shipAtlas);
             this._player = new objects.Player("stand",90,90);
-            this.addChild(this._player);
+            this._camera = new createjs.Container();
+            this._playerSpriteContainer.addChild(this._player);
 
             for (var x = 0; x < this._stringGrid[0].length; x++){
                 this._tileGrid[x] = [];
                 for (var y = 0; y < this._stringGrid.length; y++){
                     if (this._stringGrid[y].charAt(x) == ' '){
-                        this._tileGrid[x][y] = new objects.Tile("blank", 0, 0, 0, 0);
+                        this._tileGrid[x][y] = null;
                         //this._tileGrid[x][y].visible = false;
                     }
                     else if (this._stringGrid[y].charAt(x) == 'x')
@@ -96,10 +102,12 @@ module scenes {
                         this._tileGrid[x][y] = new objects.GroundTile("ramp225", 0, 224, 90, 224); //correct
                     else if (this._stringGrid[y].charAt(x) == ')')
                         this._tileGrid[x][y] = new objects.GroundTile("ramp135", 0, 134, 134, 270); //correct
-                    this._tileGrid[x][y].x = x * 16;
-                    this._tileGrid[x][y].y = y * 16;
-                    this.addChild(this._tileGrid[x][y]);
-                    this._tileGrid[x][y].visible = false;
+                    if (this._tileGrid[x][y] != null) {
+                        this._tileGrid[x][y].x = x * 16;
+                        this._tileGrid[x][y].y = y * 16;
+                        this._tileSpriteContainer.addChild(this._tileGrid[x][y]);
+                        this._tileGrid[x][y].visible = false;
+                    }
                 }
 
             }
@@ -107,10 +115,15 @@ module scenes {
             this._camBottomBoundary = this._tileGrid[0].length * -16 + config.Screen.HEIGHT;
             for (var x = 0; x < 21; x++){
                 for (var y = 0; y < this._tileGrid[0].length; y++) {
-                    this._tileGrid[x][y].visible = true;
+                    if (this._tileGrid[x][y] != null)
+                        this._tileGrid[x][y].visible = true;
                 }
             }
+            stage.addChild(this._tileSpriteContainer);
+            stage.addChild(this._playerSpriteContainer);
             console.log("tilegrid created");
+            this._tileSpriteContainer.tickEnabled = false;
+            this._tileSpriteContainer.tickChildren = false;
         }
 
         private _convertAngle(hex_angle):number{
@@ -121,97 +134,90 @@ module scenes {
 
             //add the background first so it's behind everything
             this._bg = new createjs.Bitmap(assets.getResult("Background"));
-            this.addChild(this._bg);
-
-            stage.addChild(this);
+            //stage.addChild(this._bg);
+            //stage.addChild(this);
             canPause = true;
+            //stage.addChild(this._camera);
 
         }
 
         public update() : void {
-            //console.log(this.x);
-            //console.log(Math.floor((config.Screen.WIDTH + (this.x * -1)) / 16));
-
+            //console.log(stage.x);
+            //console.log(Math.floor((config.Screen.WIDTH + (stage.x * -1)) / 16));
             this._player.update();
             this._player.checkCollisions(this._tileGrid);
             //console.log(this._player.x);
             this._updateCameraPosition();
-            //console.log(this.x);
+            //console.log(stage.x);
         }
 
-        private _updateCameraPosition() : void{
-            this._camDifR = this.x - Math.floor(-this._player.x + this._rightCamBorder );
-            this._camDifL = this.x - Math.floor(-this._player.x + this._leftCamBorder );
+        private _updateCameraPosition() : void{ 
+            this._camDifR = this._playerSpriteContainer.x - Math.floor(-this._player.x + this._rightCamBorder );
+            this._camDifL = this._playerSpriteContainer.x - Math.floor(-this._player.x + this._leftCamBorder );
             if (this._camDifR > 0) {
-                this.x -= Math.min(this._camDifR, this._maxCamSpeed)
+                this._playerSpriteContainer.x -= Math.min(this._camDifR, this._maxCamSpeed)
                 //make offscreen things invisible, and onscreen things visible
                 for (var y = 0; y < this._tileGrid[0].length; y++)
                 {
-                    var screenTilePos = Math.floor((this.x * -1) / 16);
-                    if (config.Screen.WIDTH/16 + screenTilePos < this._tileGrid.length && this._tileGrid[(config.Screen.WIDTH/16 + screenTilePos)][y].isEmpty == false)
+                    var screenTilePos = Math.floor((this._playerSpriteContainer.x * -1) / 16);
+                    if (config.Screen.WIDTH/16 + screenTilePos < this._tileGrid.length && this._tileGrid[(config.Screen.WIDTH/16 + screenTilePos)][y] != null)
                         this._tileGrid[(config.Screen.WIDTH/16 + screenTilePos)][y].visible = true;
-                    if (screenTilePos - 1 >= 0)
-                        this._tileGrid[screenTilePos - 1][y].visible = false;
+                    if ( screenTilePos - 2 >= 0 && this._tileGrid[screenTilePos - 2][y] != null)
+                        this._tileGrid[screenTilePos - 2][y].visible = false;
                 }
             }
             
             else if (this._camDifL < 0) {
-                this.x -= Math.max(this._camDifL, -this._maxCamSpeed)
+                this._playerSpriteContainer.x -= Math.max(this._camDifL, -this._maxCamSpeed)
                 //make offscreen things invisible, and onscreen things visible
                 for (var y = 0; y < this._tileGrid[0].length; y++)
                 {
-                    var screenTilePos = Math.floor((this.x * -1) / 16);
-                    if (screenTilePos - 1 >= 0 && this._tileGrid[screenTilePos - 1][y].isEmpty == false)
-                        this._tileGrid[screenTilePos - 1][y].visible = true;
-                    if (config.Screen.WIDTH/16 + screenTilePos + 1 < this._tileGrid.length)
+                    var screenTilePos = Math.floor((this._playerSpriteContainer.x  * -1) / 16);
+                    if (screenTilePos >= 0 && this._tileGrid[screenTilePos][y] != null)
+                        this._tileGrid[screenTilePos][y].visible = true;
+                    if (config.Screen.WIDTH/16 + screenTilePos + 1 < this._tileGrid.length && this._tileGrid[(config.Screen.WIDTH/16 + screenTilePos + 1)][y] != null)
                         this._tileGrid[(config.Screen.WIDTH/16 + screenTilePos + 1)][y].visible = false;
                 }
             }
             
             if (this._player.isGrounded()) {
                 if (this._player.velY() <= this._maxCamSpeed - 10) {
-                    this._camDifU = this.y - Math.floor(-this._player.y + this._groundCamBorder );
+                    this._camDifU = this._playerSpriteContainer.y - Math.floor(-this._player.y + this._groundCamBorder );
                     if (Math.abs(this._camDifU) < this._maxCamSpeed - 10)
-                        this.y -= this._camDifU;
+                        this._playerSpriteContainer.y -= this._camDifU;
                     else
-                        this.y -= (this._maxCamSpeed - 10) * Math.sign(this._camDifU);
+                        this._playerSpriteContainer.y -= (this._maxCamSpeed - 10) * Math.sign(this._camDifU);
                 }
                 else {
-                    this._camDifU = this.y - Math.floor(-this._player.y + this._groundCamBorder );
+                    this._camDifU = this._playerSpriteContainer.y - Math.floor(-this._player.y + this._groundCamBorder );
                     if (Math.abs(this._camDifU) < this._maxCamSpeed)
-                        this.y -= this._camDifU;
+                        this._playerSpriteContainer.y -= this._camDifU;
                     else
-                        this.y -= this._maxCamSpeed * Math.sign(this._camDifU);
+                        this._playerSpriteContainer.y -= this._maxCamSpeed * Math.sign(this._camDifU);
                 }
             }
             else {
-                this._camDifU = this.y - Math.floor(-this._player.y + this._topCamBorder);
-                this._camDifD = this.y - Math.floor(-this._player.y + this._bottomCamBorder);
+                this._camDifU = this._playerSpriteContainer.y - Math.floor(-this._player.y + this._topCamBorder);
+                this._camDifD = this._playerSpriteContainer.y - Math.floor(-this._player.y + this._bottomCamBorder);
             if (this._camDifU < 0) 
-                this.y -= Math.min(this._camDifU, this._maxCamSpeed)
+                this._playerSpriteContainer.y -= Math.min(this._camDifU, this._maxCamSpeed)
             
             else if (this._camDifD > 0)
-                this.y -= Math.max(this._camDifD, -this._maxCamSpeed)
+                this._playerSpriteContainer.y -= Math.max(this._camDifD, -this._maxCamSpeed)
             }
             //side wall boundarys
-            if (this.x > 0)
-                this.x = 0;
-            else if (this.x < this._camRightBoundary)
-                this.x = this._camRightBoundary;
+            if (this._playerSpriteContainer.x > 0)
+                this._playerSpriteContainer.x = 0;
+            else if (this._playerSpriteContainer.x < this._camRightBoundary)
+                this._playerSpriteContainer.x = this._camRightBoundary;
             //upper and lower boundarys
-            if (this.y > 0)
-                this.y = 0;
-            else if (this.y < this._camBottomBoundary)
-                this.y = this._camBottomBoundary;
+            if (this._playerSpriteContainer.y > 0)
+                this._playerSpriteContainer.y = 0;
+            else if (this._playerSpriteContainer.y < this._camBottomBoundary)
+                this._playerSpriteContainer.y = this._camBottomBoundary;
+            this._tileSpriteContainer.x = this._playerSpriteContainer.x;
+            this._tileSpriteContainer.y = this._playerSpriteContainer.y;
             
-        }
-
-        private _moveCamRight(amount : number) : void {
-            this.x -= amount;
-        }
-
-        private _moveCamLeft(amount : number) : void {
-            this.x += amount;
         }
 
         private _returnBtnClick(event : createjs.MouseEvent) {

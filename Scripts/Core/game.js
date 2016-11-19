@@ -5,6 +5,7 @@ var canvas;
 var stage;
 var spriteSheetLoader;
 var shipAtlas;
+var tileSpriteSheet;
 var currentScene;
 var scene;
 var numLaps;
@@ -29,6 +30,7 @@ var assetData = [
     { id: "InstBtn", src: "../../Assets/images/Instructions.png" },
     { id: "Block", src: "../../Assets/images/metalblock.png" },
     { id: "Ramps", src: "../../Assets/images/metalblock2.png" },
+    { id: "Tiles", src: "../../Assets/images/metalblocks.png" },
     { id: "Ramp22", src: "../../Assets/images/ramp22.png" },
     { id: "Ramp23", src: "../../Assets/images/ramp23.png" },
     { id: "Ramp135", src: "../../Assets/images/ramp135.png" },
@@ -68,26 +70,19 @@ function init() {
     pauseBg = new createjs.Bitmap(assets.getResult("Pause"));
     exitBtn = new objects.Button("ExitBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y + 150, 177, 84);
     canvas = document.getElementById("canvas");
-    stage = new createjs.Stage(canvas);
+    stage = new createjs.SpriteStage("canvas");
     stage.enableMouseOver(20);
     createjs.Ticker.setFPS(config.Game.FPS);
     createjs.Ticker.on("tick", this.gameLoop, this);
     collision = new managers.Collision();
-    let atlasData = {
-        images: [assets.getResult("Sonic"), assets.getResult("Block"), assets.getResult("Ramps"), assets.getResult("Portal")],
+    let sonicSpriteData = {
+        images: [assets.getResult("Sonic")],
         frames: [[1, 6, 39, 40, 0],
             [1, 47, 39, 40, 0], [41, 47, 39, 40, 0],
             [81, 47, 39, 40, 0], [121, 47, 39, 40, 0],
             [81, 91, 39, 40, 0], [121, 91, 39, 40, 0], [161, 91, 39, 40, 0], [201, 91, 39, 40, 0], [1, 91, 39, 40, 0], [41, 91, 39, 40, 0],
             [1, 141, 39, 40, 0], [41, 141, 39, 40, 0], [81, 141, 39, 40, 0], [121, 141, 39, 40, 0],
-            [2, 235, 39, 40, 0], [42, 235, 39, 40, 0], [82, 235, 39, 40, 0], [122, 235, 39, 40, 0], [162, 235, 39, 40, 0],
-            [0, 0, 16, 16, 1],
-            [0, 0, 1, 1, 0],
-            [0, 0, 16, 16, 2],
-            [20, 0, 16, 16, 2],
-            [0, 20, 16, 16, 2],
-            [20, 20, 16, 16, 2],
-            [0, 0, 16, 16, 3]],
+            [2, 235, 39, 40, 0], [42, 235, 39, 40, 0], [82, 235, 39, 40, 0], [122, 235, 39, 40, 0], [162, 235, 39, 40, 0]],
         /*animations: {
         player: 0,
         block: 1,
@@ -99,21 +94,35 @@ function init() {
             "crouch": { "frames": [3, 4] },
             "walk": { "frames": [5, 6, 7, 8, 9, 10], speed: 1 / 60 },
             "run": { "frames": [11, 12, 13, 14] },
-            "jump": { "frames": [15, 16, 17, 18, 19], speed: 12 / 60 },
-            "block": { "frames": [20] },
-            "blank": { "frames": [21] },
-            "ramp45": { "frames": [22] },
-            "ramp315": { "frames": [23] },
-            "ramp135": { "frames": [24] },
-            "ramp225": { "frames": [25] },
-            "portal": { "frames": [26] }
+            "jump": { "frames": [15, 16, 17, 18, 19], speed: 12 / 60 }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",
             "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
         ]
     };
-    shipAtlas = new createjs.SpriteSheet(atlasData);
+    let tileData = {
+        images: [assets.getResult("Tiles")],
+        frames: [
+            [40, 0, 16, 16, 0],
+            [0, 0, 16, 16, 0],
+            [20, 0, 16, 16, 0],
+            [0, 20, 16, 16, 0],
+            [20, 20, 16, 16, 0]],
+        animations: {
+            "block": { "frames": [0] },
+            "ramp45": { "frames": [1] },
+            "ramp315": { "frames": [2] },
+            "ramp135": { "frames": [3] },
+            "ramp225": { "frames": [4] },
+        },
+        "texturepacker": [
+            "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",
+            "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+        ]
+    };
+    tileSpriteSheet = new createjs.SpriteSheet(tileData);
+    shipAtlas = new createjs.SpriteSheet(sonicSpriteData);
     scene = config.Scene.LEVEL1;
     changeScene();
 }

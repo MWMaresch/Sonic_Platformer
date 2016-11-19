@@ -211,9 +211,9 @@ module objects {
             //a lot of the time a sensor's tile will be empty and its method won't even run any code     
 
             //only do wall collisions if we're moving forwards
-            if (this._velX < 0)
+            if (tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)] != null && this._velX < 0)
                 tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)].onLeftWallCollision(this, this._sideSensorL);
-            else if (this._velX > 0)
+            else if (tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)] != null && this._velX > 0)
                 tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)].onRightWallCollision(this, this._sideSensorR);
 
             //only check head collision if we're in the air
@@ -236,51 +236,51 @@ module objects {
             var py = Math.floor(sensorPos.y / 16);
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
             if (this._mode == Quadrant.Floor) {
-                if (!tileGrid[px][py].isEmpty)
+                if (tileGrid[px][py] != null)
                     tileGrid[px][py].onFloorCollision(this, sensorPos);
-                else if (!tileGrid[px][Math.floor(py + (length * 0.3)/16)].isEmpty)
+                else if (tileGrid[px][Math.floor(py + (length * 0.3)/16)] != null)
                     tileGrid[px][Math.floor(py + (length * 0.3)/16)].onFloorCollision(this, sensorPos);
-                else if (!tileGrid[px][Math.floor(py + (length * 0.6)/16)].isEmpty)
+                else if (tileGrid[px][Math.floor(py + (length * 0.6)/16)] != null)
                     tileGrid[px][Math.floor(py + (length * 0.6)/16)].onFloorCollision(this, sensorPos);
-                else if (!tileGrid[px][Math.floor(py + length/16)].isEmpty)
+                else if (tileGrid[px][Math.floor(py + length/16)] != null)
                     tileGrid[px][Math.floor(py + length/16)].onFloorCollision(this, sensorPos);
                 else
                     this._setAirSensor();
             }
             else if (this._mode == Quadrant.RightWall) {
-                if (!tileGrid[px][py].isEmpty)
+                if (tileGrid[px][py] != null)
                     tileGrid[px][py].onFloorCollisionR(this, sensorPos);
-                else if (!tileGrid[Math.floor(px + (length * 0.3)/16)][py].isEmpty)
+                else if (tileGrid[Math.floor(px + (length * 0.3)/16)][py] != null)
                     tileGrid[Math.floor(px + (length * 0.3)/16)][py].onFloorCollisionR(this, sensorPos);
-                else if (!tileGrid[Math.floor(px + (length * 0.6)/16)][py].isEmpty)
+                else if (tileGrid[Math.floor(px + (length * 0.6)/16)][py] != null)
                     tileGrid[Math.floor(px + (length * 0.6)/16)][py].onFloorCollisionR(this, sensorPos);
-                else if (!tileGrid[Math.floor(px + (length)/16)][py].isEmpty)
+                else if (tileGrid[Math.floor(px + (length)/16)][py] != null)
                     tileGrid[Math.floor(px + (length)/16)][py].onFloorCollisionR(this, sensorPos);
                 else
                     this._setAirSensor();
             }
             else if (this._mode == Quadrant.Ceiling) {
                 length *= -1;
-                if (!tileGrid[px][py].isEmpty)
+                if (tileGrid[px][py] != null)
                     tileGrid[px][py].onFloorCollisionU(this, sensorPos);
-                else if (!tileGrid[px][Math.floor(py + (length * 0.3)/16)].isEmpty)
+                else if (tileGrid[px][Math.floor(py + (length * 0.3)/16)] != null)
                     tileGrid[px][Math.floor(py + (length * 0.3)/16)].onFloorCollisionU(this, sensorPos);
-                else if (!tileGrid[px][Math.floor(py + (length * 0.6)/16)].isEmpty)
+                else if (tileGrid[px][Math.floor(py + (length * 0.6)/16)] != null)
                     tileGrid[px][Math.floor(py + (length * 0.6)/16)].onFloorCollisionU(this, sensorPos);
-                else if (!tileGrid[px][Math.floor(py + length/16)].isEmpty)
+                else if (tileGrid[px][Math.floor(py + length/16)] != null)
                     tileGrid[px][Math.floor(py + length/16)].onFloorCollisionU(this, sensorPos);
                 else
                     this._setAirSensor();
             }
             else { //quadrant must be left wall
                 length *= -1;
-                if (!tileGrid[px][py].isEmpty)
+                if (tileGrid[px][py] != null)
                     tileGrid[px][py].onFloorCollisionL(this, sensorPos);
-                else if (!tileGrid[Math.floor(px + (length * 0.3)/16)][py].isEmpty)
+                else if (tileGrid[Math.floor(px + (length * 0.3)/16)][py] != null)
                     tileGrid[Math.floor(px + (length * 0.3)/16)][py].onFloorCollisionL(this, sensorPos);
-                else if (!tileGrid[Math.floor(px + (length * 0.6)/16)][py].isEmpty)
+                else if (tileGrid[Math.floor(px + (length * 0.6)/16)][py] != null)
                     tileGrid[Math.floor(px + (length * 0.6)/16)][py].onFloorCollisionL(this, sensorPos);
-                else if (!tileGrid[Math.floor(px + (length)/16)][py].isEmpty)
+                else if (tileGrid[Math.floor(px + (length)/16)][py] != null)
                     tileGrid[Math.floor(px + (length)/16)][py].onFloorCollisionL(this, sensorPos);
                 else
                     this._setAirSensor();
@@ -292,13 +292,13 @@ module objects {
             var py = Math.floor(sensorPos.y / 16);
 
             //instead of a real raycast (which I don't really know how to do anyway), check the few tiles where the raycast could return true
-            if (!tileGrid[px][py].isEmpty)
+            if (tileGrid[px][py] != null)
                 tileGrid[px][py].onCeilingCollision(this, sensorPos);
-            else if (!tileGrid[px][Math.floor(py + (length * 0.3)/16)].isEmpty)
+            else if (tileGrid[px][Math.floor(py + (length * 0.3)/16)] != null)
                 tileGrid[px][Math.floor(py + (length * 0.3)/16)].onCeilingCollision(this, sensorPos);
-            else if (!tileGrid[px][Math.floor(py + (length * 0.6)/16)].isEmpty)
+            else if (tileGrid[px][Math.floor(py + (length * 0.6)/16)] != null)
                 tileGrid[px][Math.floor(py + (length * 0.6)/16)].onCeilingCollision(this, sensorPos);
-            else if (!tileGrid[px][Math.floor(py + length/16)].isEmpty)
+            else if (tileGrid[px][Math.floor(py + length/16)] != null)
                 tileGrid[px][Math.floor(py + length/16)].onCeilingCollision(this, sensorPos);
             this._updateSensors();
         }
