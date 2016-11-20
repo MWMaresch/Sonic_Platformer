@@ -14,9 +14,9 @@ var scenes;
                 "..(                                        ....(           ]......                                                        .",
                 ".[                                         ...[             ].....                                                        .",
                 ".                                          ..[               ]....                                                        .",
-                ".                  ,.....1                 ..                 )...                                                      E .",
+                ".                  ,.....1                 ..                 )...                                                        .",
                 ".                 /.......`                ..`                 ...    ..           .....        .....        ..       .....",
-                ".                 .........                ...1                ... y  ..   ...                                            .",
+                ".                 .........                ...1                ...    ..   ...                                            .",
                 ".`                .........                ..............      ...    ..                                                  .",
                 "..1               ).......[                                    .........                         ,.                       .",
                 "...1               ].....(                                     .........                        ,.                        .",
@@ -44,11 +44,19 @@ var scenes;
                    225 up to 314
             */
             this._SCALE = config.Screen.REAL_WIDTH / config.Screen.WIDTH;
-            this._tileSpriteContainer = new createjs.SpriteContainer(tileSpriteSheet);
-            this._playerSpriteContainer = new createjs.SpriteContainer(shipAtlas);
+            this._tileSpriteContainer = new createjs.SpriteContainer(spriteAtlas);
+            this._spriteContainer = new createjs.SpriteContainer(spriteAtlas);
+            this._hudContainer = new createjs.SpriteContainer(fontSpriteSheet);
+            this._bg1 = new createjs.Sprite(spriteAtlas, "nightsky");
+            this._bg2 = new createjs.Sprite(spriteAtlas, "nightsky");
+            this._bgWidth = this._bg1.getBounds().width - 1;
+            this._bg2.x = this._bgWidth;
+            this._spriteContainer.addChild(this._bg1);
+            this._spriteContainer.addChild(this._bg2);
             this._player = new objects.Player("stand", 90, 90);
-            this._camera = new createjs.Container();
-            this._playerSpriteContainer.addChild(this._player);
+            //this._motobug = new objects.Enemy("motobug", 90, 90);
+            //this._spriteContainer.addChild(this._motobug);
+            this._spriteContainer.addChild(this._player);
             for (var x = 0; x < this._stringGrid[0].length; x++) {
                 this._tileGrid[x] = [];
                 for (var y = 0; y < this._stringGrid.length; y++) {
@@ -97,29 +105,38 @@ var scenes;
                         this._tileGrid[x][y].visible = true;
                 }
             }
-            stage.addChild(this._tileSpriteContainer);
-            stage.addChild(this._playerSpriteContainer);
+            this._spriteContainer.addChild(this._tileSpriteContainer);
+            stage.addChild(this._spriteContainer);
+            this._timeText = new createjs.BitmapText("TIME 0:00", fontSpriteSheet);
+            this._ringsText = new createjs.BitmapText("RINGS", fontSpriteSheet);
+            this._timeText.letterSpacing = 1;
+            this._ringsText.letterSpacing = 1;
+            this._timeText.x = 18;
+            this._timeText.y = 28;
+            this._ringsText.x = 18;
+            this._ringsText.y = 45;
+            this._hudContainer.addChild(this._timeText);
+            //this._hudContainer.addChild(this._ringsText);
+            stage.addChild(this._hudContainer);
             console.log("tilegrid created");
             this._tileSpriteContainer.tickEnabled = false;
             this._tileSpriteContainer.tickChildren = false;
-            this._playerSpriteContainer.snapToPixel = true;
-            this._tileSpriteContainer.snapToPixel = true;
+            this._spriteContainer.snapToPixel = true;
             stage.snapToPixelEnabled = true;
         }
         _convertAngle(hex_angle) {
             return (256 - hex_angle) * 1.40625;
         }
         start() {
-            //add the background first so it's behind everything
-            this._bg = new createjs.Bitmap(assets.getResult("Background"));
-            //stage.addChild(this._bg);
-            //stage.addChild(this);
+            this._timer = 0;
             canPause = true;
-            //stage.addChild(this._camera);
         }
         update() {
             //console.log(stage.x);
             //console.log(Math.floor((config.Screen.WIDTH + (stage.x * -1)) / 16));
+            this._timer += createjs.Ticker.interval;
+            this._timeText.text = "TIME  " + Math.floor((this._timer / 1000) / 60).toString() + ":" + Math.floor(((this._timer / 1000) % 60));
+            this._ringsText.text = "RINGS  " + this._player.numRings();
             this._player.update();
             this._player.checkCollisions(this._tileGrid);
             //console.log(this._player.x);
@@ -127,13 +144,13 @@ var scenes;
             //console.log(stage.x);
         }
         _updateCameraPosition() {
-            this._camDifR = this._playerSpriteContainer.x - (-this._player.x + this._rightCamBorder);
-            this._camDifL = this._playerSpriteContainer.x - (-this._player.x + this._leftCamBorder);
+            this._camDifR = this._spriteContainer.x - (this._rightCamBorder - this._player.x);
+            this._camDifL = this._spriteContainer.x - (this._leftCamBorder - this._player.x);
             if (this._camDifR > 0) {
-                this._playerSpriteContainer.x -= Math.min(this._camDifR, this._maxCamSpeed);
+                this._spriteContainer.x -= Math.min(this._camDifR, this._maxCamSpeed);
                 //make offscreen things invisible, and onscreen things visible
                 for (var y = 0; y < this._tileGrid[0].length; y++) {
-                    var screenTilePos = Math.floor((this._playerSpriteContainer.x * -1) / 16);
+                    var screenTilePos = Math.floor((this._spriteContainer.x * -1) / 16);
                     if (config.Screen.WIDTH / 16 + screenTilePos < this._tileGrid.length && this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos)][y] != null)
                         this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos)][y].visible = true;
                     if (screenTilePos - 2 >= 0 && this._tileGrid[screenTilePos - 2][y] != null)
@@ -141,10 +158,10 @@ var scenes;
                 }
             }
             else if (this._camDifL < 0) {
-                this._playerSpriteContainer.x -= Math.max(this._camDifL, -this._maxCamSpeed);
+                this._spriteContainer.x -= Math.max(this._camDifL, -this._maxCamSpeed);
                 //make offscreen things invisible, and onscreen things visible
                 for (var y = 0; y < this._tileGrid[0].length; y++) {
-                    var screenTilePos = Math.floor((this._playerSpriteContainer.x * -1) / 16);
+                    var screenTilePos = Math.floor((this._spriteContainer.x * -1) / 16);
                     if (screenTilePos >= 0 && this._tileGrid[screenTilePos][y] != null)
                         this._tileGrid[screenTilePos][y].visible = true;
                     if (config.Screen.WIDTH / 16 + screenTilePos + 1 < this._tileGrid.length && this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos + 1)][y] != null)
@@ -153,40 +170,40 @@ var scenes;
             }
             if (this._player.isGrounded()) {
                 if (this._player.velY() <= this._maxCamSpeed - 10) {
-                    this._camDifU = this._playerSpriteContainer.y - (-this._player.y + this._groundCamBorder);
+                    this._camDifU = this._spriteContainer.y - (-this._player.y + this._groundCamBorder);
                     if (Math.abs(this._camDifU) < this._maxCamSpeed - 10)
-                        this._playerSpriteContainer.y -= this._camDifU;
+                        this._spriteContainer.y -= this._camDifU;
                     else
-                        this._playerSpriteContainer.y -= (this._maxCamSpeed - 10) * Math.sign(this._camDifU);
+                        this._spriteContainer.y -= (this._maxCamSpeed - 10) * Math.sign(this._camDifU);
                 }
                 else {
-                    this._camDifU = this._playerSpriteContainer.y - (-this._player.y + this._groundCamBorder);
+                    this._camDifU = this._spriteContainer.y - (-this._player.y + this._groundCamBorder);
                     if (Math.abs(this._camDifU) < this._maxCamSpeed)
-                        this._playerSpriteContainer.y -= this._camDifU;
+                        this._spriteContainer.y -= this._camDifU;
                     else
-                        this._playerSpriteContainer.y -= this._maxCamSpeed * Math.sign(this._camDifU);
+                        this._spriteContainer.y -= this._maxCamSpeed * Math.sign(this._camDifU);
                 }
             }
             else {
-                this._camDifU = this._playerSpriteContainer.y - (-this._player.y + this._topCamBorder);
-                this._camDifD = this._playerSpriteContainer.y - (-this._player.y + this._bottomCamBorder);
+                this._camDifU = this._spriteContainer.y - (-this._player.y + this._topCamBorder);
+                this._camDifD = this._spriteContainer.y - (-this._player.y + this._bottomCamBorder);
                 if (this._camDifU < 0)
-                    this._playerSpriteContainer.y -= Math.min(this._camDifU, this._maxCamSpeed);
+                    this._spriteContainer.y -= Math.min(this._camDifU, this._maxCamSpeed);
                 else if (this._camDifD > 0)
-                    this._playerSpriteContainer.y -= Math.max(this._camDifD, -this._maxCamSpeed);
+                    this._spriteContainer.y -= Math.max(this._camDifD, -this._maxCamSpeed);
             }
             //side wall boundarys
-            if (this._playerSpriteContainer.x > 0)
-                this._playerSpriteContainer.x = 0;
-            else if (this._playerSpriteContainer.x < this._camRightBoundary)
-                this._playerSpriteContainer.x = this._camRightBoundary;
+            if (this._spriteContainer.x > 0)
+                this._spriteContainer.x = 0;
+            else if (this._spriteContainer.x < this._camRightBoundary)
+                this._spriteContainer.x = this._camRightBoundary;
             //upper and lower boundarys
-            if (this._playerSpriteContainer.y > 0)
-                this._playerSpriteContainer.y = 0;
-            else if (this._playerSpriteContainer.y < this._camBottomBoundary)
-                this._playerSpriteContainer.y = this._camBottomBoundary;
-            this._tileSpriteContainer.x = this._playerSpriteContainer.x;
-            this._tileSpriteContainer.y = this._playerSpriteContainer.y;
+            if (this._spriteContainer.y > 0)
+                this._spriteContainer.y = 0;
+            else if (this._spriteContainer.y < this._camBottomBoundary)
+                this._spriteContainer.y = this._camBottomBoundary;
+            this._bg1.x = (Math.floor(-this._spriteContainer.x / this._bgWidth) * this._bgWidth);
+            this._bg2.x = this._bg1.x + this._bgWidth;
         }
         _returnBtnClick(event) {
             this.removeAllChildren();

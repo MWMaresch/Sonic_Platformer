@@ -38,7 +38,7 @@ module objects {
         }
 
         constructor(imageString : string, deathAnimString) {
-            super(shipAtlas, imageString);
+            super(spriteAtlas, imageString);
 
             this._initialize(imageString);
             this.start();

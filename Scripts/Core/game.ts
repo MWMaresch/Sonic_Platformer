@@ -6,8 +6,9 @@ var canvas: HTMLElement;
 var stage: createjs.SpriteStage;
 
 var spriteSheetLoader : createjs.SpriteSheetLoader;
-var shipAtlas : createjs.SpriteSheet;
+var spriteAtlas : createjs.SpriteSheet;
 var tileSpriteSheet : createjs.SpriteSheet;
+var fontSpriteSheet : createjs.SpriteSheet;
 
 var currentScene : objects.Scene;
 var scene: number;
@@ -31,12 +32,14 @@ enum Quadrant {
 // Preload Assets required
 var assetData:objects.Asset[] = [
     {id: "Pause", src:"../../Assets/images/pause.png"},
+    {id: "Background", src:"../../Assets/images/nightsky.png"},
     {id: "Overlay", src:"../../Assets/images/FinishOverlay.png"},
     {id: "ExitBtn", src:"../../Assets/images/exit.png"},
     {id: "InstBtn", src:"../../Assets/images/Instructions.png"},
     {id: "Block", src:"../../Assets/images/metalblock.png"},
     {id: "Ramps", src:"../../Assets/images/metalblock2.png"},
     {id: "Tiles", src:"../../Assets/images/metalblocks.png"},
+    {id: "Font", src:"../../Assets/images/HUDfont.png"},
     {id: "Ramp22", src:"../../Assets/images/ramp22.png"},
     {id: "Ramp23", src:"../../Assets/images/ramp23.png"},
     {id: "Ramp135", src:"../../Assets/images/ramp135.png"},
@@ -93,7 +96,7 @@ function init() {
 
     collision = new managers.Collision();
 
-    let sonicSpriteData = {
+    let spriteData = {
         images: [assets.getResult("Sonic")],
 
         frames:[ [1, 6, 39, 40, 0], //standing still
@@ -101,7 +104,14 @@ function init() {
         [81, 47, 39, 40, 0], [121, 47, 39, 40, 0], //crouching
         [81, 91, 39, 40, 0], [121, 91, 39, 40, 0], [161, 91, 39, 40, 0], [201, 91, 39, 40, 0], [1, 91, 39, 40, 0], [41, 91, 39, 40, 0], //walking
         [1, 141, 39, 40, 0], [41, 141, 39, 40, 0], [81, 141, 39, 40, 0], [121, 141, 39, 40, 0], //running
-        [2, 235, 39, 40, 0], [42, 235, 39, 40, 0], [82, 235, 39, 40, 0], [122, 235, 39, 40, 0], [162, 235, 39, 40, 0]],//jumping
+        [2, 235, 39, 40, 0], [42, 235, 39, 40, 0], [82, 235, 39, 40, 0], [122, 235, 39, 40, 0], [162, 235, 39, 40, 0],//jumping
+        [590, 365, 39, 29, 0], //motobug enemy
+        [272, 0, 16, 16, 0],//solid tile
+        [232, 0, 16, 16, 0],//bottom right slope tile, 45
+        [252, 0, 16, 16, 0],//bottom left slope tile, 315
+        [232, 20, 16, 16, 0],//top right slope tile, 135
+        [252, 20, 16, 16, 0],//top left slope tile, 225
+        [477, 473, 512, 256, 0]], //sky
 
         /*animations: {
         player: 0,
@@ -115,7 +125,14 @@ function init() {
             "crouch": { "frames": [3,4] },
             "walk": { "frames": [5,6,7,8,9,10], speed:1/60 },
             "run": { "frames": [11,12,13,14] },
-            "jump": { "frames": [15,16,17,18,19], speed:12/60 }
+            "jump": { "frames": [15,16,17,18,19], speed:12/60 },
+            "motobug": {"frames":[20]},
+            "block": { "frames": [21] },
+            "ramp45": { "frames": [22] },
+            "ramp315": { "frames": [23] },
+            "ramp135": { "frames": [24] },
+            "ramp225": { "frames": [25] },
+            "nightsky": { "frames": [26] }
         },
 
         "texturepacker": [
@@ -124,22 +141,51 @@ function init() {
         ]
     }
 
-    let tileData = {
-        images: [assets.getResult("Tiles")],
+    let fontData = {
+        images: [assets.getResult("Font")],
 
         frames:[ 
-        [40, 0, 16, 16, 0],//solid tile
-        [0, 0, 16, 16, 0],//bottom right slope tile, 45
-        [20, 0, 16, 16, 0],//bottom left slope tile, 315
-        [0, 20, 16, 16, 0],//top right slope tile, 135
-        [20, 20, 16, 16, 0]],//top left slope tile, 225
+        [7, 0, 7, 11, 0],        [15, 0, 7, 11, 0],
+        [23, 0, 7, 11, 0],        [31, 0, 7, 11, 0],
+        [39, 0, 7, 11, 0],        [47, 0, 7, 11, 0],
+        [55, 0, 7, 11, 0],        [63, 0, 7, 11, 0],
+        [72, 0, 3, 11, 0],        [77, 0, 7, 11, 0],
+        [85, 0, 8, 11, 0],        [94, 0, 6, 11, 0],
+        [101, 0, 10, 11, 0],        [112, 0, 9, 11, 0],
+        [122, 0, 7, 11, 0],        [130, 0, 7, 11, 0],
+        [138, 0, 8, 11, 0],        [146, 0, 7, 11, 0],
+        [154, 0, 7, 11, 0],        [162, 0, 7, 11, 0],
+        [170, 0, 7, 11, 0],        [178, 0, 7, 11, 0],
+        [186, 0, 10, 11, 0],        [197, 0, 8, 11, 0],
+        [206, 0, 7, 11, 0],        [214, 0, 8, 11, 0],
+        [223, 0, 7, 11, 0],        [232, 0, 4, 11, 0],
+        [238, 0, 7, 11, 0],        [246, 0, 7, 11, 0],
+        [254, 0, 7, 11, 0],        [262, 0, 7, 11, 0],
+        [270, 0, 7, 11, 0],        [278, 0, 7, 11, 0],
+        [286, 0, 7, 11, 0],        [294, 0, 7, 11, 0],
+        [428, 0, 7, 11, 0]],
 
         animations: {
-            "block": { "frames": [0] },
-            "ramp45": { "frames": [1] },
-            "ramp315": { "frames": [2] },
-            "ramp135": { "frames": [3] },
-            "ramp225": { "frames": [4] },
+            "A": [0],            "B": [1] ,
+            "C":  [2] ,            "D":  [3] ,
+            "E":  [4] ,            "F":  [5] ,
+            "G":  [6] ,            "H":  [7] ,
+            "I":  [8] ,            "J":  [9] ,
+            "K":  [10] ,            "L":  [11] ,
+            "M":  [12] ,            "N":  [13] ,
+            "O":  [14] ,            "P":  [15] ,
+            "Q":  [16] ,            "R":  [17] ,
+            "S":  [18] ,            "T":  [19] ,
+            "U":  [20] ,            "V":  [21] ,
+            "W":  [22] ,            "X":  [23] ,
+            "Y":  [24] ,            "Z":  [25] ,
+            "0":  [26] ,            "1":  [27] ,
+            "2":  [28] ,            "3":  [29] ,
+            "4":  [30] ,            "5":  [31] ,
+            "6":  [32] ,            "7":  [33] ,
+            "8":  [34] ,            "9":  [35] ,
+            ":":  [36] ,
+            ".":  [36] ,
         },
 
         "texturepacker": [
@@ -148,15 +194,15 @@ function init() {
         ]
     }
 
-    tileSpriteSheet = new createjs.SpriteSheet(tileData);
-    shipAtlas = new createjs.SpriteSheet(sonicSpriteData);
+    fontSpriteSheet = new createjs.SpriteSheet(fontData);
+    spriteAtlas = new createjs.SpriteSheet(spriteData);
 
     scene = config.Scene.LEVEL1;
     changeScene();
 }
 
 function gameLoop(event: createjs.Event): void {
-    console.log("Framerate: " + Math.round(createjs.Ticker.framerate));
+    console.log("Framerate: " + createjs.Ticker.getFPS());
     if (!paused)
     {
         // Update whatever scene is currently active.

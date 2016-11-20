@@ -16,6 +16,7 @@ var objects;
             this._GRAVITY = 0.21875;
             this._JUMPVELOCITY = 6;
             this._SHORTJUMPVELOCITY = 4;
+            this._rings = 0;
             this._isGrounded = false;
             this._accelerating = false;
             this._pressedJump = false;
@@ -28,7 +29,6 @@ var objects;
             this._angleThreshold = 45;
             this._angleRadians = 0;
             this._layer = 1;
-            //other variables
             this._velX = 0;
             this._velY = 0;
             this._gSpeed = 0;
@@ -41,6 +41,7 @@ var objects;
             this.y = y;
             this.width = this.getBounds().width;
             this.height = this.getBounds().height;
+            this._rings = 0;
             window.onkeydown = this._onKeyDown;
             window.onkeyup = this._onKeyUp;
         }
@@ -50,6 +51,9 @@ var objects;
                 //console.log("sensors detected air");
                 this._startFalling();
             }
+        }
+        numRings() {
+            return this._rings;
         }
         isGrounded() {
             return this._isGrounded;

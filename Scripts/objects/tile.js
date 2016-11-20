@@ -2,7 +2,7 @@ var objects;
 (function (objects) {
     class Tile extends createjs.Sprite {
         constructor(imageString, angleTop, angleBottom, angleL, angleR) {
-            super(tileSpriteSheet, imageString);
+            super(spriteAtlas, imageString);
             this.isEmpty = true;
             this.start();
             this._topAngle = angleTop;

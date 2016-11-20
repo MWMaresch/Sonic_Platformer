@@ -17,6 +17,7 @@ module objects {
         private _JUMPVELOCITY : number = 6;
         private _SHORTJUMPVELOCITY : number = 4;
 
+        private _rings : number = 0;
         private _isGrounded : boolean = false;
         private _accelerating : boolean = false;
         private _pressedJump : boolean = false;
@@ -37,7 +38,6 @@ module objects {
         private _angleRadians : number = 0;
         private _layer : number = 1;
 
-        //other variables
         private _velX : number = 0;
         private _velY : number = 0;
         private _gSpeed : number = 0;
@@ -58,7 +58,7 @@ module objects {
 
             this.width = this.getBounds().width;
             this.height = this.getBounds().height;
-
+            this._rings = 0;
             window.onkeydown = this._onKeyDown;
             window.onkeyup = this._onKeyUp;
         }
@@ -69,6 +69,10 @@ module objects {
                 //console.log("sensors detected air");
                 this._startFalling();
             }
+        }
+
+        public numRings() : number {
+            return this._rings;
         }
 
         public isGrounded() : boolean {

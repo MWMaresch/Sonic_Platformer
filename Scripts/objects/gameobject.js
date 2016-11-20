@@ -2,7 +2,7 @@ var objects;
 (function (objects) {
     class GameObject extends createjs.Sprite {
         constructor(imageString, deathAnimString) {
-            super(shipAtlas, imageString);
+            super(spriteAtlas, imageString);
             this._initialize(imageString);
             this.start();
         }

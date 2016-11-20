@@ -13,7 +13,7 @@ module objects {
         protected _layer : number;
 
         constructor(imageString : string, angleTop : number, angleBottom : number, angleL : number, angleR : number) {
-            super(tileSpriteSheet, imageString);
+            super(spriteAtlas, imageString);
             this.start();
             this._topAngle = angleTop;
             this._rSideAngle = angleR;

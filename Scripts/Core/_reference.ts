@@ -13,7 +13,7 @@
 /// <reference path="../objects/vector2.ts" />
 /// <reference path="../objects/tile.ts" />
 /// <reference path="../objects/groundtile.ts" />
-/// <reference path="../objects/warp.ts" />
+/// <reference path="../objects/enemy.ts" />
 
 /// <reference path="../managers/collision.ts" />
 
