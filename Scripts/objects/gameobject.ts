@@ -3,13 +3,6 @@ module objects {
         private _width:number;
         private _height:number;
 
-        private _TRCorner:Vector2;
-        private _TLCorner:Vector2;
-        private _BRCorner:Vector2;
-        private _BLCorner:Vector2
-
-        private _deathAnim:string;
-
         // PUBLIC PROPERTIES
         get width() : number {
             return this._width
@@ -24,20 +17,20 @@ module objects {
             this._height = h;
         }
 
-        get tr_corner() : Vector2 {
-            return new objects.Vector2(this.x + this.width * 0.5, this.y - this.height * 0.5);
+        get topLine() : number {
+            return this.y - this.height/2;
         }
-        get tl_corner() : Vector2 {
-            return new objects.Vector2(this.x - this.width * 0.5, this.y - this.height * 0.5);
+        get bottomLine() : number {
+            return this.y + this.height/2;
         }
-        get br_corner() : Vector2 {
-            return new objects.Vector2(this.x + this.width * 0.5, this.y + this.height * 0.5);
+        get rightLine() : number {
+            return this.x + this.width/2;
         }
-        get bl_corner() : Vector2 {
-            return new objects.Vector2(this.x - this.width * 0.5, this.y + this.height * 0.5);
+        get leftLine() : number {
+            return this.x - this.width/2;
         }
 
-        constructor(imageString : string, deathAnimString) {
+        constructor(imageString : string) {
             super(spriteAtlas, imageString);
 
             this._initialize(imageString);

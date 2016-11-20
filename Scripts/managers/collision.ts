@@ -13,10 +13,19 @@ module managers {
         }
 
         public boxCheck(coll:objects.GameObject, objColliding:objects.GameObject) {            
-            if(coll.tr_corner.x > objColliding.tl_corner.x && 
-                coll.tl_corner.x < objColliding.tr_corner.x &&
-                coll.tr_corner.y < objColliding.bl_corner.y &&
-                coll.br_corner.y > objColliding.tl_corner.y) {
+            if(coll.bottomLine > objColliding.topLine && 
+                coll.topLine < objColliding.bottomLine &&
+                coll.leftLine < objColliding.rightLine &&
+                coll.rightLine > objColliding.leftLine) {
+                    return true;
+                }
+        }
+
+        public sensorBoxCheck(sensor:objects.Vector2, objColliding:objects.GameObject) {            
+            if(sensor.y > objColliding.topLine && 
+                sensor.y < objColliding.bottomLine &&
+                sensor.x < objColliding.rightLine &&
+                sensor.x > objColliding.leftLine) {
                     return true;
                 }
         }

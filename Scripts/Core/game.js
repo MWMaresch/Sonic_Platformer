@@ -92,7 +92,9 @@ function init() {
             [252, 0, 16, 16, 0],
             [232, 20, 16, 16, 0],
             [252, 20, 16, 16, 0],
-            [477, 473, 512, 256, 0]],
+            [477, 473, 512, 256, 0],
+            [905, 319, 40, 32, 0],
+            [91, 617, 40, 43, 0]],
         /*animations: {
         player: 0,
         block: 1,
@@ -111,7 +113,9 @@ function init() {
             "ramp315": { "frames": [23] },
             "ramp135": { "frames": [24] },
             "ramp225": { "frames": [25] },
-            "nightsky": { "frames": [26] }
+            "nightsky": { "frames": [26] },
+            "spikes": { "frames": [27] },
+            "dead": { "frames": [28] }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",

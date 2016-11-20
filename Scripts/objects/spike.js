@@ -1,8 +1,8 @@
 var objects;
 (function (objects) {
-    class Spike extends createjs.Sprite {
-        constructor(imageString, x, y) {
-            super(spriteAtlas, imageString);
+    class Spike extends objects.GameObject {
+        constructor(x, y) {
+            super("spikes");
             this.x = x;
             this.y = y;
             this.start();

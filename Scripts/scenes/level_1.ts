@@ -28,26 +28,24 @@ module scenes {
         private _ringsText : createjs.BitmapText;
         private _camera : createjs.Container;
         private _text : createjs.BitmapText;
+        private _spikes : objects.Spike[];
 
         private _tileGrid : objects.Tile[][] = [];
         private _stringGrid : string[] =
         ["...........................................................................................................................",
-         "..(                                        ....(           ]......                                                        .",
-         ".[                                         ...[             ].....                                                        .",
-         ".                                          ..[               ]....                                                        .",
-         ".                  ,.....1                 ..                 )...                                                        .",
-         ".                 /.......`                ..`                 ...    ..           .....        .....        ..       .....",
-         ".                 .........                ...1                ...    ..   ...                                            .",
-         ".`                .........                ..............      ...    ..                                                  .",
-         "..1               ).......[                                    .........                         ,.                       .",
-         "...1               ].....(                                     .........                        ,.                        .",
-         "....1                                                         /............                    /.                         .",
-         ".....1                                                       ,..........                      /.                          .",
-         "......1                                                     ,...........                     ,.                           .",
-         ".......1                    ,..1                           ,............                    ,..         ,.......1         .",
-         "...................................  ..........................................  ..........................................",
-         "...................................                                              ..........................................",
-         "...................................                                              ..........................................",
+         "....(                                    ]...(               ]......                                                      .",
+         "...[                                      ].(                 ].....                                                      .",
+         "..[                                                            )....                                                      .",
+         ".[                 ,.....1                                                                                                .",
+         ".                 /.......`                                           ..           .....        .....        ..       .....",
+         ".                 .........                                           ..   ...                                          ]..",
+         ".`                .........                                    .........                                                 ).",
+         "..1               ).......[                                    .........                                                  .",
+         "...1               ].....(                                     .........                                                  .",
+         "....1                                                          .........                                                  .",
+         ".....1                                   ,...1                 .........`                                                /.",
+         "......1                                 ,.....1                ..........1                           ,.......1          ,..",
+         "...........................................................................................................................",
          "..........................................................................................................................."]; //this is actually the level itself.
          //it can be any size, but all rows must be equal, and all columns must be equal
 
@@ -74,6 +72,7 @@ module scenes {
             this._tileSpriteContainer = new createjs.SpriteContainer(spriteAtlas);
             this._spriteContainer = new createjs.SpriteContainer(spriteAtlas);
             this._hudContainer = new createjs.SpriteContainer(fontSpriteSheet);
+            this._spikes = [new objects.Spike(33*16, 192), new objects.Spike(105*16, 176)];
 
             this._bg1 = new createjs.Sprite(spriteAtlas, "nightsky");
             this._bg2 = new createjs.Sprite(spriteAtlas, "nightsky");
@@ -81,19 +80,15 @@ module scenes {
             this._bg2.x = this._bgWidth;
             this._spriteContainer.addChild(this._bg1);
             this._spriteContainer.addChild(this._bg2);
+            this._spriteContainer.addChild(this._spikes[0]);
+            this._spriteContainer.addChild(this._spikes[1]);
 
-            this._player = new objects.Player("stand",90,90);
-            //this._motobug = new objects.Enemy("motobug", 90, 90);
-            //this._spriteContainer.addChild(this._motobug);
-            this._spriteContainer.addChild(this._player);
 
             for (var x = 0; x < this._stringGrid[0].length; x++){
                 this._tileGrid[x] = [];
                 for (var y = 0; y < this._stringGrid.length; y++){
-                    if (this._stringGrid[y].charAt(x) == ' '){
+                    if (this._stringGrid[y].charAt(x) == ' ')
                         this._tileGrid[x][y] = null;
-                        //this._tileGrid[x][y].visible = false;
-                    }
                     else if (this._stringGrid[y].charAt(x) == 'x')
                         this._tileGrid[x][y] = new objects.Warp("portal", 0);
                     else if (this._stringGrid[y].charAt(x) == 'y')
@@ -103,23 +98,21 @@ module scenes {
                     else if (this._stringGrid[y].charAt(x) == '.')
                         this._tileGrid[x][y] = new objects.GroundTile("block", 0, 180, 90, 270);
                     else if (this._stringGrid[y].charAt(x) == '/')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp45", 45, 180, 45, 270); //correct
+                        this._tileGrid[x][y] = new objects.GroundTile("ramp45", 45, 180, 45, 270);
                     else if (this._stringGrid[y].charAt(x) == ',')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp45", 44, 180, 44, 270); //correct
-                    else if (this._stringGrid[y].charAt(x) == '”')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp23", 10, 180, 23, 270);
+                        this._tileGrid[x][y] = new objects.GroundTile("ramp45", 44, 180, 44, 270);
                     else if (this._stringGrid[y].charAt(x) == '1')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp315", 315, 180, 90, 315); //correct
+                        this._tileGrid[x][y] = new objects.GroundTile("ramp315", 315, 180, 90, 315);
                     else if (this._stringGrid[y].charAt(x) == '`')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp315", 314, 180, 90, 314); //correct
+                        this._tileGrid[x][y] = new objects.GroundTile("ramp315", 314, 180, 90, 314);
                     else if (this._stringGrid[y].charAt(x) == ']')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp135", 0, 135, 135, 270); //correct
+                        this._tileGrid[x][y] = new objects.GroundTile("ramp135", 0, 135, 135, 270);
                     else if (this._stringGrid[y].charAt(x) == '[')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp225", 0, 225, 90, 225); //correct
+                        this._tileGrid[x][y] = new objects.GroundTile("ramp225", 0, 225, 90, 225);
                     else if (this._stringGrid[y].charAt(x) == '(')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp225", 0, 224, 90, 224); //correct
+                        this._tileGrid[x][y] = new objects.GroundTile("ramp225", 0, 224, 90, 224);
                     else if (this._stringGrid[y].charAt(x) == ')')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp135", 0, 134, 134, 270); //correct
+                        this._tileGrid[x][y] = new objects.GroundTile("ramp135", 0, 134, 134, 270);
                     if (this._tileGrid[x][y] != null) {
                         this._tileGrid[x][y].x = x * 16;
                         this._tileGrid[x][y].y = y * 16;
@@ -127,7 +120,6 @@ module scenes {
                         this._tileGrid[x][y].visible = false;
                     }
                 }
-
             }
             this._camRightBoundary = this._tileGrid.length * -16 + config.Screen.WIDTH;
             this._camBottomBoundary = this._tileGrid[0].length * -16 + config.Screen.HEIGHT;
@@ -139,6 +131,10 @@ module scenes {
             }
             this._spriteContainer.addChild(this._tileSpriteContainer);
 
+            this._player = new objects.Player("stand",90,90);
+            //this._motobug = new objects.Enemy("motobug", 90, 90);
+            //this._spriteContainer.addChild(this._motobug);
+            this._spriteContainer.addChild(this._player);
 
             stage.addChild(this._spriteContainer);
 
@@ -178,12 +174,34 @@ module scenes {
             //console.log(Math.floor((config.Screen.WIDTH + (stage.x * -1)) / 16));
             this._timer += createjs.Ticker.interval;
             this._timeText.text = "TIME  " + Math.floor((this._timer/1000)/60).toString() + ":" + Math.floor(((this._timer/1000)%60));
-            this._ringsText.text = "RINGS  " + this._player.numRings();
+            this._ringsText.text = "RINGS  " + this._player.getNumRings();
             this._player.update();
             this._player.checkCollisions(this._tileGrid);
             //console.log(this._player.x);
             this._updateCameraPosition();
+            this._checkCollisions();
             //console.log(stage.x);
+        }
+
+        private _checkCollisions() : void {
+            if (!this._player.isDead()){
+                for (var obj = 0; obj < this._spikes.length; obj++) {
+                    console.log("checking spike index " + obj);
+                    if (collision.sensorBoxCheck(this._player.getLeftSideSensor(), this._spikes[obj])) {
+                        this._player.collideWithLeftWall(this._spikes[obj].rightLine);
+                    }
+                    else if (collision.sensorBoxCheck(this._player.getRightSideSensor(), this._spikes[obj])) {
+                        this._player.collideWithRightWall(this._spikes[obj].leftLine);
+                    }
+                    else if (this._player.velY() > 0 && (collision.sensorBoxCheck(this._player.getLeftFootSensor(), this._spikes[obj])
+                                                    || collision.sensorBoxCheck(this._player.getRightFootSensor(), this._spikes[obj]))){
+                        this._player.getHurt();
+                    }
+                }
+            }
+            else if (this._camDifU > 300) {
+                console.log("gameover");
+            }
         }
 
         private _updateCameraPosition() : void{ 

@@ -1,10 +1,10 @@
 module objects {
-    export class Spike extends createjs.Sprite {
+    export class Spike extends objects.GameObject {
 
         protected _layer : number;
 
-        constructor(imageString : string, x : number, y : number) {
-            super(spriteAtlas, imageString);
+        constructor(x : number, y : number) {
+            super("spikes");
             this.x = x;
             this.y = y;
             this.start();

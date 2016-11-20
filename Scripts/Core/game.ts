@@ -111,7 +111,9 @@ function init() {
         [252, 0, 16, 16, 0],//bottom left slope tile, 315
         [232, 20, 16, 16, 0],//top right slope tile, 135
         [252, 20, 16, 16, 0],//top left slope tile, 225
-        [477, 473, 512, 256, 0]], //sky
+        [477, 473, 512, 256, 0], //sky
+        [905, 319, 40, 32, 0], //spikes
+        [91, 617, 40, 43, 0]], //ouch
 
         /*animations: {
         player: 0,
@@ -132,7 +134,10 @@ function init() {
             "ramp315": { "frames": [23] },
             "ramp135": { "frames": [24] },
             "ramp225": { "frames": [25] },
-            "nightsky": { "frames": [26] }
+            "nightsky": { "frames": [26] },
+            "spikes": { "frames": [27] },
+            "dead": { "frames": [28] }
+
         },
 
         "texturepacker": [

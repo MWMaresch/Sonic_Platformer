@@ -1,7 +1,7 @@
 var objects;
 (function (objects) {
     class GameObject extends createjs.Sprite {
-        constructor(imageString, deathAnimString) {
+        constructor(imageString) {
             super(spriteAtlas, imageString);
             this._initialize(imageString);
             this.start();
@@ -19,17 +19,17 @@ var objects;
         set height(h) {
             this._height = h;
         }
-        get tr_corner() {
-            return new objects.Vector2(this.x + this.width * 0.5, this.y - this.height * 0.5);
+        get topLine() {
+            return this.y - this.height / 2;
         }
-        get tl_corner() {
-            return new objects.Vector2(this.x - this.width * 0.5, this.y - this.height * 0.5);
+        get bottomLine() {
+            return this.y + this.height / 2;
         }
-        get br_corner() {
-            return new objects.Vector2(this.x + this.width * 0.5, this.y + this.height * 0.5);
+        get rightLine() {
+            return this.x + this.width / 2;
         }
-        get bl_corner() {
-            return new objects.Vector2(this.x - this.width * 0.5, this.y + this.height * 0.5);
+        get leftLine() {
+            return this.x - this.width / 2;
         }
         _initialize(imageString) {
             this.width = this.getBounds().width;

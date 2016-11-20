@@ -2,7 +2,7 @@ var objects;
 (function (objects) {
     class Player extends objects.GameObject {
         constructor(imageString, x, y) {
-            super(imageString, "");
+            super(imageString);
             //constant variables
             //if only the const or readonly keywords could be used here
             this._GROUNDACCELERATION = 0.046875; //applied when moving left or right
@@ -18,6 +18,7 @@ var objects;
             this._SHORTJUMPVELOCITY = 4;
             this._rings = 0;
             this._isGrounded = false;
+            this._isDead = false;
             this._accelerating = false;
             this._pressedJump = false;
             this._topSensorL = new objects.Vector2;
@@ -52,43 +53,72 @@ var objects;
                 this._startFalling();
             }
         }
-        numRings() {
+        getRightSideSensor() {
+            return this._sideSensorR;
+        }
+        getLeftSideSensor() {
+            return this._sideSensorL;
+        }
+        getLeftFootSensor() {
+            return new objects.Vector2(this._footSensorL.x, this.y + 20);
+        }
+        getRightFootSensor() {
+            return new objects.Vector2(this._footSensorR.x, this.y + 20);
+        }
+        getNumRings() {
             return this._rings;
         }
         isGrounded() {
             return this._isGrounded;
         }
+        isDead() {
+            return this._isDead;
+        }
         velY() {
             return this._velY;
         }
+        getHurt() {
+            if (this._rings == 0) {
+                this._velX = 0;
+                this._velY = -6;
+                this._isDead = true;
+                this.gotoAndStop("dead");
+            }
+        }
         update() {
             super.update();
-            this._sensorsInAir = 0;
-            this._accelerating = false;
-            this._higherGround.y = 90000;
-            this._lowerGround.y = -90000;
-            if (this._hcLockTimer > 0)
-                this._hcLockTimer--;
-            //console.log("frame advance");
-            if (controls.UP)
-                this.lookUp();
-            if (controls.DOWN)
-                this.crouch();
-            if (this._hcLockTimer <= 0) {
-                if (controls.LEFT)
-                    this.moveLeft();
-                else if (controls.RIGHT)
-                    this.moveRight();
+            if (!this._isDead) {
+                this._sensorsInAir = 0;
+                this._accelerating = false;
+                this._higherGround.y = 90000;
+                this._lowerGround.y = -90000;
+                if (this._hcLockTimer > 0)
+                    this._hcLockTimer--;
+                //console.log("frame advance");
+                if (controls.UP)
+                    this.lookUp();
+                if (controls.DOWN)
+                    this.crouch();
+                if (this._hcLockTimer <= 0) {
+                    if (controls.LEFT)
+                        this.moveLeft();
+                    else if (controls.RIGHT)
+                        this.moveRight();
+                }
+                if (controls.JUMP)
+                    this.jump();
+                else {
+                    this._pressedJump = false;
+                    if (this._velY < -this._SHORTJUMPVELOCITY)
+                        this._velY = -this._SHORTJUMPVELOCITY;
+                }
+                this.updateMovement();
+                this._updateSensors();
             }
-            if (controls.JUMP)
-                this.jump();
             else {
-                this._pressedJump = false;
-                if (this._velY < -this._SHORTJUMPVELOCITY)
-                    this._velY = -this._SHORTJUMPVELOCITY;
+                this.y += this._velY;
+                this._velY += this._GRAVITY;
             }
-            this.updateMovement();
-            this._updateSensors();
         }
         _startFalling() {
             //console.log("fall");
@@ -180,21 +210,22 @@ var objects;
             this._topSensorR = new objects.Vector2(this.x + this._headOffset.x, this.y - this._headOffset.y);
         }
         checkCollisions(tileGrid) {
-            //a lot of the time a sensor's tile will be empty and its method won't even run any code     
-            //only do wall collisions if we're moving forwards
-            if (tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)] != null && this._velX < 0)
-                tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)].onLeftWallCollision(this, this._sideSensorL);
-            else if (tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)] != null && this._velX > 0)
-                tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)].onRightWallCollision(this, this._sideSensorR);
-            //only check head collision if we're in the air
-            if (!this._isGrounded) {
-                this._checkHeadCollision(-this._footRayCastLength, this._topSensorR, tileGrid);
-                this._checkHeadCollision(-this._footRayCastLength, this._topSensorL, tileGrid);
-            }
-            //always check if our feet would hit something
-            if (this._velY >= 0 || this._isGrounded) {
-                this._checkFootCollision(this._footRayCastLength, this._footSensorR, tileGrid);
-                this._checkFootCollision(this._footRayCastLength, this._footSensorL, tileGrid);
+            if (!this._isDead) {
+                //only do wall collisions if we're moving forwards
+                if (tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)] != null && this._velX < 0)
+                    tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)].onLeftWallCollision(this, this._sideSensorL);
+                else if (tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)] != null && this._velX > 0)
+                    tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)].onRightWallCollision(this, this._sideSensorR);
+                //only check head collision if we're in the air
+                if (!this._isGrounded) {
+                    this._checkHeadCollision(-this._footRayCastLength, this._topSensorR, tileGrid);
+                    this._checkHeadCollision(-this._footRayCastLength, this._topSensorL, tileGrid);
+                }
+                //always check if our feet would hit something
+                if (this._velY >= 0 || this._isGrounded) {
+                    this._checkFootCollision(this._footRayCastLength, this._footSensorR, tileGrid);
+                    this._checkFootCollision(this._footRayCastLength, this._footSensorL, tileGrid);
+                }
             }
         }
         _checkFootCollision(length, sensorPos, tileGrid) {
@@ -335,8 +366,11 @@ var objects;
                 this.y = ceilingHeight + 16;
                 if (this._velY < 0) {
                     if (angle >= 224 || angle <= 135) {
-                        this.collideWithUpperGround(ceilingHeight, 180);
                         this._gSpeed = this._velY * -Math.sign(Math.sin(this._toRadians(angle)));
+                        if (Math.abs(this._gSpeed) > 2.5)
+                            this.collideWithUpperGround(ceilingHeight, 180);
+                        else
+                            this._velY = 0;
                     }
                     else
                         this._velY = 0;
