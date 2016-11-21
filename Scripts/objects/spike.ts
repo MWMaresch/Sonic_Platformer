@@ -1,6 +1,6 @@
 module objects {
-    export class Spike extends objects.GameObject {
-
+    export class Spike extends objects.GameObject { 
+        //might be a different class in the future
         protected _layer : number;
 
         constructor(x : number, y : number) {

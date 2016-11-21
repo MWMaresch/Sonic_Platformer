@@ -4,10 +4,8 @@ var managers;
         constructor() {
             this.start();
         }
-        start() {
-        }
-        update() {
-        }
+        start() { }
+        update() { }
         boxCheck(coll, objColliding) {
             if (coll.bottomLine > objColliding.topLine &&
                 coll.topLine < objColliding.bottomLine &&
@@ -15,6 +13,8 @@ var managers;
                 coll.rightLine > objColliding.leftLine) {
                 return true;
             }
+            else
+                return false;
         }
         sensorBoxCheck(sensor, objColliding) {
             if (sensor.y > objColliding.topLine &&
@@ -23,6 +23,8 @@ var managers;
                 sensor.x > objColliding.leftLine) {
                 return true;
             }
+            else
+                return false;
         }
         circleCheck(obj1, obj2) {
             var x1 = obj1.x;
@@ -35,6 +37,8 @@ var managers;
             let tempDist = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
             if (tempDist < (radius1 + radius2))
                 return true;
+            else
+                return false;
         }
     }
     managers.Collision = Collision;

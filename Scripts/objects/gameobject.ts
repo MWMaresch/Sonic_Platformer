@@ -17,6 +17,7 @@ module objects {
             this._height = h;
         }
 
+        //to make the collision class more readable
         get topLine() : number {
             return this.y - this.height/2;
         }

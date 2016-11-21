@@ -10,6 +10,7 @@ var scenes;
             super();
         }
         start() {
+            //all we do is display a picture and give them 2 buttons
             console.log("Menu Scene Started");
             this._img = new createjs.Sprite(spriteAtlas, "title");
             this._img.regX = this._img.getBounds().width / 2;
@@ -23,18 +24,16 @@ var scenes;
             this._instBtn = new objects.Button("InstBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y + 100, 176, 22);
             stage.addChild(this._instBtn);
             this._instBtn.on("click", this._instBtnClick, this);
-            // Add menu scene to global stage container
-            //stage.addChild(this);
         }
         update() {
         }
         _playBtnClick(event) {
-            this.removeAllChildren();
+            stage.removeAllChildren();
             scene = config.Scene.LEVEL1;
             changeScene();
         }
         _instBtnClick(event) {
-            this.removeAllChildren();
+            stage.removeAllChildren();
             scene = config.Scene.INSTRUCTIONS;
             changeScene();
         }

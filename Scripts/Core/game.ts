@@ -5,9 +5,7 @@ var assets: createjs.LoadQueue;
 var canvas: HTMLElement;
 var stage: createjs.SpriteStage;
 
-var spriteSheetLoader : createjs.SpriteSheetLoader;
 var spriteAtlas : createjs.SpriteSheet;
-var tileSpriteSheet : createjs.SpriteSheet;
 var fontSpriteSheet : createjs.SpriteSheet;
 
 var currentScene : objects.Scene;
@@ -15,6 +13,7 @@ var scene: number;
 
 var collision: managers.Collision;
 
+//when we have multiple levels, they should all be able to pause
 var paused : boolean = false;
 var exitBtn : objects.Button;
 var pauseBg : createjs.Bitmap;
@@ -22,30 +21,38 @@ var canPause : boolean = false;
 var gameWon : boolean = false;
 
 //to simplify sonic's loop behaviour
+//and by simplify, I mean make it accurate to the originals, because they simplified it
 enum Quadrant {
     Floor = 1,
     RightWall = 2,
     Ceiling = 3,
     LeftWall = 4
 }
+         /*
+            quadrant 1: ground and left lower slope
+                315 up to 44
+                -45
+
+            quadrant 2: right lower slope and right wall
+                45 up to 134
+
+            quadrant 3: right upper slope and ceiling
+                135 up to 224
+
+            quadrant 4: left upper slope and left wall
+                225 up to 314
+         */
 
 // Preload Assets required
 var assetData:objects.Asset[] = [
     {id: "Pause", src:"../../Assets/images/pause.png"},
-    {id: "Background", src:"../../Assets/images/nightsky.png"},
     {id: "Overlay", src:"../../Assets/images/FinishOverlay.png"},
     {id: "ExitBtn", src:"../../Assets/images/exit.png"},
     {id: "InstBtn", src:"../../Assets/images/Instructions.png"},
     {id: "InstScreen", src:"../../Assets/images/InstrScreen.png"},
     {id: "StrBtn", src:"../../Assets/images/Start.png"},
-    {id: "Block", src:"../../Assets/images/metalblock.png"},
-    {id: "Ramps", src:"../../Assets/images/metalblock2.png"},
     {id: "Tiles", src:"../../Assets/images/metalblocks.png"},
     {id: "Font", src:"../../Assets/images/HUDfont.png"},
-    {id: "Ramp22", src:"../../Assets/images/ramp22.png"},
-    {id: "Ramp23", src:"../../Assets/images/ramp23.png"},
-    {id: "Ramp135", src:"../../Assets/images/ramp135.png"},
-    {id: "Player", src:"../../Assets/images/Character.png"},
     {id: "Sonic", src:"../../Assets/images/SonicSprites.png"}
 ];
 
@@ -82,11 +89,10 @@ function togglePause(){
 }
 
 function init() {
-    // Reference to canvas element
     pauseBg = new createjs.Bitmap(assets.getResult("Pause"));
     exitBtn = new objects.Button("ExitBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y, 177, 84);
+    // Reference to canvas element
     canvas = document.getElementById("canvas");
-
 
     stage = new createjs.SpriteStage("canvas",false, false);
     stage.enableMouseOver(20);
@@ -118,12 +124,6 @@ function init() {
         [200, 582, 256, 158, 0], //title
         [315, 0, 16, 16, 0], [0,0,1,1,0]], //emerald
 
-        /*animations: {
-        player: 0,
-        block: 1,
-        empty: 2
-        },*/
-
         animations: {
             "stand": { "frames": [0] },
             "lookup": { "frames": [1,2] },
@@ -150,6 +150,7 @@ function init() {
         ]
     }
 
+    //this exists so we can display text in a SpriteContainer
     let fontData = {
         images: [assets.getResult("Font")],
 
@@ -205,6 +206,7 @@ function init() {
 
     fontSpriteSheet = new createjs.SpriteSheet(fontData);
     spriteAtlas = new createjs.SpriteSheet(spriteData);
+    //scale up the low res game through the canvas
     canvas.style.width = (config.Screen.WIDTH * config.Screen.SCALE_X) + 'px';
 
     scene = config.Scene.MENU;
@@ -235,7 +237,7 @@ function changeScene() : void {
         case config.Scene.LEVEL1 :
             stage.removeAllChildren();
             currentScene = new scenes.Level_1();
-            console.log("Starting SINGLEPLAYER scene");
+            console.log("Starting LEVEL1 scene");
             break;
         case config.Scene.INSTRUCTIONS :
             stage.removeAllChildren();

@@ -32,16 +32,8 @@ module objects {
         public onFloorCollisionR(player:Player, sensor:Vector2):void {}
         public onFloorCollisionU(player:Player, sensor:Vector2):void {}
         public onFloorCollisionL(player:Player, sensor:Vector2):void {}
-
-        public onCeilingCollision(player:Player, sensor:Vector2):void {}
-        
-        public onLeftWallCollision(player:Player, sensor:Vector2):boolean { return false; }
-
-        public onRightWallCollision(player:Player, sensor:Vector2):boolean { return false; }
-
-        public reverseHeightMap():void{}
-        public reverseSideHeightMap():void{}
-
-        public isEmpty : boolean = true;
+        public onCeilingCollision(player:Player, sensor:Vector2):void {}        
+        public onLeftWallCollision(player:Player, sensor:Vector2):void {} 
+        public onRightWallCollision(player:Player, sensor:Vector2):void {} 
     }
 }

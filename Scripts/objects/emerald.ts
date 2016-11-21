@@ -1,15 +1,14 @@
 module objects {
     export class Emerald extends Tile {
-        //private _heightmap : number[];// = [9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16]
 
         constructor(imageString : string, angleTop : number,angleBottom : number,angleL : number,angleR : number,) {
             super(imageString, angleTop, angleBottom, angleL, angleR);
-            //the following arbitrary values mean nothing, and were initially used for testing purposes
         }
         public start():void {}
 
         public update():void {}
 
+        //no matter how the player collides with us, we do the same thing
         private _collect() : void{
             gameWon = true;
         }
@@ -34,14 +33,12 @@ module objects {
             this._collect();
         }
         
-        public onLeftWallCollision(player:Player, sensor:Vector2):boolean {
+        public onLeftWallCollision(player:Player, sensor:Vector2) {
             this._collect();
-            return false;
         }
 
-        public onRightWallCollision(player:Player, sensor:Vector2):boolean {
+        public onRightWallCollision(player:Player, sensor:Vector2) {
             this._collect();
-            return false;
         }
         public isEmpty : boolean = false;
     }

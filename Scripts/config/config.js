@@ -17,6 +17,7 @@ var config;
     Screen.HEIGHT = 240;
     Screen.CENTER_X = 160;
     Screen.CENTER_Y = 120;
+    //used back when the stage was scaled up instead of the canvas
     Screen.REAL_WIDTH = 320;
     Screen.REAL_HEIGHT = 240;
     config.Screen = Screen;

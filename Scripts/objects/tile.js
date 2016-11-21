@@ -3,7 +3,6 @@ var objects;
     class Tile extends createjs.Sprite {
         constructor(imageString, angleTop, angleBottom, angleL, angleR) {
             super(spriteAtlas, imageString);
-            this.isEmpty = true;
             this.start();
             this._topAngle = angleTop;
             this._rSideAngle = angleR;
@@ -20,10 +19,8 @@ var objects;
         onFloorCollisionU(player, sensor) { }
         onFloorCollisionL(player, sensor) { }
         onCeilingCollision(player, sensor) { }
-        onLeftWallCollision(player, sensor) { return false; }
-        onRightWallCollision(player, sensor) { return false; }
-        reverseHeightMap() { }
-        reverseSideHeightMap() { }
+        onLeftWallCollision(player, sensor) { }
+        onRightWallCollision(player, sensor) { }
     }
     objects.Tile = Tile;
 })(objects || (objects = {}));

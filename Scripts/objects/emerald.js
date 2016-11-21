@@ -1,14 +1,13 @@
 var objects;
 (function (objects) {
     class Emerald extends objects.Tile {
-        //private _heightmap : number[];// = [9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16]
         constructor(imageString, angleTop, angleBottom, angleL, angleR) {
             super(imageString, angleTop, angleBottom, angleL, angleR);
             this.isEmpty = false;
-            //the following arbitrary values mean nothing, and were initially used for testing purposes
         }
         start() { }
         update() { }
+        //no matter how the player collides with us, we do the same thing
         _collect() {
             gameWon = true;
         }
@@ -29,11 +28,9 @@ var objects;
         }
         onLeftWallCollision(player, sensor) {
             this._collect();
-            return false;
         }
         onRightWallCollision(player, sensor) {
             this._collect();
-            return false;
         }
     }
     objects.Emerald = Emerald;

@@ -13,64 +13,42 @@ module objects {
         }
 
         private _initializeHeightmaps () : void{
-
             //top heightmap used when player is colliding with it as if it were the floor
-            for (var x = 0; x <= this.getBounds().width - 1; x++)
-            {
-                for (var y = 0; y <= this.getBounds().height - 1; y++)
-                {
-                    if (this.hitTest(x,y))
-                    {
+            for (var x = 0; x <= this.getBounds().width - 1; x++){
+                for (var y = 0; y <= this.getBounds().height - 1; y++){
+                    if (this.hitTest(x,y)){
                         this._topHeightmap[x] = y;
                         break;
                     }
                 }
             }
             //bottom heightmap used when player runs on it as if it were the ceiling
-            for (var x = 0; x <= this.getBounds().width - 1; x++)
-            {
-                for (var y = this.getBounds().height - 1; y >= 0; y--)
-                {
-                    if (this.hitTest(x,y))
-                    {
+            for (var x = 0; x <= this.getBounds().width - 1; x++){
+                for (var y = this.getBounds().height - 1; y >= 0; y--){
+                    if (this.hitTest(x,y)){
                         this._bottomHeightmap[x] = y;
                         break;
                     }
                 }
             }
             //left heightmap used when player runs on it when it's the right wall
-            for (var y = 0; y <= this.getBounds().height - 1; y++)
-            {
-                for (var x = 0; x <= this.getBounds().width - 1; x++)
-                {
-                    if (this.hitTest(x,y))
-                    {
+            for (var y = 0; y <= this.getBounds().height - 1; y++){
+                for (var x = 0; x <= this.getBounds().width - 1; x++){
+                    if (this.hitTest(x,y)){
                         this._leftHeightmap[y] = x;
                         break;
                     }
                 }
             }
             //right heightmap used when player runs on it when it's the left wall
-            for (var y = 0; y <= this.getBounds().height - 1; y++)
-            {
-                for (var x = this.getBounds().width - 1; x >= 0; x--)
-                {
-                    if (this.hitTest(x,y))
-                    {
+            for (var y = 0; y <= this.getBounds().height - 1; y++){
+                for (var x = this.getBounds().width - 1; x >= 0; x--){
+                    if (this.hitTest(x,y)){
                         this._rightHeightmap[y] = x;
                         break;
                     }
                 }
             }
-            //console.log("Tile with right side angle " + this._rSideAngle + " has right heightmap " + this._rightHeightmap);
-        }
-
-        public reverseHeightMap():void{
-            this._topHeightmap.reverse();
-        }
-
-        public reverseSideHeightMap():void{
-            this._leftHeightmap.reverse();
         }
 
         public start():void {}
@@ -114,29 +92,16 @@ module objects {
         }
         
         //the player moved into this block from the side
-        public onLeftWallCollision(player:Player, sensor:Vector2):boolean {
-            if (this.hitTest(Math.floor(sensor.x - this.x), Math.floor(sensor.y - this.y)))
-            {
+        public onLeftWallCollision(player:Player, sensor:Vector2) {
+            if (this.hitTest(Math.floor(sensor.x - this.x), Math.floor(sensor.y - this.y))){
                 player.collideWithLeftWall(this.x + this.getBounds().width);
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
 
-        public onRightWallCollision(player:Player, sensor:Vector2):boolean {
-            if (this.hitTest(Math.floor(sensor.x - this.x), Math.floor(sensor.y - this.y)))
-            {
+        public onRightWallCollision(player:Player, sensor:Vector2) {
+            if (this.hitTest(Math.floor(sensor.x - this.x), Math.floor(sensor.y - this.y))){
                 player.collideWithRightWall(this.x);
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
-        public isEmpty : boolean = false;
     }
 }

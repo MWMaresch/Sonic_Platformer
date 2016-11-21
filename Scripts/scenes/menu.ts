@@ -7,8 +7,6 @@ module scenes {
     export class Menu extends objects.Scene {
 
         // Private instance variables
-        // Label or bitmap
-        // Button 
         private _img : createjs.Sprite;
         private _playBtn : objects.Button;
         private _instBtn : objects.Button;        
@@ -18,6 +16,7 @@ module scenes {
         }
 
         public start() : void {
+            //all we do is display a picture and give them 2 buttons
             console.log("Menu Scene Started");
             this._img = new createjs.Sprite(spriteAtlas, "title");
             this._img.regX = this._img.getBounds().width/2;
@@ -33,9 +32,6 @@ module scenes {
             this._instBtn = new objects.Button("InstBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y + 100, 176, 22);
             stage.addChild(this._instBtn);
             this._instBtn.on("click", this._instBtnClick, this);
-
-            // Add menu scene to global stage container
-            //stage.addChild(this);
         }
 
         public update() : void {
@@ -43,13 +39,13 @@ module scenes {
         }
 
         private _playBtnClick(event : createjs.MouseEvent) {
-            this.removeAllChildren();
+            stage.removeAllChildren();
             scene = config.Scene.LEVEL1;
             changeScene();
         }
 
         private _instBtnClick(event : createjs.MouseEvent) {
-            this.removeAllChildren();
+            stage.removeAllChildren();
             scene = config.Scene.INSTRUCTIONS;
             changeScene();
         }

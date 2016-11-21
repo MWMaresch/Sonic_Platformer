@@ -4,7 +4,6 @@ var objects;
         //private _heightmap : number[];// = [9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16]
         constructor(imageString, angleTop, angleBottom, angleL, angleR) {
             super(imageString, angleTop, angleBottom, angleL, angleR);
-            this.isEmpty = false;
             //the following arbitrary values mean nothing, and were initially used for testing purposes
             this._topHeightmap = [9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16];
             this._bottomHeightmap = [9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16];
@@ -49,13 +48,6 @@ var objects;
                     }
                 }
             }
-            //console.log("Tile with right side angle " + this._rSideAngle + " has right heightmap " + this._rightHeightmap);
-        }
-        reverseHeightMap() {
-            this._topHeightmap.reverse();
-        }
-        reverseSideHeightMap() {
-            this._leftHeightmap.reverse();
         }
         start() { }
         update() { }
@@ -94,19 +86,11 @@ var objects;
         onLeftWallCollision(player, sensor) {
             if (this.hitTest(Math.floor(sensor.x - this.x), Math.floor(sensor.y - this.y))) {
                 player.collideWithLeftWall(this.x + this.getBounds().width);
-                return true;
-            }
-            else {
-                return false;
             }
         }
         onRightWallCollision(player, sensor) {
             if (this.hitTest(Math.floor(sensor.x - this.x), Math.floor(sensor.y - this.y))) {
                 player.collideWithRightWall(this.x);
-                return true;
-            }
-            else {
-                return false;
             }
         }
     }

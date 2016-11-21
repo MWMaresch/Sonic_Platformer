@@ -27,20 +27,7 @@ var scenes;
                 "...........................................................................................................................",
                 "..........................................................................................................................."]; //this is actually the level itself.
             //it can be any size, but all rows must be equal, and all columns must be equal
-            /*
-               quadrant 1: ground and left lower slope
-                   315 up to 44
-                   -45
-   
-               quadrant 2: right lower slope and right wall
-                   45 up to 134
-   
-               quadrant 3: right upper slope and ceiling
-                   135 up to 224
-   
-               quadrant 4: left upper slope and left wall
-                   225 up to 314
-            */
+            //in case the stage is upscaled to the canvas, which it used to be
             this._SCALE = config.Screen.REAL_WIDTH / config.Screen.WIDTH;
             this._tileSpriteContainer = new createjs.SpriteContainer(spriteAtlas);
             this._spriteContainer = new createjs.SpriteContainer(spriteAtlas);
@@ -54,6 +41,7 @@ var scenes;
             this._spriteContainer.addChild(this._bg2);
             this._spriteContainer.addChild(this._spikes[0]);
             this._spriteContainer.addChild(this._spikes[1]);
+            //go through the level string array and add all tiles from it to our sprite container
             for (var x = 0; x < this._stringGrid[0].length; x++) {
                 this._tileGrid[x] = [];
                 for (var y = 0; y < this._stringGrid.length; y++) {
@@ -95,14 +83,13 @@ var scenes;
                         this._tileGrid[x][y].visible = true;
                 }
             }
+            //adding everything to a single sprite container reduces the amount of times we need to draw things to the stage, therefore drastically increasing performance
             this._spriteContainer.addChild(this._tileSpriteContainer);
             this._player = new objects.Player("stand", 90, 90);
-            //this._motobug = new objects.Enemy("motobug", 90, 90);
-            //this._spriteContainer.addChild(this._motobug);
             this._spriteContainer.addChild(this._player);
             stage.addChild(this._spriteContainer);
             this._timeText = new createjs.BitmapText("TIME 0:00", fontSpriteSheet);
-            this._ringsText = new createjs.BitmapText("RINGS", fontSpriteSheet);
+            this._ringsText = new createjs.BitmapText("RINGS", fontSpriteSheet); //rings are not implemented yet
             this._timeText.letterSpacing = 1;
             this._ringsText.letterSpacing = 1;
             this._timeText.x = 18;
@@ -112,13 +99,11 @@ var scenes;
             this._hudContainer.addChild(this._timeText);
             //this._hudContainer.addChild(this._ringsText);
             stage.addChild(this._hudContainer);
-            console.log("tilegrid created");
+            console.log("tile grid created");
+            //increasing performance slightly more by disabling ticking for the tiles, which shouldn't move anyway
             this._tileSpriteContainer.tickEnabled = false;
             this._tileSpriteContainer.tickChildren = false;
             this._spriteContainer.snapToPixel = true;
-        }
-        _convertAngle(hex_angle) {
-            return (256 - hex_angle) * 1.40625;
         }
         start() {
             this._timer = 0;
@@ -127,6 +112,7 @@ var scenes;
         }
         update() {
             if (!gameWon) {
+                //the main loop
                 this._timer += createjs.Ticker.interval;
                 this._timeText.text = "TIME  " + Math.floor((this._timer / 1000) / 60).toString() + ":" + Math.floor(((this._timer / 1000) % 60));
                 this._ringsText.text = "RINGS  " + this._player.getNumRings();
@@ -136,6 +122,7 @@ var scenes;
                 this._checkCollisions();
             }
             else if (!this._alreadyWon) {
+                //we only want this to execute once when sonic wins, so we do a check first
                 this._timeText.text = "YOU WON IN " + Math.floor((this._timer / 1000) / 60).toString() + ":" + Math.floor(((this._timer / 1000) % 60)) + "\n PRESS ESC TO \nPAUSE AND EXIT";
                 this._timeText.scaleX = 1.5;
                 this._timeText.scaleY = 1.5;
@@ -146,8 +133,11 @@ var scenes;
             }
         }
         _checkCollisions() {
+            //if the player is dead, they should fall down through everything
             if (!this._player.isDead()) {
+                //otherwise, check if he's colliding with any spikes
                 for (var obj = 0; obj < this._spikes.length; obj++) {
+                    //sonic only gets hurt if he's on top of the spikes: from the side they should act like solid walls
                     if (collision.sensorBoxCheck(this._player.getLeftSideSensor(), this._spikes[obj])) {
                         this._player.collideWithLeftWall(this._spikes[obj].rightLine);
                     }
@@ -168,11 +158,13 @@ var scenes;
         _updateCameraPosition() {
             this._camDifR = this._spriteContainer.x - (this._rightCamBorder - this._player.x);
             this._camDifL = this._spriteContainer.x - (this._leftCamBorder - this._player.x);
+            //horizontal camera movement
             if (this._camDifR > 0) {
+                //move the 'camera' to sonic, unless he's faster than the max cam speed
                 this._spriteContainer.x -= Math.min(this._camDifR, this._maxCamSpeed);
-                //make offscreen things invisible, and onscreen things visible
-                //older computers can lag if we don't do this
                 for (var y = 0; y < this._tileGrid[0].length; y++) {
+                    //make offscreen tiles invisible, and onscreen tiles visible
+                    //older computers can lag if we don't do this
                     var screenTilePos = Math.floor((this._spriteContainer.x * -1) / 16);
                     if (config.Screen.WIDTH / 16 + screenTilePos < this._tileGrid.length && this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos)][y] != null)
                         this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos)][y].visible = true;
@@ -181,8 +173,9 @@ var scenes;
                 }
             }
             else if (this._camDifL < 0) {
+                //same as above, only for moving left
+                //this had to be separated because of the small window sonic has to move in the middle of the screen
                 this._spriteContainer.x -= Math.max(this._camDifL, -this._maxCamSpeed);
-                //make offscreen things invisible, and onscreen things visible
                 for (var y = 0; y < this._tileGrid[0].length; y++) {
                     var screenTilePos = Math.floor((this._spriteContainer.x * -1) / 16);
                     if (screenTilePos >= 0 && this._tileGrid[screenTilePos][y] != null)
@@ -191,6 +184,8 @@ var scenes;
                         this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos + 1)][y].visible = false;
                 }
             }
+            //vertical camera movement
+            //camera is slightly different when sonic is grounded or in the air
             if (this._player.isGrounded()) {
                 if (this._player.velY() <= this._maxCamSpeed - 10) {
                     this._camDifU = this._spriteContainer.y - (-this._player.y + this._groundCamBorder);
@@ -225,6 +220,7 @@ var scenes;
                 this._spriteContainer.y = 0;
             else if (this._spriteContainer.y < this._camBottomBoundary)
                 this._spriteContainer.y = this._camBottomBoundary;
+            //move the background(s) in relation to everything else
             this._bg1.x = (Math.floor(-this._spriteContainer.x / this._bgWidth) * this._bgWidth);
             this._bg2.x = this._bg1.x + this._bgWidth;
         }

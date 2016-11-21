@@ -19,6 +19,7 @@ var objects;
         set height(h) {
             this._height = h;
         }
+        //to make the collision class more readable
         get topLine() {
             return this.y - this.height / 2;
         }

@@ -15,6 +15,7 @@ module config {
         public static HEIGHT : number = 240;
         public static CENTER_X : number = 160;
         public static CENTER_Y : number = 120;
+        //used back when the stage was scaled up instead of the canvas
         public static REAL_WIDTH : number = 320;
         public static REAL_HEIGHT : number = 240;
     }
