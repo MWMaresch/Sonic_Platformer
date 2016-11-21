@@ -15,6 +15,7 @@
 /// <reference path="../objects/groundtile.ts" />
 /// <reference path="../objects/enemy.ts" />
 /// <reference path="../objects/spike.ts" />
+/// <reference path="../objects/emerald.ts" />
 
 /// <reference path="../managers/collision.ts" />
 

@@ -9,12 +9,12 @@ var tileSpriteSheet;
 var fontSpriteSheet;
 var currentScene;
 var scene;
-var numLaps;
 var collision;
 var paused = false;
 var exitBtn;
 var pauseBg;
 var canPause = false;
+var gameWon = false;
 //to simplify sonic's loop behaviour
 var Quadrant;
 (function (Quadrant) {
@@ -30,6 +30,8 @@ var assetData = [
     { id: "Overlay", src: "../../Assets/images/FinishOverlay.png" },
     { id: "ExitBtn", src: "../../Assets/images/exit.png" },
     { id: "InstBtn", src: "../../Assets/images/Instructions.png" },
+    { id: "InstScreen", src: "../../Assets/images/InstrScreen.png" },
+    { id: "StrBtn", src: "../../Assets/images/Start.png" },
     { id: "Block", src: "../../Assets/images/metalblock.png" },
     { id: "Ramps", src: "../../Assets/images/metalblock2.png" },
     { id: "Tiles", src: "../../Assets/images/metalblocks.png" },
@@ -38,7 +40,6 @@ var assetData = [
     { id: "Ramp23", src: "../../Assets/images/ramp23.png" },
     { id: "Ramp135", src: "../../Assets/images/ramp135.png" },
     { id: "Player", src: "../../Assets/images/Character.png" },
-    { id: "Portal", src: "../../Assets/images/portal.png" },
     { id: "Sonic", src: "../../Assets/images/SonicSprites.png" }
 ];
 function preload() {
@@ -49,6 +50,7 @@ function preload() {
     assets.loadManifest(assetData);
 }
 function exitBtnClick(event) {
+    stage.removeAllChildren();
     canPause = false;
     paused = false;
     scene = config.Scene.MENU;
@@ -71,10 +73,11 @@ function togglePause() {
 function init() {
     // Reference to canvas element
     pauseBg = new createjs.Bitmap(assets.getResult("Pause"));
-    exitBtn = new objects.Button("ExitBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y + 150, 177, 84);
+    exitBtn = new objects.Button("ExitBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y, 177, 84);
     canvas = document.getElementById("canvas");
     stage = new createjs.SpriteStage("canvas", false, false);
     stage.enableMouseOver(20);
+    stage.snapToPixelEnabled = true;
     createjs.Ticker.setFPS(config.Game.FPS);
     createjs.Ticker.on("tick", this.gameLoop, this);
     collision = new managers.Collision();
@@ -94,7 +97,9 @@ function init() {
             [252, 20, 16, 16, 0],
             [477, 473, 512, 256, 0],
             [905, 319, 40, 32, 0],
-            [91, 617, 40, 43, 0]],
+            [91, 617, 40, 43, 0],
+            [200, 582, 256, 158, 0],
+            [315, 0, 16, 16, 0], [0, 0, 1, 1, 0]],
         /*animations: {
         player: 0,
         block: 1,
@@ -115,7 +120,9 @@ function init() {
             "ramp225": { "frames": [25] },
             "nightsky": { "frames": [26] },
             "spikes": { "frames": [27] },
-            "dead": { "frames": [28] }
+            "dead": { "frames": [28] },
+            "title": { "frames": [29] },
+            "emerald": { "frames": [30, 31] }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",
@@ -173,16 +180,15 @@ function init() {
     };
     fontSpriteSheet = new createjs.SpriteSheet(fontData);
     spriteAtlas = new createjs.SpriteSheet(spriteData);
-    scene = config.Scene.LEVEL1;
+    canvas.style.width = (config.Screen.WIDTH * config.Screen.SCALE_X) + 'px';
+    scene = config.Scene.MENU;
     changeScene();
 }
 function gameLoop(event) {
-    console.log("Framerate: " + createjs.Ticker.getFPS());
     if (!paused) {
         // Update whatever scene is currently active.
         currentScene.update();
     }
-    canvas.style.width = (config.Screen.WIDTH * config.Screen.SCALE_X) + 'px';
     stage.update();
 }
 function changeScene() {

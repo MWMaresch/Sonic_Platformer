@@ -9,20 +9,21 @@ var scenes;
             this._topCamBorder = 64;
             this._groundCamBorder = 96;
             this._bottomCamBorder = 128;
+            this._alreadyWon = false;
             this._tileGrid = [];
-            this._stringGrid = ["...........................................................................................................................",
-                "....(                                    ]...(               ]......                                                      .",
-                "...[                                      ].(                 ].....                                                      .",
-                "..[                                                            )....                                                      .",
+            this._stringGrid = ["..........................................................................   ..............................................",
+                "....(                                    ]...(                                                                            .",
+                "...[                                      ].(                                                                             .",
+                "..[                                                                                                                     E .",
                 ".[                 ,.....1                                                                                                .",
-                ".                 /.......`                                           ..           .....        .....        ..       .....",
-                ".                 .........                                           ..   ...                                          ]..",
-                ".`                .........                                    .........                                                 ).",
-                "..1               ).......[                                    .........                                                  .",
-                "...1               ].....(                                     .........                                                  .",
-                "....1                                                          .........                                                  .",
-                ".....1                                   ,...1                 .........`                                                /.",
-                "......1                                 ,.....1                ..........1                           ,.......1          ,..",
+                ".                 /.......`                                         ...             .....       .....        ...       ....",
+                ".                 .........                                         ...                                                ....",
+                ".`                .........                                         ......    ...                                       ]..",
+                "..1               ).......[                                         ......                                               ).",
+                "...1               ].....(                                          ......                                                .",
+                "....1                                                               ......                                                .",
+                ".....1                                   ,...1                      ......`                                              /.",
+                "......1                                 ,.....1                     .......1                         ,.......1          ,..",
                 "...........................................................................................................................",
                 "..........................................................................................................................."]; //this is actually the level itself.
             //it can be any size, but all rows must be equal, and all columns must be equal
@@ -58,12 +59,8 @@ var scenes;
                 for (var y = 0; y < this._stringGrid.length; y++) {
                     if (this._stringGrid[y].charAt(x) == ' ')
                         this._tileGrid[x][y] = null;
-                    else if (this._stringGrid[y].charAt(x) == 'x')
-                        this._tileGrid[x][y] = new objects.Warp("portal", 0);
-                    else if (this._stringGrid[y].charAt(x) == 'y')
-                        this._tileGrid[x][y] = new objects.Tile("portal", 0, 0, 0, 0);
                     else if (this._stringGrid[y].charAt(x) == 'E')
-                        this._tileGrid[x][y] = new objects.Tile("portal", 0, 0, 0, 0);
+                        this._tileGrid[x][y] = new objects.Emerald("emerald", 0, 0, 0, 0);
                     else if (this._stringGrid[y].charAt(x) == '.')
                         this._tileGrid[x][y] = new objects.GroundTile("block", 0, 180, 90, 270);
                     else if (this._stringGrid[y].charAt(x) == '/')
@@ -119,7 +116,6 @@ var scenes;
             this._tileSpriteContainer.tickEnabled = false;
             this._tileSpriteContainer.tickChildren = false;
             this._spriteContainer.snapToPixel = true;
-            stage.snapToPixelEnabled = true;
         }
         _convertAngle(hex_angle) {
             return (256 - hex_angle) * 1.40625;
@@ -127,24 +123,31 @@ var scenes;
         start() {
             this._timer = 0;
             canPause = true;
+            gameWon = false;
         }
         update() {
-            //console.log(stage.x);
-            //console.log(Math.floor((config.Screen.WIDTH + (stage.x * -1)) / 16));
-            this._timer += createjs.Ticker.interval;
-            this._timeText.text = "TIME  " + Math.floor((this._timer / 1000) / 60).toString() + ":" + Math.floor(((this._timer / 1000) % 60));
-            this._ringsText.text = "RINGS  " + this._player.getNumRings();
-            this._player.update();
-            this._player.checkCollisions(this._tileGrid);
-            //console.log(this._player.x);
-            this._updateCameraPosition();
-            this._checkCollisions();
-            //console.log(stage.x);
+            if (!gameWon) {
+                this._timer += createjs.Ticker.interval;
+                this._timeText.text = "TIME  " + Math.floor((this._timer / 1000) / 60).toString() + ":" + Math.floor(((this._timer / 1000) % 60));
+                this._ringsText.text = "RINGS  " + this._player.getNumRings();
+                this._player.update();
+                this._player.checkCollisions(this._tileGrid);
+                this._updateCameraPosition();
+                this._checkCollisions();
+            }
+            else if (!this._alreadyWon) {
+                this._timeText.text = "YOU WON IN " + Math.floor((this._timer / 1000) / 60).toString() + ":" + Math.floor(((this._timer / 1000) % 60)) + "\n PRESS ESC TO \nPAUSE AND EXIT";
+                this._timeText.scaleX = 1.5;
+                this._timeText.scaleY = 1.5;
+                this._timeText.regX = this._timeText.getBounds().width / 2;
+                this._timeText.regY = this._timeText.getBounds().height / 2;
+                this._timeText.x = config.Screen.WIDTH / 2;
+                this._timeText.y = config.Screen.HEIGHT / 2;
+            }
         }
         _checkCollisions() {
             if (!this._player.isDead()) {
                 for (var obj = 0; obj < this._spikes.length; obj++) {
-                    console.log("checking spike index " + obj);
                     if (collision.sensorBoxCheck(this._player.getLeftSideSensor(), this._spikes[obj])) {
                         this._player.collideWithLeftWall(this._spikes[obj].rightLine);
                     }
@@ -158,7 +161,8 @@ var scenes;
                 }
             }
             else if (this._camDifU > 300) {
-                console.log("gameover");
+                stage.removeAllChildren();
+                changeScene();
             }
         }
         _updateCameraPosition() {
@@ -167,6 +171,7 @@ var scenes;
             if (this._camDifR > 0) {
                 this._spriteContainer.x -= Math.min(this._camDifR, this._maxCamSpeed);
                 //make offscreen things invisible, and onscreen things visible
+                //older computers can lag if we don't do this
                 for (var y = 0; y < this._tileGrid[0].length; y++) {
                     var screenTilePos = Math.floor((this._spriteContainer.x * -1) / 16);
                     if (config.Screen.WIDTH / 16 + screenTilePos < this._tileGrid.length && this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos)][y] != null)

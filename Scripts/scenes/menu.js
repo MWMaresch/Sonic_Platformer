@@ -11,31 +11,24 @@ var scenes;
         }
         start() {
             console.log("Menu Scene Started");
-            this._1pBtn = new objects.Button("TimAtBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y + 140, 300, 68);
-            this.addChild(this._1pBtn);
-            this._1pBtn.on("click", this._playBtnClick, this);
-            this._1p1lBtn = new objects.Button("LapBtn", config.Screen.CENTER_X + 300, config.Screen.CENTER_Y + 140, 300, 68);
-            this.addChild(this._1p1lBtn);
-            this._1p1lBtn.on("click", this._play1lBtnClick, this);
-            this._instBtn = new objects.Button("InstBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y + 300, 300, 68);
-            this.addChild(this._instBtn);
+            this._img = new createjs.Sprite(spriteAtlas, "title");
+            this._img.regX = this._img.getBounds().width / 2;
+            this._img.regY = this._img.getBounds().height / 2;
+            this._img.x = config.Screen.WIDTH / 2;
+            this._img.y = config.Screen.HEIGHT / 2 - 20;
+            stage.addChild(this._img);
+            this._playBtn = new objects.Button("StrBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y + 75, 82, 22);
+            stage.addChild(this._playBtn);
+            this._playBtn.on("click", this._playBtnClick, this);
+            this._instBtn = new objects.Button("InstBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y + 100, 176, 22);
+            stage.addChild(this._instBtn);
             this._instBtn.on("click", this._instBtnClick, this);
-            this._menuBG = new createjs.Bitmap(assets.getResult("Menu_BG"));
-            // this.addChild(this._menuBG);
-            this.addChildAt(this._menuBG, 0);
             // Add menu scene to global stage container
-            stage.addChild(this);
+            //stage.addChild(this);
         }
         update() {
         }
         _playBtnClick(event) {
-            numLaps = 3;
-            this.removeAllChildren();
-            scene = config.Scene.LEVEL1;
-            changeScene();
-        }
-        _play1lBtnClick(event) {
-            numLaps = 1;
             this.removeAllChildren();
             scene = config.Scene.LEVEL1;
             changeScene();
