@@ -6,21 +6,21 @@ var managers;
         }
         start() { }
         update() { }
-        boxCheck(coll, objColliding) {
-            if (coll.bottomLine > objColliding.topLine &&
-                coll.topLine < objColliding.bottomLine &&
-                coll.leftLine < objColliding.rightLine &&
-                coll.rightLine > objColliding.leftLine) {
+        boxCheck(obj1, obj2) {
+            if (obj1.bottomLine > obj2.topLine &&
+                obj1.topLine < obj2.bottomLine &&
+                obj1.leftLine < obj2.rightLine &&
+                obj1.rightLine > obj2.leftLine) {
                 return true;
             }
             else
                 return false;
         }
-        sensorBoxCheck(sensor, objColliding) {
-            if (sensor.y > objColliding.topLine &&
-                sensor.y < objColliding.bottomLine &&
-                sensor.x < objColliding.rightLine &&
-                sensor.x > objColliding.leftLine) {
+        sensorBoxCheck(sensor, obj) {
+            if (sensor.y > obj.topLine &&
+                sensor.y < obj.bottomLine &&
+                sensor.x < obj.rightLine &&
+                sensor.x > obj.leftLine) {
                 return true;
             }
             else

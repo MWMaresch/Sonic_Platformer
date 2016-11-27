@@ -10,15 +10,19 @@
 /// <reference path="../objects/scene.ts" />
 /// <reference path="../objects/player.ts" />
 /// <reference path="../objects/gameobject.ts" />
+/// <reference path="../objects/physgameobject.ts" />
 /// <reference path="../objects/vector2.ts" />
 /// <reference path="../objects/tile.ts" />
 /// <reference path="../objects/groundtile.ts" />
-/// <reference path="../objects/enemy.ts" />
+/// <reference path="../objects/tiletypes.ts" />
+/// <reference path="../objects/motobug.ts" />
 /// <reference path="../objects/spike.ts" />
 /// <reference path="../objects/emerald.ts" />
 
 /// <reference path="../managers/collision.ts" />
 
 /// <reference path="../scenes/menu.ts" />
-/// <reference path="../scenes/level_1.ts" />
+/// <reference path="../scenes/level.ts" />
+/// <reference path="../scenes/testroom.ts" />
 /// <reference path="../scenes/instructions.ts" />
+/// <reference path="../scenes/Level_1.ts" />

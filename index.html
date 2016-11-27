@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset ="uft-8" />
-    <meta name = "viewport" content = "width = device-width, initial-scale=1" />
+    <meta charset="uft-8" />
+    <meta name="viewport" content="width = device-width, initial-scale=1" />
     <tite>Sonic Platformer</tite>
     <!-- CSS Section -->
     <link rel="stylesheet" href="Content/reset.css">
     <link rel="stylesheet" href="Content/game.css">
 </head>
+
 <body onload="preload()">
     <div class="game">
         <canvas id="canvas" width="320" height="240"></canvas>
@@ -24,10 +26,11 @@
     <!--Game Scripts-->
     <script src="Scripts/config/keys.js"></script>
     <script src="Scripts/config/controls.js"></script>
-    
+
     <script src="Scripts/managers/collision.js"></script>
 
     <script src="Scripts/objects/gameobject.js"></script>
+    <script src="Scripts/objects/physgameobject.js"></script>
     <script src="Scripts/objects/asset.js"></script>
     <script src="Scripts/objects/label.js"></script>
     <script src="Scripts/objects/button.js"></script>
@@ -35,16 +38,20 @@
     <script src="Scripts/objects/player.js"></script>
     <script src="Scripts/objects/vector2.js"></script>
     <script src="Scripts/objects/tile.js"></script>
-    <script src="Scripts/objects/enemy.js"></script>
+    <script src="Scripts/objects/motobug.js"></script>
     <script src="Scripts/objects/spike.js"></script>
     <script src="Scripts/objects/emerald.js"></script>
     <script src="Scripts/objects/groundtile.js"></script>
+    <script src="Scripts/objects/tiletypes.js"></script>
 
     <!-- Scene Scripts -->
     <script src="Scripts/scenes/menu.js"></script>
-    <script src="Scripts/scenes/level_1.js"></script>
+    <script src="Scripts/scenes/level.js"></script>
+    <script src="Scripts/scenes/testroom.js"></script>
     <script src="Scripts/scenes/instructions.js"></script>
+    <script src="Scripts/scenes/level_1.js"></script>
 
     <script src="Scripts/core/game.js"></script>
 </body>
+
 </html>

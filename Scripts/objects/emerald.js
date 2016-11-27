@@ -11,7 +11,7 @@ var objects;
         _collect() {
             gameWon = true;
         }
-        onFloorCollision(player, sensor) {
+        onFloorCollision(other, sensor) {
             this._collect();
         }
         onFloorCollisionR(player, sensor) {
@@ -26,10 +26,10 @@ var objects;
         onCeilingCollision(player, sensor) {
             this._collect();
         }
-        onLeftWallCollision(player, sensor) {
+        onLeftWallCollision(other, sensor) {
             this._collect();
         }
-        onRightWallCollision(player, sensor) {
+        onRightWallCollision(other, sensor) {
             this._collect();
         }
     }

@@ -13,7 +13,7 @@ module objects {
             gameWon = true;
         }
 
-        public onFloorCollision(player:Player, sensor:Vector2):void {
+        public onFloorCollision(other: GameObject, sensor: Vector2): void {
             this._collect();
         }
 
@@ -33,11 +33,11 @@ module objects {
             this._collect();
         }
         
-        public onLeftWallCollision(player:Player, sensor:Vector2) {
+        public onLeftWallCollision(other: GameObject, sensor: Vector2) {
             this._collect();
         }
 
-        public onRightWallCollision(player:Player, sensor:Vector2) {
+        public onRightWallCollision(other: GameObject, sensor: Vector2) {
             this._collect();
         }
         public isEmpty : boolean = false;

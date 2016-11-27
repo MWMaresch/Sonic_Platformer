@@ -2,13 +2,26 @@ var objects;
 (function (objects) {
     class Spike extends objects.GameObject {
         constructor(x, y) {
-            super("spikes");
-            this.x = x;
-            this.y = y;
-            this.start();
+            super("spikes", x, y);
         }
         start() { }
         update() { }
+        //spikes never need to collide with the grid, so override the method with an empty one
+        checkCollisionWithGrid(tileGrid) { }
+        checkCollisionWithPlayer(player) {
+            //otherwise, check if he's colliding with any spikes
+            //sonic only gets hurt if he's on top of the spikes: from the side they should act like solid walls
+            if (collision.sensorBoxCheck(player.leftSideSensor, this)) {
+                player.collideWithLeftWall(this.rightLine);
+            }
+            else if (collision.sensorBoxCheck(player.rightSideSensor, this)) {
+                player.collideWithRightWall(this.leftLine);
+            }
+            else if (player.velY > 0 && (collision.sensorBoxCheck(player.leftFootSensor, this)
+                || collision.sensorBoxCheck(player.rightFootSensor, this))) {
+                player.getHurt();
+            }
+        }
     }
     objects.Spike = Spike;
 })(objects || (objects = {}));

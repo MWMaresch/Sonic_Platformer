@@ -8,22 +8,22 @@ module managers {
 
         public update() {}
 
-        public boxCheck(coll:objects.GameObject, objColliding:objects.GameObject) : boolean {            
-            if(coll.bottomLine > objColliding.topLine && 
-                coll.topLine < objColliding.bottomLine &&
-                coll.leftLine < objColliding.rightLine &&
-                coll.rightLine > objColliding.leftLine) {
+        public boxCheck(obj1:objects.GameObject, obj2:objects.GameObject) : boolean {            
+            if(obj1.bottomLine > obj2.topLine && 
+                obj1.topLine < obj2.bottomLine &&
+                obj1.leftLine < obj2.rightLine &&
+                obj1.rightLine > obj2.leftLine) {
                     return true;
                 }
             else
                 return false;
         }
 
-        public sensorBoxCheck(sensor:objects.Vector2, objColliding:objects.GameObject) : boolean {            
-            if(sensor.y > objColliding.topLine && 
-                sensor.y < objColliding.bottomLine &&
-                sensor.x < objColliding.rightLine &&
-                sensor.x > objColliding.leftLine) {
+        public sensorBoxCheck(sensor:objects.Vector2, obj:objects.GameObject) : boolean {            
+            if(sensor.y > obj.topLine && 
+                sensor.y < obj.bottomLine &&
+                sensor.x < obj.rightLine &&
+                sensor.x > obj.leftLine) {
                     return true;
                 }
             else

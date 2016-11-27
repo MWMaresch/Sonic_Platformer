@@ -2,19 +2,21 @@ var objects;
 (function (objects) {
     class GroundTile extends objects.Tile {
         //private _heightmap : number[];// = [9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16]
-        constructor(imageString, angleTop, angleBottom, angleL, angleR) {
-            super(imageString, angleTop, angleBottom, angleL, angleR);
+        constructor(imageString, angleTop, angleBottom, angleL, angleR, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight) {
+            super(imageString, angleTop, angleBottom, angleL, angleR, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight);
             //the following arbitrary values mean nothing, and were initially used for testing purposes
-            this._topHeightmap = [9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16];
-            this._bottomHeightmap = [9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16];
-            this._leftHeightmap = [9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16];
-            this._rightHeightmap = [9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16];
-            this._initializeHeightmaps();
+            if (this._topHeightmap == null) {
+                this._calculateHeightmaps();
+            }
         }
-        _initializeHeightmaps() {
+        _calculateHeightmaps() {
+            this._topHeightmap = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            this._bottomHeightmap = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            this._leftHeightmap = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            this._rightHeightmap = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             //top heightmap used when player is colliding with it as if it were the floor
-            for (var x = 0; x <= this.getBounds().width - 1; x++) {
-                for (var y = 0; y <= this.getBounds().height - 1; y++) {
+            for (var x = 0; x <= 15; x++) {
+                for (var y = 0; y <= 15; y++) {
                     if (this.hitTest(x, y)) {
                         this._topHeightmap[x] = y;
                         break;
@@ -22,8 +24,8 @@ var objects;
                 }
             }
             //bottom heightmap used when player runs on it as if it were the ceiling
-            for (var x = 0; x <= this.getBounds().width - 1; x++) {
-                for (var y = this.getBounds().height - 1; y >= 0; y--) {
+            for (var x = 0; x <= 15; x++) {
+                for (var y = 15; y >= 0; y--) {
                     if (this.hitTest(x, y)) {
                         this._bottomHeightmap[x] = y;
                         break;
@@ -31,8 +33,8 @@ var objects;
                 }
             }
             //left heightmap used when player runs on it when it's the right wall
-            for (var y = 0; y <= this.getBounds().height - 1; y++) {
-                for (var x = 0; x <= this.getBounds().width - 1; x++) {
+            for (var y = 0; y <= 15; y++) {
+                for (var x = 0; x <= 15; x++) {
                     if (this.hitTest(x, y)) {
                         this._leftHeightmap[y] = x;
                         break;
@@ -40,8 +42,8 @@ var objects;
                 }
             }
             //right heightmap used when player runs on it when it's the left wall
-            for (var y = 0; y <= this.getBounds().height - 1; y++) {
-                for (var x = this.getBounds().width - 1; x >= 0; x--) {
+            for (var y = 0; y <= 15; y++) {
+                for (var x = 15; x >= 0; x--) {
                     if (this.hitTest(x, y)) {
                         this._rightHeightmap[y] = x;
                         break;
@@ -51,12 +53,15 @@ var objects;
         }
         start() { }
         update() { }
+        /*public getHeightmaps() {
+            return [this._topHeightmap, this._bottomHeightmap, this._leftHeightmap, this._rightHeightmap];
+        }*/
         //bottom means the bottom of the player, not the bottom of this tile
         //the player is standing on this block
-        onFloorCollision(player, sensor) {
+        onFloorCollision(other, sensor) {
             var px = sensor.x / 16;
             var h = (px - Math.floor(px)) * 16;
-            player.collideWithGround(this.y + this._topHeightmap[Math.floor(h)], this._topAngle);
+            other.collideWithGround(this.y + this._topHeightmap[Math.floor(h)], this._topAngle);
         }
         //the player is running on the left side of this block
         onFloorCollisionR(player, sensor) {
@@ -78,19 +83,24 @@ var objects;
         }
         //the player jumped into this block from below
         onCeilingCollision(player, sensor) {
-            var px = sensor.x / 16;
-            var h = (px - Math.floor(px)) * 16;
-            player.collideWithCeiling(this.y + this._bottomHeightmap[Math.floor(h)], this._bottomAngle);
-        }
-        //the player moved into this block from the side
-        onLeftWallCollision(player, sensor) {
-            if (this.hitTest(Math.floor(sensor.x - this.x), Math.floor(sensor.y - this.y))) {
-                player.collideWithLeftWall(this.x + this.getBounds().width);
+            if (this._isSolid) {
+                var px = sensor.x / 16;
+                var h = (px - Math.floor(px)) * 16;
+                player.collideWithCeiling(this.y + this._bottomHeightmap[Math.floor(h)], this._bottomAngle);
             }
         }
-        onRightWallCollision(player, sensor) {
-            if (this.hitTest(Math.floor(sensor.x - this.x), Math.floor(sensor.y - this.y))) {
-                player.collideWithRightWall(this.x);
+        //the player moved into this block from the side
+        //TODO: create and use a more accurate detection method using the sensor and side heightmaps
+        onLeftWallCollision(other, sensor) {
+            if (this._isSolid) {
+                if (this._topHeightmap[15] <= 4)
+                    other.collideWithLeftWall(this.x + 16);
+            }
+        }
+        onRightWallCollision(other, sensor) {
+            if (this._isSolid) {
+                if (this._topHeightmap[0] <= 4)
+                    other.collideWithRightWall(this.x);
             }
         }
     }

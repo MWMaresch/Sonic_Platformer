@@ -8,6 +8,7 @@ var fontSpriteSheet;
 var currentScene;
 var scene;
 var collision;
+console.log("loading core");
 //when we have multiple levels, they should all be able to pause
 var paused = false;
 var exitBtn;
@@ -95,8 +96,7 @@ function init() {
             [81, 47, 39, 40, 0], [121, 47, 39, 40, 0],
             [81, 91, 39, 40, 0], [121, 91, 39, 40, 0], [161, 91, 39, 40, 0], [201, 91, 39, 40, 0], [1, 91, 39, 40, 0], [41, 91, 39, 40, 0],
             [1, 141, 39, 40, 0], [41, 141, 39, 40, 0], [81, 141, 39, 40, 0], [121, 141, 39, 40, 0],
-            [2, 235, 39, 40, 0], [42, 235, 39, 40, 0], [82, 235, 39, 40, 0], [122, 235, 39, 40, 0], [162, 235, 39, 40, 0],
-            [590, 365, 39, 29, 0],
+            [2, 245, 39, 30, 0], [42, 245, 39, 30, 0], [82, 245, 39, 30, 0], [122, 245, 39, 30, 0], [162, 245, 39, 30, 0],
             [272, 0, 16, 16, 0],
             [232, 0, 16, 16, 0],
             [252, 0, 16, 16, 0],
@@ -105,26 +105,36 @@ function init() {
             [477, 473, 512, 256, 0],
             [905, 319, 40, 32, 0],
             [91, 617, 40, 43, 0],
-            [200, 582, 256, 158, 0],
-            [315, 0, 16, 16, 0], [0, 0, 1, 1, 0]],
+            [315, 0, 16, 16, 0], [0, 0, 1, 1, 0],
+            [589, 364, 40, 30, 0], [590, 401, 40, 30, 0], [589, 364, 40, 30, 0], [686, 401, 40, 30, 0],
+            [18, 738, 90, 77, 0], [18, 746, 90, 77, 0], [18, 754, 90, 77, 0], [18, 762, 90, 77, 0], [18, 770, 90, 77, 0],
+            [18, 778, 90, 77, 0], [18, 786, 90, 77, 0], [18, 794, 90, 77, 0], [18, 802, 90, 77, 0], [18, 810, 90, 77, 0],
+            [108, 771, 90, 77, 0], [200, 771, 90, 77, 0], [296, 771, 92, 77, 0], [398, 771, 93, 77, 0], [482, 771, 90, 77, 0],
+            [577, 771, 90, 77, 0], [677, 771, 90, 77, 0],
+            [200, 588, 256, 144, 0],
+            [507, 854, 511, 98]],
         animations: {
-            "stand": { "frames": [0] },
-            "lookup": { "frames": [1, 2] },
-            "crouch": { "frames": [3, 4] },
-            "walk": { "frames": [5, 6, 7, 8, 9, 10], speed: 1 / 60 },
-            "run": { "frames": [11, 12, 13, 14] },
-            "jump": { "frames": [15, 16, 17, 18, 19], speed: 12 / 60 },
-            "motobug": { "frames": [20] },
-            "block": { "frames": [21] },
-            "ramp45": { "frames": [22] },
-            "ramp315": { "frames": [23] },
-            "ramp135": { "frames": [24] },
-            "ramp225": { "frames": [25] },
-            "nightsky": { "frames": [26] },
-            "spikes": { "frames": [27] },
-            "dead": { "frames": [28] },
-            "title": { "frames": [29] },
-            "emerald": { "frames": [30, 31] }
+            "stand": { frames: [0] },
+            "lookup": { frames: [1, 2] },
+            "crouch": { frames: [3, 4] },
+            "walk": { frames: [5, 6, 7, 8, 9, 10], speed: 1 / 8 },
+            "run": { frames: [11, 12, 13, 14] },
+            "jump": { frames: [15, 16, 17, 18, 19], speed: 12 / 60 },
+            "block": { frames: [20] },
+            "ramp45": { frames: [21] },
+            "ramp315": { frames: [22] },
+            "ramp135": { frames: [23] },
+            "ramp225": { frames: [24] },
+            "nightsky": { frames: [25] },
+            "spikes": { frames: [26] },
+            "dead": { frames: [27] },
+            "emerald": { frames: [28, 29] },
+            "motobug": { frames: [30, 31, 32, 33], speed: 1 / 8 },
+            "title1": { frames: [34, 35, 36, 37, 38, 39, 40, 41, 42], next: "title2" },
+            "title2": { frames: [43, 44, 45, 46, 47, 48], next: "title3", speed: 1 / 8 },
+            "title3": { frames: [49, 50], speed: 1 / 8 },
+            "emblem": { frames: [51] },
+            "titleWater": { frames: [52] }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",
@@ -183,6 +193,7 @@ function init() {
     };
     fontSpriteSheet = new createjs.SpriteSheet(fontData);
     spriteAtlas = new createjs.SpriteSheet(spriteData);
+    objects.LinearTile.initialize();
     //scale up the low res game through the canvas
     canvas.style.width = (config.Screen.WIDTH * config.Screen.SCALE_X) + 'px';
     scene = config.Scene.MENU;
@@ -206,7 +217,7 @@ function changeScene() {
             break;
         case config.Scene.LEVEL1:
             stage.removeAllChildren();
-            currentScene = new scenes.Level_1();
+            currentScene = new scenes.TestRoom();
             console.log("Starting LEVEL1 scene");
             break;
         case config.Scene.INSTRUCTIONS:

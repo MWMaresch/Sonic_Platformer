@@ -13,5 +13,6 @@ canvas {
     text-align: center;
     background-color: white;
     margin-left: 10%;
+    image-rendering:optimizeSpeed;
     image-rendering:pixelated;
 }
