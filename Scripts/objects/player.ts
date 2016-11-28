@@ -223,7 +223,7 @@ module objects {
                 }
 
                 //updating ground speed based on our slope angle
-                this._angleRadians = this._toRadians(this._angle);
+                this._angleRadians = toRadians(this._angle);
                 this._gSpeed += this._SLOPEFACTOR * -Math.sin(this._angleRadians);
                 this._velX = this._gSpeed * Math.cos(this._angleRadians);
                 this._velY = this._gSpeed * -Math.sin(this._angleRadians);
@@ -236,10 +236,6 @@ module objects {
             }
             this.x += this._velX;
             this.y += this._velY;
-        }
-
-        private _toRadians(angle: number) {
-            return angle * (Math.PI / 180);
         }
 
         private _updateSensors(): void {
@@ -444,7 +440,7 @@ module objects {
                 if (this._velY < 0) {
                     //if we jump into a slope, we might be able to reattach if we're fast enough
                     if (angle >= 224 || angle <= 135) {
-                        this._gSpeed = this._velY * -Math.sign(Math.sin(this._toRadians(angle)));
+                        this._gSpeed = this._velY * -Math.sign(Math.sin(toRadians(angle)));
                         if (Math.abs(this._gSpeed) > 2.5)
                             this.collideWithUpperGround(ceilingHeight, angle);
                         else

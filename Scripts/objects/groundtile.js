@@ -1,10 +1,8 @@
 var objects;
 (function (objects) {
     class GroundTile extends objects.Tile {
-        //private _heightmap : number[];// = [9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16]
         constructor(imageString, angleTop, angleBottom, angleL, angleR, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight) {
             super(imageString, angleTop, angleBottom, angleL, angleR, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight);
-            //the following arbitrary values mean nothing, and were initially used for testing purposes
             if (this._topHeightmap == null) {
                 this._calculateHeightmaps();
             }
@@ -53,9 +51,6 @@ var objects;
         }
         start() { }
         update() { }
-        /*public getHeightmaps() {
-            return [this._topHeightmap, this._bottomHeightmap, this._leftHeightmap, this._rightHeightmap];
-        }*/
         //bottom means the bottom of the player, not the bottom of this tile
         //the player is standing on this block
         onFloorCollision(other, sensor) {

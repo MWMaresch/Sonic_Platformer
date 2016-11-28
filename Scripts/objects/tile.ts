@@ -32,14 +32,26 @@ module objects {
             //console.log([this._topHeightmap, this._bottomHeightmap, this._leftHeightmap, this._rightHeightmap]);
         }
 
-        public getSolidType() : boolean {
+        public offsetHeightmap(amount : number): void {
+            //when we want this tile to be shorter than it initially was
+            //useful for when there are many similar tile types with their only difference being their height
+            for (var i = 0; i < 16; i++) {
+                this._topHeightmap[i]+=amount;
+            }
+            for (var i = 0; i < amount; i++) {
+                this._leftHeightmap[i] = 16;
+                this._rightHeightmap[i] = 0;
+            }
+        }
+
+        get isSolid() : boolean {
             return this._isSolid;
         }
 
         public setDataToTile(tile: Tile) {
             var otherHeightmaps = tile.getHeightmaps();
             var otherAngles = tile.getAngles();
-            this._isSolid = tile.getSolidType();
+            this._isSolid = tile.isSolid;
             this._topHeightmap = otherHeightmaps[0];
             this._bottomHeightmap = otherHeightmaps[1];
             this._leftHeightmap = otherHeightmaps[2];
