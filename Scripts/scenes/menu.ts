@@ -38,14 +38,14 @@ module scenes {
             //create water at the back
             this._waterImage = new createjs.Sprite(spriteAtlas, "titleWater");
             this._waterImage.regY = 0;
-            this._waterImage.x = -100;
+            this._waterImage.x = -150;
             this._waterImage.y = config.Screen.HEIGHT - 104;
-            this._waterImage.skewX = -40;
+            this._waterImage.skewX = -55;
             this._waterHeight = this._waterImage.getBounds().height;
             this._waterImage.scaleY = this._waterHeight / this._waterImage.getTransformedBounds().height;
             this._waterImage2 = new createjs.Sprite(spriteAtlas, "titleWater");
             this._waterImage2.regY = 0;
-            this._waterImage2.x = 539;
+            this._waterImage2.x = this._waterImage.x + this._waterImage.getBounds().width - 1;
             this._waterImage2.y = config.Screen.HEIGHT - 104;
             this._waterImage2.skewX = -40;
             this._waterImage2.scaleY = this._waterHeight / this._waterImage2.getTransformedBounds().height;
@@ -98,8 +98,8 @@ module scenes {
 
         private _updateWater() {
             this._waterImage.scaleY = 1;
-            this._waterImage.skewX += 0.2 * Math.cos(toRadians(this._waterImage.skewX));
-            this._waterImage.skewX %= 40;
+            this._waterImage.skewX += 0.36 * Math.cos(toRadians(this._waterImage.skewX));
+            this._waterImage.skewX %= 55;//if the water's skew is greater than 55 (or < -55), the speed variance is noticeable
             this._waterImage.scaleY = this._waterHeight / this._waterImage.getTransformedBounds().height;
             this._waterImage2.skewX = this._waterImage.skewX;
             this._waterImage2.scaleY = this._waterImage.scaleY;
