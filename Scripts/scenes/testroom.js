@@ -11,7 +11,7 @@ var scenes;
                 ".                 /.......`                                         ...             .....       .....        ...       ....",
                 ".                 .........                                         ...                                                ....",
                 ".`                .........                                         ......    ...                                       ]..",
-                "..1               ).......[                                         ......                                               ).",
+                "..1               ) ..... [                                         ......                                               ).",
                 "...1               ].....(                                          ......                                                .",
                 "....1                                                               ......                                                .",
                 ".....1                                   ,...1                      ......`                                              /.",
@@ -27,8 +27,8 @@ var scenes;
             this._player = new objects.Player("stand", 9 * 16, 12 * 16);
             this._spriteContainer.addChild(this._player);
             //creating obstacles
-            this._obstacles.push(new objects.Motobug("motobug", 86 * 16, 10 * 16));
-            this._obstacles.push(new objects.Motobug("motobug", this._player.x + 301, 10 * 16));
+            this._obstacles.push(new objects.Motobug(86 * 16, 10 * 16));
+            this._obstacles.push(new objects.Motobug(this._player.x + 301, 10 * 16));
             this._obstacles.push(new objects.Spike(33 * 16, 192));
             this._obstacles.push(new objects.Spike(105 * 16, 176));
             //adding all obstacles to spriteContainer

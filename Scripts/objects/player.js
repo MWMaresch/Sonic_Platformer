@@ -14,7 +14,7 @@ var objects;
             this._TERMINALVELOCITY = 15; //should never be more than the size of a single tile, which is 16
             this._SLOPEFACTOR = 0.125; //slowing sonic when he's on a slope
             this._GRAVITY = 0.21875;
-            this._JUMPVELOCITY = 6;
+            this._JUMPVELOCITY = 6.5;
             this._SHORTJUMPVELOCITY = 4;
             this._rings = 0;
             this._isGrounded = false;
@@ -30,6 +30,7 @@ var objects;
             this._topSensorR = new objects.Vector2;
             this._footOffset = new objects.Vector2(9, 0); //from center
             this._footRayCastLength = 35;
+            this._curFootDist = 20;
             this._headOffset = new objects.Vector2(9, 0); //from center
             this._sideOffset = new objects.Vector2(10, 4); //from center
             this._angleThreshold = 45;
@@ -55,11 +56,14 @@ var objects;
                 this._isRolling = true;
                 this.height = 30;
                 this.width = 14;
+                this._curFootDist = 15;
                 this.y += 5;
+                this.regY = 15;
                 this.camOffsetY = 5;
                 this._footOffset.x = 7;
                 this.gotoAndPlay("jump");
-                this.spriteSheet.getAnimation("jump").speed = Math.max(0, 1 / (5 - Math.abs(this._gSpeed)));
+                //we don't want the animation speed to be below 0 or above 1
+                this.spriteSheet.getAnimation("jump").speed = Math.min(1, Math.max(0, 1 / (5 - Math.abs(this._gSpeed))));
             }
         }
         _stopRolling() {
@@ -67,7 +71,9 @@ var objects;
                 this._isRolling = false;
                 this.height = 40;
                 this.width = 18;
+                this._curFootDist = 20;
                 this.y -= 5;
+                this.regY = 20;
                 this.camOffsetY = 0;
                 this._footOffset.x = 9;
             }
@@ -93,12 +99,15 @@ var objects;
         getHurt() {
             this._startFalling();
             if (this._rings == 0) {
-                this._velX = 0;
-                this._velY = -7;
-                this._isDead = true;
-                this.gotoAndStop("dead");
+                this.triggerDeath();
             }
             //TODO: add rebound and hurt animation when we actually have rings
+        }
+        triggerDeath() {
+            this._velX = 0;
+            this._velY = -7;
+            this._isDead = true;
+            this.gotoAndStop("dead");
         }
         bounce() {
             this._velY = -Math.abs(this._velY);
@@ -125,12 +134,12 @@ var objects;
                 this._hcLockTimer--;
             if (controls.UP)
                 this.lookUp();
-            if (controls.DOWN)
-                this.crouch();
             if (controls.LEFT)
                 this.moveLeft();
             else if (controls.RIGHT)
                 this.moveRight();
+            else if (controls.DOWN)
+                this.crouch();
             if (controls.JUMP)
                 this.jump();
             else {
@@ -156,39 +165,63 @@ var objects;
                 //we should never go too fast to pass through blocks
                 if (Math.abs(this._velX) > this._MAXRUNSPEED)
                     this._velX = this._MAXRUNSPEED * Math.sign(this._velX);
-                if (Math.abs(this._velY) > this._TERMINALVELOCITY)
-                    this._velY = this._TERMINALVELOCITY * Math.sign(this._velY);
                 //weird air drag
                 if (this._velY < 0 && this._velY > -4 && Math.abs(this._velX) >= 0.125)
                     this._velX *= this._AIRDRAG;
             }
             else {
-                // when we're not accelerating, stop if we're very slow, otherwise slow sonic down
-                if (!this._accelerating) {
+                //update animations and their speeds
+                if (!this._isRolling) {
+                    if (this._gSpeed != 0) {
+                        if (Math.abs(this._gSpeed) >= this._MAXRUNSPEED) {
+                            if (this.currentAnimation != "run")
+                                this.gotoAndPlay("run");
+                            this.spriteSheet.getAnimation("run").speed = 1 / Math.max(8 - Math.abs(this._gSpeed), 1);
+                            this._gSpeed = this._MAXRUNSPEED * Math.sign(this._gSpeed);
+                        }
+                        else if (this.currentAnimation != "walk")
+                            this.gotoAndPlay("walk");
+                        this.spriteSheet.getAnimation("walk").speed = 1 / Math.max(8 - Math.abs(this._gSpeed), 1);
+                    }
+                    //updating ground speed based on our slope angle
+                    this._angleRadians = toRadians(this._angle);
+                    this._gSpeed += this._SLOPEFACTOR * -Math.sin(this._angleRadians);
+                    // when we're not accelerating, stop if we're very slow, otherwise slow sonic down
+                    if (!this._accelerating) {
+                        if (Math.abs(this._gSpeed) < this._FRICTION) {
+                            this._gSpeed = 0;
+                            this.gotoAndStop("stand");
+                        }
+                        else
+                            this._gSpeed -= this._FRICTION * Math.sign(this._gSpeed);
+                    }
+                }
+                else {
+                    this._angleRadians = toRadians(this._angle);
+                    //if we roll downhill, we should go much faster than when rolling uphill
+                    if (Math.sign(this._gSpeed) == Math.sign(Math.sin(this._angleRadians))) {
+                        this._gSpeed += this._SLOPEFACTOR * 0.625 * -Math.sin(this._angleRadians);
+                    }
+                    else {
+                        this._gSpeed += this._SLOPEFACTOR * 2.5 * -Math.sin(this._angleRadians);
+                    }
                     if (Math.abs(this._gSpeed) < this._FRICTION) {
                         this._gSpeed = 0;
                         this.gotoAndStop("stand");
+                        this._stopRolling();
                     }
                     else
-                        this._gSpeed -= this._FRICTION * Math.sign(this._gSpeed);
+                        this._gSpeed -= (this._FRICTION / 2) * Math.sign(this._gSpeed);
+                    this.spriteSheet.getAnimation("jump").speed = Math.min(1, Math.max(0, 1 / (5 - Math.abs(this._gSpeed))));
                 }
-                //update animations and their speeds
-                if (this._gSpeed != 0) {
-                    if (Math.abs(this._gSpeed) >= this._MAXRUNSPEED) {
-                        if (this.currentAnimation != "run")
-                            this.gotoAndPlay("run");
-                        this.spriteSheet.getAnimation("run").speed = 1 / Math.max(8 - Math.abs(this._gSpeed), 1);
-                        this._gSpeed = this._MAXRUNSPEED * Math.sign(this._gSpeed);
-                    }
-                    else if (this.currentAnimation != "walk")
-                        this.gotoAndPlay("walk");
-                    this.spriteSheet.getAnimation("walk").speed = 1 / Math.max(8 - Math.abs(this._gSpeed), 1);
+                if (Math.abs(this._gSpeed) > 15) {
+                    console.log("reaching terminal velocity at " + this._gSpeed);
+                    this._gSpeed = Math.sign(this._gSpeed) * 15;
                 }
-                //updating ground speed based on our slope angle
-                this._angleRadians = toRadians(this._angle);
-                this._gSpeed += this._SLOPEFACTOR * -Math.sin(this._angleRadians);
                 this._velX = this._gSpeed * Math.cos(this._angleRadians);
                 this._velY = this._gSpeed * -Math.sin(this._angleRadians);
+                if (Math.abs(this._velY) > this._TERMINALVELOCITY)
+                    this._velY = this._TERMINALVELOCITY * Math.sign(this._velY);
                 //if we're too slow when running on walls, we fall
                 if (this._mode != Quadrant.Floor && Math.abs(this._gSpeed) < 2.5 && this._hcLockTimer <= 0) {
                     this._hcLockTimer = 30;
@@ -250,6 +283,9 @@ var objects;
                     this._checkFootCollision(this._footRayCastLength, this._footSensorR, tileGrid);
                     this._checkFootCollision(this._footRayCastLength, this._footSensorL, tileGrid);
                 }
+                if (this.y > tileGrid[0].length * 16) {
+                    this.triggerDeath();
+                }
             }
         }
         _checkFootCollision(length, sensorPos, tileGrid) {
@@ -259,8 +295,8 @@ var objects;
             //we actually need to check a multiple tiles that extend below us for when we run down a steep slope
             //only execute code from the first tile we detect, though
             if (this._mode == Quadrant.Floor) {
-                if (tileGrid[px][Math.floor((sensorPos.y + 16) / 16)] != null)
-                    tileGrid[px][Math.floor((sensorPos.y + 16) / 16)].onFloorCollision(this, sensorPos);
+                if (tileGrid[px][Math.floor((sensorPos.y + (this._curFootDist - 1)) / 16)] != null)
+                    tileGrid[px][Math.floor((sensorPos.y + (this._curFootDist - 1)) / 16)].onFloorCollision(this, sensorPos);
                 else if (this._isGrounded && tileGrid[px][Math.floor((sensorPos.y + 20) / 16)] != null)
                     tileGrid[px][Math.floor((sensorPos.y + 20) / 16)].onFloorCollision(this, sensorPos);
                 else if (this._isGrounded && tileGrid[px][Math.floor((sensorPos.y + length) / 16)] != null)
@@ -269,8 +305,8 @@ var objects;
                     this._setAirSensor();
             }
             else if (this._mode == Quadrant.RightWall) {
-                if (tileGrid[Math.floor((sensorPos.x + 16) / 16)][py] != null)
-                    tileGrid[Math.floor((sensorPos.x + 16) / 16)][py].onFloorCollisionR(this, sensorPos);
+                if (tileGrid[Math.floor((sensorPos.x + (this._curFootDist - 1)) / 16)][py] != null)
+                    tileGrid[Math.floor((sensorPos.x + (this._curFootDist - 1)) / 16)][py].onFloorCollisionR(this, sensorPos);
                 else if (tileGrid[Math.floor((sensorPos.x + 20) / 16)][py] != null)
                     tileGrid[Math.floor((sensorPos.x + 20) / 16)][py].onFloorCollisionR(this, sensorPos);
                 else if (tileGrid[Math.floor((sensorPos.x + length) / 16)][py] != null)
@@ -279,8 +315,8 @@ var objects;
                     this._setAirSensor();
             }
             else if (this._mode == Quadrant.Ceiling) {
-                if (tileGrid[px][Math.floor((sensorPos.y - 16) / 16)] != null)
-                    tileGrid[px][Math.floor((sensorPos.y - 16) / 16)].onFloorCollisionU(this, sensorPos);
+                if (tileGrid[px][Math.floor((sensorPos.y - (this._curFootDist - 1)) / 16)] != null)
+                    tileGrid[px][Math.floor((sensorPos.y - (this._curFootDist - 1)) / 16)].onFloorCollisionU(this, sensorPos);
                 else if (tileGrid[px][Math.floor((sensorPos.y - 20) / 16)] != null)
                     tileGrid[px][Math.floor((sensorPos.y - 20) / 16)].onFloorCollisionU(this, sensorPos);
                 else if (this._isGrounded && tileGrid[px][Math.floor((sensorPos.y - length) / 16)] != null)
@@ -289,8 +325,8 @@ var objects;
                     this._setAirSensor();
             }
             else {
-                if (tileGrid[Math.floor((sensorPos.x - 16) / 16)][py] != null)
-                    tileGrid[Math.floor((sensorPos.x - 16) / 16)][py].onFloorCollisionL(this, sensorPos);
+                if (tileGrid[Math.floor((sensorPos.x - (this._curFootDist - 1)) / 16)][py] != null)
+                    tileGrid[Math.floor((sensorPos.x - (this._curFootDist - 1)) / 16)][py].onFloorCollisionL(this, sensorPos);
                 else if (tileGrid[Math.floor((sensorPos.x - 20) / 16)][py] != null)
                     tileGrid[Math.floor((sensorPos.x - 20) / 16)][py].onFloorCollisionL(this, sensorPos);
                 else if (tileGrid[Math.floor((sensorPos.x - length) / 16)][py] != null)
@@ -315,7 +351,7 @@ var objects;
                 this._higherGround = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 35;
-                this.x = groundHeight - 20;
+                this.x = groundHeight - this._curFootDist;
                 this._angle = angle;
                 this.rotation = -angle;
             }
@@ -326,22 +362,22 @@ var objects;
                 this._lowerGround = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 35;
-                this.x = groundHeight + 20;
+                this.x = groundHeight + this._curFootDist;
                 this._angle = angle;
                 this.rotation = -angle;
             }
         }
         collideWithGround(groundHeight, angle) {
             //on relatively flat ground
-            this._stopRolling();
             if (groundHeight < this._higherGround) {
                 this._higherGround = groundHeight;
                 this._footRayCastLength = 35;
-                this.y = groundHeight - 20;
+                this.y = groundHeight - this._curFootDist;
                 this._angle = angle;
                 this.rotation = -angle;
             }
             if (!this._isGrounded) {
+                this._stopRolling();
                 //on very flat surfaces, just carry over X velocity
                 if (this._angle <= 22 || this._angle >= 338)
                     this._gSpeed = this._velX;
@@ -370,31 +406,38 @@ var objects;
         collideWithUpperGround(groundHeight, angle) {
             //running left or right on the ceiling
             if (groundHeight > this._lowerGround) {
-                this._stopRolling();
                 this._lowerGround = groundHeight;
                 this._isGrounded = true;
                 this._footRayCastLength = 35;
-                this.y = groundHeight + 20;
+                this.y = groundHeight + this._curFootDist;
                 this._angle = angle;
                 this.rotation = -angle;
             }
         }
         collideWithCeiling(ceilingHeight, angle) {
             //we hit our head on the ceiling
-            if (this.y < ceilingHeight + 20) {
-                this.y = ceilingHeight + 20;
+            console.log("collide with ceiling");
+            if (this.y < ceilingHeight + this._curFootDist) {
+                this.y = ceilingHeight + this._curFootDist;
                 if (this._velY < 0) {
                     //if we jump into a slope, we might be able to reattach if we're fast enough
                     if (angle >= 224 || angle <= 135) {
                         this._gSpeed = this._velY * -Math.sign(Math.sin(toRadians(angle)));
-                        if (Math.abs(this._gSpeed) > 2.5)
+                        if (Math.abs(this._gSpeed) > 2.5) {
+                            this._stopRolling();
                             this.collideWithUpperGround(ceilingHeight, angle);
+                        }
                         else
                             this._velY = 0;
                     }
-                    else
+                    else {
                         this._velY = 0;
+                        console.log("bumped because angle wasn't generous enough");
+                    }
                 }
+            }
+            else {
+                console.log("wasn't high enough");
             }
         }
         collideWithLeftWall(x) {
@@ -414,42 +457,56 @@ var objects;
             //TODO: looking up
         }
         crouch() {
+            if (Math.abs(this._gSpeed) > 0.53125)
+                this._startRolling();
             //TODO: crouching and spindash
         }
         moveRight() {
             //we move differently depending on whether we're on the ground or in the air
             if (this._isGrounded) {
-                if (this._hcLockTimer <= 0) {
-                    if (this._gSpeed < 0)
-                        //we use a different (higher) value when turning around so we can stop quickly
-                        this._gSpeed += this._DECELERATION;
-                    else
-                        this._gSpeed += this._GROUNDACCELERATION;
+                if (!this._isRolling) {
+                    if (this._hcLockTimer <= 0) {
+                        if (this._gSpeed < 0)
+                            //we use a different (higher) value when turning around so we can stop quickly
+                            this._gSpeed += this._DECELERATION;
+                        else
+                            this._gSpeed += this._GROUNDACCELERATION;
+                        this._accelerating = true;
+                        this.scaleX = 1;
+                    }
                 }
+                else if (this._gSpeed < 0)
+                    this._gSpeed += 0.125;
             }
             else {
                 this._velX += this._AIRACCELERATION;
                 this._gSpeed += this._AIRACCELERATION;
+                this._accelerating = true;
+                this.scaleX = 1;
             }
-            this._accelerating = true;
-            this.scaleX = 1;
         }
         moveLeft() {
             if (this._isGrounded) {
-                if (this._hcLockTimer <= 0) {
-                    if (this._gSpeed > 0)
-                        this._gSpeed -= this._DECELERATION;
-                    else
-                        this._gSpeed -= this._GROUNDACCELERATION;
+                if (!this._isRolling) {
+                    if (this._hcLockTimer <= 0) {
+                        if (this._gSpeed > 0)
+                            this._gSpeed -= this._DECELERATION;
+                        else
+                            this._gSpeed -= this._GROUNDACCELERATION;
+                        this._accelerating = true;
+                        //we're facing left
+                        this.scaleX = -1;
+                    }
                 }
+                else if (this._gSpeed > 0)
+                    this._gSpeed -= 0.125;
             }
             else {
                 this._velX -= this._AIRACCELERATION;
                 this._gSpeed -= this._AIRACCELERATION;
+                this._accelerating = true;
+                this.scaleX = -1;
             }
-            this._accelerating = true;
-            //we're facing left
-            this.scaleX = -1;
         }
         jump() {
             //the player must let go of the button and press it again to jump

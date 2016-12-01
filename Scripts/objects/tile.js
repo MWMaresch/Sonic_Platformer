@@ -1,7 +1,7 @@
 var objects;
 (function (objects) {
     class Tile extends createjs.Sprite {
-        constructor(imageString, angleTop, angleBottom, angleL, angleR, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid) {
+        constructor(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid) {
             super(spriteAtlas, imageString);
             this.start();
             this._topAngle = angleTop;
@@ -12,32 +12,22 @@ var objects;
             this._bottomHeightmap = heightmapBottom;
             this._leftHeightmap = heightmapLeft;
             this._rightHeightmap = heightmapRight;
-            if (isSolid != null)
-                this._isSolid = isSolid;
-            else
-                this._isSolid = true;
+            this._isSolid = isSolid;
             this._layer = 1;
             this.tickEnabled = false;
+            if (isSolid == null) {
+                this._isSolid = true;
+            }
             //console.log([this._topHeightmap, this._bottomHeightmap, this._leftHeightmap, this._rightHeightmap]);
         }
-        offsetHeightmap(amount) {
-            //when we want this tile to be shorter than it initially was
-            //useful for when there are many similar tile types with their only difference being their height
-            for (var i = 0; i < 16; i++) {
-                this._topHeightmap[i] += amount;
-            }
-            for (var i = 0; i < amount; i++) {
-                this._leftHeightmap[i] = 16;
-                this._rightHeightmap[i] = 0;
-            }
-        }
-        get isSolid() {
-            return this._isSolid;
-        }
+        get isSolid() { return this._isSolid; }
+        set isSolid(b) { this._isSolid = b; }
         setDataToTile(tile) {
-            var otherHeightmaps = tile.getHeightmaps();
-            var otherAngles = tile.getAngles();
+            let otherHeightmaps = tile.getHeightmaps();
+            let otherAngles = tile.getAngles();
             this._isSolid = tile.isSolid;
+            //console.log("using hm " + tile._topHeightmap);
+            this._topHeightmap = new Array(16);
             this._topHeightmap = otherHeightmaps[0];
             this._bottomHeightmap = otherHeightmaps[1];
             this._leftHeightmap = otherHeightmaps[2];
@@ -46,9 +36,11 @@ var objects;
             this._bottomAngle = otherAngles[1];
             this._lSideAngle = otherAngles[2];
             this._rSideAngle = otherAngles[3];
+            this.visible = tile.visible;
         }
         getHeightmaps() {
-            return [this._topHeightmap, this._bottomHeightmap, this._leftHeightmap, this._rightHeightmap];
+            //console.log("fetching hm " + this._topHeightmap);
+            return new Array(this._topHeightmap, this._bottomHeightmap, this._leftHeightmap, this._rightHeightmap);
         }
         getAngles() {
             return [this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle];
@@ -58,6 +50,36 @@ var objects;
             this._bottomHeightmap = heightmapBottom;
             this._leftHeightmap = heightmapLeft;
             this._rightHeightmap = heightmapRight;
+        }
+        flipHorizontally() {
+            this._topHeightmap.reverse();
+            //this._bottomHeightmap.reverse();
+            //swap the two side heightmaps
+            //var tempLeftHeightmap = this._leftHeightmap;
+            //this._leftHeightmap = this._rightHeightmap;
+            //this._rightHeightmap = tempLeftHeightmap;
+            //correct their values to work with their new sides
+            //for (var i = 0; i < this._leftHeightmap.length; i++) {
+            //    this._leftHeightmap[i] = 16 - this._leftHeightmap[i];
+            //    this._rightHeightmap[i] = 16 - this._rightHeightmap[i];
+            // }
+            //change the angles as well
+            this._topAngle = 360 - this._topAngle;
+            //var tempLeftAngle = this._lSideAngle;
+            //this._lSideAngle = this._rSideAngle;
+            //this._rSideAngle = tempLeftAngle;
+        }
+        offsetHeightmap(amount) {
+            //when we want this tile to be shorter than it initially was
+            //useful for when there are many similar tile types with their only difference being their height
+            for (var i = 0; i < this._topHeightmap.length; i++) {
+                this._topHeightmap[i] += amount;
+            }
+            /*
+            for (var i = 0; i < amount; i++) {
+                this._leftHeightmap[i] = 16;
+                this._rightHeightmap[i] = 0;
+            }*/
         }
         start() { }
         update() { }

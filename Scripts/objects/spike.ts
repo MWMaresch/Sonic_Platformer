@@ -11,9 +11,6 @@ module objects {
 
         public update(): void { }
 
-        //spikes never need to collide with the grid, so override the method with an empty one
-        public checkCollisionWithGrid(tileGrid: Tile[][]) { }
-
         public checkCollisionWithPlayer(player: objects.Player) {
             //otherwise, check if he's colliding with any spikes
             //sonic only gets hurt if he's on top of the spikes: from the side they should act like solid walls

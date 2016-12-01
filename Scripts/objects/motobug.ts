@@ -5,8 +5,8 @@ module objects {
         protected _velY: number = 0;
         private _speed: number = 1;
 
-        constructor(imageString: string, x?: number, y?: number) {
-            super(imageString, x, y);
+        constructor(x: number, y: number) {
+            super("motobug", x, y);
             this.start();
         }
 

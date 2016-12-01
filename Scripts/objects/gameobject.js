@@ -46,7 +46,7 @@ var objects;
             //updating position
             this.x += this._velX;
             this.y += this._velY;
-            //updating sensors
+            //updating sensor positions
             this._sideSensorL.x = this.x - this.width / 2;
             this._sideSensorR.x = this.x + this.width / 2;
             this._sideSensorL.y = (this.y + this.height / 2) - 14;
@@ -56,34 +56,11 @@ var objects;
             this._footSensorL.y = (this.y + this.height / 2) - 2;
             this._footSensorR.y = (this.y + this.height / 2) - 2;
         }
-        checkCollisionWithGrid(tileGrid) {
-            //only do wall collisions if we're moving forwards
-            if (this._velX < 0 && tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)] != null)
-                tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)].onLeftWallCollision(this, this._sideSensorL);
-            else if (this._velX > 0 && tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)] != null)
-                tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)].onRightWallCollision(this, this._sideSensorR);
-            this._higherGround = 90000;
-            //always check if our feet would hit something
-            //left foot
-            if (tileGrid[Math.floor(this._footSensorL.x / 16)][Math.floor(this._footSensorL.y / 16)] != null)
-                tileGrid[Math.floor(this._footSensorL.x / 16)][Math.floor(this._footSensorL.y / 16)].onFloorCollision(this, this._footSensorL);
-            else
-                this.detectLeftLedge();
-            //right foot
-            if (tileGrid[Math.floor(this._footSensorR.x / 16)][Math.floor(this._footSensorR.y / 16)] != null)
-                tileGrid[Math.floor(this._footSensorR.x / 16)][Math.floor(this._footSensorR.y / 16)].onFloorCollision(this, this._footSensorR);
-            else
-                this.detectRightLedge();
-        }
+        checkCollisionWithGrid(tileGrid) { }
         checkCollisionWithPlayer(player) { }
         detectLeftLedge() { }
         detectRightLedge() { }
-        collideWithGround(groundHeight, angle) {
-            if (groundHeight < this._higherGround) {
-                this._higherGround = groundHeight;
-                this.y = groundHeight - this.height / 2;
-            }
-        }
+        collideWithGround(groundHeight, angle) { }
         collideWithRightWall(x) { }
         collideWithLeftWall(x) { }
     }

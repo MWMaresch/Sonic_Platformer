@@ -1,8 +1,8 @@
 var objects;
 (function (objects) {
     class Motobug extends objects.PhysGameObject {
-        constructor(imageString, x, y) {
-            super(imageString, x, y);
+        constructor(x, y) {
+            super("motobug", x, y);
             this._velX = 0;
             this._velY = 0;
             this._speed = 1;

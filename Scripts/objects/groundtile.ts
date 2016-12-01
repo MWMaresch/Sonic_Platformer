@@ -1,11 +1,11 @@
 module objects {
     export class GroundTile extends Tile {
 
-        constructor(imageString: string, angleTop?: number, angleBottom?: number, angleL?: number, angleR?: number, heightmapTop?: number[], heightmapBottom?: number[], heightmapLeft?: number[], heightmapRight?: number[]) {
-            super(imageString, angleTop, angleBottom, angleL, angleR, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight);
-            if (this._topHeightmap == null)
-            {
+        constructor(imageString: string, angleTop?: number, angleBottom?: number, angleL?: number, angleR?: number, autoCalc?: boolean, heightmapTop?: number[], heightmapBottom?: number[], heightmapLeft?: number[], heightmapRight?: number[], isSolid?: boolean) {
+            super(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid);
+            if (autoCalc) {
                 this._calculateHeightmaps();
+                console.log("calculated heightmaps for a tile");
             }
         }
 
@@ -85,6 +85,8 @@ module objects {
             var h = (py - Math.floor(py)) * 16;
             player.collideWithLeftGround(this.x + this._rightHeightmap[Math.floor(h)], this._rSideAngle);
         }
+
+        //TODO: if the heightmap returned is at the very far edge, tell the player to check below the tile
 
         //the player jumped into this block from below
         public onCeilingCollision(player: Player, sensor: Vector2): void {

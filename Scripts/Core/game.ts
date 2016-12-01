@@ -133,7 +133,9 @@ function init() {
         [200, 588, 256, 144, 0],//title emblem
         [507, 964, 594, 150], //title sky
         [507, 854, 640, 104], [515, 1222, 640, 104], [512, 1335, 640, 104],[511, 1441, 640, 104],//title water
-        [98, 1109, 557, 40],[658, 1109, 557, 40],[98, 1159, 557, 40],[658, 1159, 557, 40]], //title wall
+        [98, 1109, 557, 40],[658, 1109, 557, 40],[98, 1159, 557, 40],[658, 1159, 557, 40], //title wall
+        [1228,2354,256,256],//GHZ1
+        [2011,5,256,256]],//GHZ2
 
 
 
@@ -160,7 +162,9 @@ function init() {
             "emblem": { frames: [51] },
             "titleSky": { frames: [52] },
             "titleWater": { frames: [53,54,55,56], speed:1/6 },
-            "titleWall": { frames: [57,58,59,60], speed:1/6 }
+            "titleWall": { frames: [57,58,59,60], speed:1/6 },
+            "ghz1": { frames: [61] },
+            "ghz2": { frames: [62] }
         },
 
         "texturepacker": [
@@ -253,7 +257,7 @@ function changeScene(): void {
             break;
         case config.Scene.LEVEL1:
             stage.removeAllChildren();
-            currentScene = new scenes.TestRoom();
+            currentScene = new scenes.GreenHillZone();
             console.log("Starting LEVEL1 scene");
             break;
         case config.Scene.INSTRUCTIONS:

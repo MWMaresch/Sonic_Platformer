@@ -21,5 +21,5 @@
 /// <reference path="../scenes/level.ts" />
 /// <reference path="../scenes/testroom.ts" />
 /// <reference path="../scenes/instructions.ts" />
-/// <reference path="../scenes/Level_1.ts" />
+/// <reference path="../scenes/greenhillzone.ts" />
 //# sourceMappingURL=_reference.js.map

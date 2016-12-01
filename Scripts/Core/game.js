@@ -117,7 +117,9 @@ function init() {
             [200, 588, 256, 144, 0],
             [507, 964, 594, 150],
             [507, 854, 640, 104], [515, 1222, 640, 104], [512, 1335, 640, 104], [511, 1441, 640, 104],
-            [98, 1109, 557, 40], [658, 1109, 557, 40], [98, 1159, 557, 40], [658, 1159, 557, 40]],
+            [98, 1109, 557, 40], [658, 1109, 557, 40], [98, 1159, 557, 40], [658, 1159, 557, 40],
+            [1228, 2354, 256, 256],
+            [2011, 5, 256, 256]],
         animations: {
             "stand": { frames: [0] },
             "lookup": { frames: [1, 2] },
@@ -141,7 +143,9 @@ function init() {
             "emblem": { frames: [51] },
             "titleSky": { frames: [52] },
             "titleWater": { frames: [53, 54, 55, 56], speed: 1 / 6 },
-            "titleWall": { frames: [57, 58, 59, 60], speed: 1 / 6 }
+            "titleWall": { frames: [57, 58, 59, 60], speed: 1 / 6 },
+            "ghz1": { frames: [61] },
+            "ghz2": { frames: [62] }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",
@@ -222,7 +226,7 @@ function changeScene() {
             break;
         case config.Scene.LEVEL1:
             stage.removeAllChildren();
-            currentScene = new scenes.TestRoom();
+            currentScene = new scenes.GreenHillZone();
             console.log("Starting LEVEL1 scene");
             break;
         case config.Scene.INSTRUCTIONS:

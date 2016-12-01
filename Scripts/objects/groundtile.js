@@ -1,10 +1,11 @@
 var objects;
 (function (objects) {
     class GroundTile extends objects.Tile {
-        constructor(imageString, angleTop, angleBottom, angleL, angleR, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight) {
-            super(imageString, angleTop, angleBottom, angleL, angleR, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight);
-            if (this._topHeightmap == null) {
+        constructor(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid) {
+            super(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid);
+            if (autoCalc) {
                 this._calculateHeightmaps();
+                console.log("calculated heightmaps for a tile");
             }
         }
         _calculateHeightmaps() {
@@ -76,6 +77,7 @@ var objects;
             var h = (py - Math.floor(py)) * 16;
             player.collideWithLeftGround(this.x + this._rightHeightmap[Math.floor(h)], this._rSideAngle);
         }
+        //TODO: if the heightmap returned is at the very far edge, tell the player to check below the tile
         //the player jumped into this block from below
         onCeilingCollision(player, sensor) {
             if (this._isSolid) {
