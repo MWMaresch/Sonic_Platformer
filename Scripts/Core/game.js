@@ -119,7 +119,16 @@ function init() {
             [507, 854, 640, 104], [515, 1222, 640, 104], [512, 1335, 640, 104], [511, 1441, 640, 104],
             [98, 1109, 557, 40], [658, 1109, 557, 40], [98, 1159, 557, 40], [658, 1159, 557, 40],
             [1228, 2354, 256, 256],
-            [2011, 5, 256, 256]],
+            [2011, 5, 256, 256],
+            [2011, 2354, 256, 256],
+            [1489, 1832, 256, 256],
+            [1489, 788, 256, 256],
+            [1750, 5, 256, 256],
+            [1750, 266, 256, 256],
+            [2272, 5, 256, 256],
+            [1228, 266, 256, 256],
+            [2011, 2093, 256, 256],
+            [2272, 527, 256, 256]],
         animations: {
             "stand": { frames: [0] },
             "lookup": { frames: [1, 2] },
@@ -145,7 +154,16 @@ function init() {
             "titleWater": { frames: [53, 54, 55, 56], speed: 1 / 6 },
             "titleWall": { frames: [57, 58, 59, 60], speed: 1 / 6 },
             "ghz1": { frames: [61] },
-            "ghz2": { frames: [62] }
+            "ghz2": { frames: [62] },
+            "ghz3": { frames: [63] },
+            "ghz4": { frames: [64] },
+            "ghz5": { frames: [65] },
+            "ghz6": { frames: [66] },
+            "ghz7": { frames: [67] },
+            "ghz8": { frames: [68] },
+            "ghz9": { frames: [69] },
+            "ghz10": { frames: [70] },
+            "ghz11": { frames: [71] }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",
@@ -204,7 +222,7 @@ function init() {
     };
     fontSpriteSheet = new createjs.SpriteSheet(fontData);
     spriteAtlas = new createjs.SpriteSheet(spriteData);
-    objects.LinearTile.initialize();
+    objects.TileGroup.initialize();
     scene = config.Scene.MENU;
     changeScene();
 }

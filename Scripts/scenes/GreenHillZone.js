@@ -7,7 +7,7 @@ var scenes;
             this._act1Grid = ["                       00000            ",
                 "                  00  000000            ",
                 "            0000000000000000            ",
-                "0010000000000000000000000000 0000000    ",
+                "00123456789A0000000000000000 0000000    ",
                 "                       00000000000000000"];
             this.createBackground();
             this.createGridFromTileGroups(this._act1Grid); //, objects.TileGroup.GHZ_1);

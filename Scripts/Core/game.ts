@@ -135,7 +135,16 @@ function init() {
         [507, 854, 640, 104], [515, 1222, 640, 104], [512, 1335, 640, 104],[511, 1441, 640, 104],//title water
         [98, 1109, 557, 40],[658, 1109, 557, 40],[98, 1159, 557, 40],[658, 1159, 557, 40], //title wall
         [1228,2354,256,256],//GHZ1
-        [2011,5,256,256]],//GHZ2
+        [2011,5,256,256],//GHZ2
+        [2011,2354,256,256],//GHZ3
+        [1489,1832,256,256],//GHZ4
+        [1489,788,256,256],//GHZ5
+        [1750,5,256,256],//GHZ6
+        [1750,266,256,256],//GHZ7
+        [2272,5,256,256],//GHZ8
+        [1228,266,256,256],//GHZ9
+        [2011,2093,256,256],//GHZ10
+        [2272,527,256,256]],//GHZ11
 
 
 
@@ -164,7 +173,16 @@ function init() {
             "titleWater": { frames: [53,54,55,56], speed:1/6 },
             "titleWall": { frames: [57,58,59,60], speed:1/6 },
             "ghz1": { frames: [61] },
-            "ghz2": { frames: [62] }
+            "ghz2": { frames: [62] },
+            "ghz3": { frames: [63] },
+            "ghz4": { frames: [64] },
+            "ghz5": { frames: [65] },
+            "ghz6": { frames: [66] },
+            "ghz7": { frames: [67] },
+            "ghz8": { frames: [68] },
+            "ghz9": { frames: [69] },
+            "ghz10": { frames: [70] },
+            "ghz11": { frames: [71] }
         },
 
         "texturepacker": [
@@ -230,7 +248,7 @@ function init() {
     fontSpriteSheet = new createjs.SpriteSheet(fontData);
     spriteAtlas = new createjs.SpriteSheet(spriteData);
 
-    objects.LinearTile.initialize();
+    objects.TileGroup.initialize();
 
     scene = config.Scene.MENU;
     changeScene();

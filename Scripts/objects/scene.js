@@ -15,6 +15,7 @@ var objects;
         }
         update() {
         }
+        getTileGrid() { }
     }
     objects.Scene = Scene;
 })(objects || (objects = {}));

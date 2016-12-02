@@ -198,25 +198,51 @@ module scenes {
             }
             for (var groupX = 0; groupX < stringGrid[0].length; groupX++) {
                 for (var groupY = 0; groupY < stringGrid.length; groupY++) {
-                    if (stringGrid[groupY].charAt(groupX) == ' ') {
+                    if (stringGrid[groupY].charAt(groupX) == ' ')
                         tileGroup = objects.TileGroup.EMPTY;
-                    }
-                    else if (stringGrid[groupY].charAt(groupX) == '0') {
+                    else if (stringGrid[groupY].charAt(groupX) == '0')
                         tileGroup = objects.TileGroup.GHZ_1;
-                    }
-                    else if (stringGrid[groupY].charAt(groupX) == '1') {
+                    else if (stringGrid[groupY].charAt(groupX) == '1')
                         tileGroup = objects.TileGroup.GHZ_2;
-                    }
+                    else if (stringGrid[groupY].charAt(groupX) == '2')
+                        tileGroup = objects.TileGroup.GHZ_3;
+                    else if (stringGrid[groupY].charAt(groupX) == '3')
+                        tileGroup = objects.TileGroup.GHZ_4;
+                    else if (stringGrid[groupY].charAt(groupX) == '4')
+                        tileGroup = objects.TileGroup.GHZ_5;
+                    else if (stringGrid[groupY].charAt(groupX) == '5')
+                        tileGroup = objects.TileGroup.GHZ_6;
+                    else if (stringGrid[groupY].charAt(groupX) == '6')
+                        tileGroup = objects.TileGroup.GHZ_7;
+                    else if (stringGrid[groupY].charAt(groupX) == '7')
+                        tileGroup = objects.TileGroup.GHZ_8;
+                    else if (stringGrid[groupY].charAt(groupX) == '8')
+                        tileGroup = objects.TileGroup.GHZ_9;
+                    else if (stringGrid[groupY].charAt(groupX) == '9')
+                        tileGroup = objects.TileGroup.GHZ_10;
+                    else if (stringGrid[groupY].charAt(groupX) == 'A')
+                        tileGroup = objects.TileGroup.GHZ_11;
+
                     for (var tileX = 0; tileX < tileGroup.length; tileX++) {
                         for (var tileY = 0; tileY < tileGroup[0].length; tileY++) {
                             if (tileGroup[tileX][tileY] != null) {
-                                //if (tileGroup[tileX][tileY] instanceof createjs.Sprite ) {
-                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.GroundTile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
-                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(tileGroup[tileX][tileY]);
-                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
-                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
-                                if (this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].visible)
-                                    this._tileSpriteContainer.addChild(this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY]);
+                                if (tileGroup[tileX][tileY] instanceof objects.GroundTile) {
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.GroundTile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(tileGroup[tileX][tileY]);
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
+                                    if (this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].visible)
+                                        this._tileSpriteContainer.addChild(this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY]);
+                                }
+                                else {
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.Tile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(tileGroup[tileX][tileY]);
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
+                                    if (this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].visible)
+                                        this._tileSpriteContainer.addChild(this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY]);
+
+                                }
                             }
                             else if (groupX * 16 + tileX == 0 || groupX * 16 + tileX == this._tileGrid.length - 1) {
                                 this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.GroundTile("block", 0, 0, 0, 0, false);
@@ -237,6 +263,10 @@ module scenes {
             this._tileSpriteContainer.tickEnabled = false;
             this._tileSpriteContainer.tickChildren = false;
             this._spriteContainer.snapToPixel = true;
+        }
+
+        public getTileGrid() {
+            return this._tileGrid;
         }
 
         protected updateCamera(): void {
