@@ -28,10 +28,10 @@ var objects;
         "                ",
         "                ",
         "                ",
-        "024M531100000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000"];
+        "-24M5311--------",
+        "                ",
+        "                ",
+        "                "];
     var tileGroup2Str = [".               ",
         "                ",
         "                ",
@@ -44,10 +44,10 @@ var objects;
         "                ",
         "                ",
         "                ",
-        "0002468997531000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000"];
+        "---2468997531---",
+        "                ",
+        "                ",
+        "                "];
     var tileGroup3Str = [".               ",
         "                ",
         "                ",
@@ -56,14 +56,14 @@ var objects;
         "                ",
         "                ",
         "                ",
-        "            P510",
-        "          PR0000",
-        "        PR000000",
-        "      PR00000000",
-        "02M9LN0000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000"];
+        "            P51-",
+        "          PR-   ",
+        "        PR-     ",
+        "      PR-       ",
+        "02M9LN-         ",
+        "                ",
+        "                ",
+        "                "];
     var tileGroup4Str = [".               ",
         "                ",
         "                ",
@@ -72,14 +72,14 @@ var objects;
         "                ",
         "                ",
         "                ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            "];
+        "----            ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                "];
     var tileGroup5Str = [".               ",
         "                ",
         "                ",
@@ -88,14 +88,14 @@ var objects;
         "                ",
         "                ",
         "                ",
-        "0246531002466930",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000"];
+        "-246531--246693-",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                "];
     var tileGroup6Str = [".               ",
         "                ",
         "                ",
@@ -104,14 +104,14 @@ var objects;
         "                ",
         "                ",
         "                ",
-        "0D0OMKI         ",
-        "0000000SQ       ",
-        "000000000SQ     ",
-        "00000000000OMKI ",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000"];
+        "-D-OMKI         ",
+        "      -SQ       ",
+        "        -SQ     ",
+        "          -OMKI ",
+        "              --",
+        "                ",
+        "                ",
+        "                "];
     var tileGroup7Str = [".               ",
         "                ",
         "                ",
@@ -120,78 +120,94 @@ var objects;
         "                ",
         "                ",
         "                ",
-        "      r024310000",
-        "      p000000000",
-        "     n0000000000",
-        "  Vdj00000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000"];
+        "      r-2431----",
+        "      p-        ",
+        "     n-         ",
+        "  Vdj-          ",
+        "--              ",
+        "                ",
+        "                ",
+        "                "];
     var tileGroup8Str = [".               ",
         "                ",
         "                ",
         "                ",
-        "            0000",
-        "            0000",
-        "        00000000",
-        "        00000000",
-        "0221000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000"];
+        "            0---",
+        "            0   ",
+        "        0---0   ",
+        "        0       ",
+        "-221----0       ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                "];
     var tileGroup9Str = [".     DE   DBCE ",
-        "    000000000000",
-        "    000000000000",
-        "    000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000"];
+        "    0-----------",
+        "    0           ",
+        "    0           ",
+        "----0           ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                "];
     var tileGroup10Str = [".DE             ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            ",
-        "0000            "];
+        "----            ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                "];
     var tileGroup11Str = [". DE   DBCE  DDD",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000",
-        "0000000000000000"];
+        "----------------",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                "];
+    var tileGroup12Str = [".               ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                ",
+        "                "];
     var hmFlat = [];
     var hmFlatB = [];
     var hm45 = [];
@@ -298,6 +314,7 @@ var objects;
             TileGroup.GHZ_9 = this.generateGroup(TileGroup.GHZ_9, tileGroup9Str, "ghz9");
             TileGroup.GHZ_10 = this.generateGroup(TileGroup.GHZ_10, tileGroup10Str, "ghz10");
             TileGroup.GHZ_11 = this.generateGroup(TileGroup.GHZ_11, tileGroup11Str, "ghz11");
+            TileGroup.GHZ_12 = this.generateGroup(TileGroup.GHZ_12, tileGroup12Str, "ghz12");
         }
         static generateGroup(tileGroupArray, tileGroupStr, stringImage) {
             tileGroupArray = new Array(16);
@@ -327,289 +344,345 @@ var objects;
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(1);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == '2') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(1);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == '3') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(3);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == '4') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(3);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == '5') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(5);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == '6') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(5);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == '7') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(6);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == '8') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(6);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == '9') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(7);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'A') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(7);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'B') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(11);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'C') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(11);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'D') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(13);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'E') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(13);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'F') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(14);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'G') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(14);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'H') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
                             tileGroupArray[x][y].offsetHeightmap(12);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'I') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
                             tileGroupArray[x][y].offsetHeightmap(12);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'J') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
                             tileGroupArray[x][y].offsetHeightmap(8);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'K') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
                             tileGroupArray[x][y].offsetHeightmap(8);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'L') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
                             tileGroupArray[x][y].offsetHeightmap(4);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'M') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
                             tileGroupArray[x][y].offsetHeightmap(4);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'N') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'O') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'P') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE22);
                             tileGroupArray[x][y].offsetHeightmap(8);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'Q') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE22);
                             tileGroupArray[x][y].offsetHeightmap(8);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'R') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE22);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'S') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE22);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'T') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(13);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'U') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(13);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'V') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(14);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'W') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3);
                             tileGroupArray[x][y].offsetHeightmap(14);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'X') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3_B);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'Y') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3_B);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'Z') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE7);
                             tileGroupArray[x][y].offsetHeightmap(10);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'a') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE7);
                             tileGroupArray[x][y].offsetHeightmap(10);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'b') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE11);
                             tileGroupArray[x][y].offsetHeightmap(7);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'c') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE11);
                             tileGroupArray[x][y].offsetHeightmap(7);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'd') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE15);
                             tileGroupArray[x][y].offsetHeightmap(9);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'e') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE15);
                             tileGroupArray[x][y].offsetHeightmap(9);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'f') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE20);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'g') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE20);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'h') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE26);
                             tileGroupArray[x][y].offsetHeightmap(11);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'i') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE26);
                             tileGroupArray[x][y].offsetHeightmap(11);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'j') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE28);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'k') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE28);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'l') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE36);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'm') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE36);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'n') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE45);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'o') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE45);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'p') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE62);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'q') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE62);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'r') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE75);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 's') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE75);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 't') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE86);
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         else if (tileGroupStr[y].charAt(x) == 'u') {
                             tileGroupArray[x][y] = new objects.GroundTile("");
                             tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE86);
                             tileGroupArray[x][y].flipHorizontally();
+                            tileGroupArray[x][y].isSolid = false;
                         }
                         tileGroupArray[x][y].visible = false;
                     }

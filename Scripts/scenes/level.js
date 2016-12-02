@@ -182,6 +182,8 @@ var scenes;
                         tileGroup = objects.TileGroup.GHZ_10;
                     else if (stringGrid[groupY].charAt(groupX) == 'A')
                         tileGroup = objects.TileGroup.GHZ_11;
+                    else if (stringGrid[groupY].charAt(groupX) == 'B')
+                        tileGroup = objects.TileGroup.GHZ_12;
                     for (var tileX = 0; tileX < tileGroup.length; tileX++) {
                         for (var tileY = 0; tileY < tileGroup[0].length; tileY++) {
                             if (tileGroup[tileX][tileY] != null) {

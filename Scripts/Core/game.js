@@ -128,7 +128,8 @@ function init() {
             [2272, 5, 256, 256],
             [1228, 266, 256, 256],
             [2011, 2093, 256, 256],
-            [2272, 527, 256, 256]],
+            [2272, 527, 256, 256],
+            [1228, 1571, 256, 256]],
         animations: {
             "stand": { frames: [0] },
             "lookup": { frames: [1, 2] },
@@ -163,7 +164,8 @@ function init() {
             "ghz8": { frames: [68] },
             "ghz9": { frames: [69] },
             "ghz10": { frames: [70] },
-            "ghz11": { frames: [71] }
+            "ghz11": { frames: [71] },
+            "ghz12": { frames: [72] }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",

@@ -7,14 +7,21 @@ module scenes {
         private _act1Grid: string[] =
            ["                       00000            ",
             "                  00  000000            ",
-            "            0000000000000000            ",
-            "00123456789A0000000000000000 0000000    ",
+            "            020 000000000000            ",
+            "00123456789AB777000000000000 0000000    ",
             "                       00000000000000000"];
 
         constructor() {
             super();
             this.createBackground();
             this.createGridFromTileGroups(this._act1Grid);//, objects.TileGroup.GHZ_1);
+
+            for (var t = 1; t < 5; t ++) {
+                this._tileGrid[192][43 + t] = new objects.GroundTile("");
+                this._tileGrid[192][43 + t].setDataToTile(objects.LinearTile.FLAT);
+                this._tileGrid[192][43 + t].x = 192 * 16;
+                this._tileGrid[192][43 + t].y = (43 + t) * 16;
+            }
 
             //adding everything to a single sprite container reduces the amount of times we need to draw things to the stage, therefore drastically increasing performance
             this._player = new objects.Player("stand", 80, 940);
