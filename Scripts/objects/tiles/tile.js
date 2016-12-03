@@ -91,6 +91,72 @@ var objects;
                 this._leftHeightmap[i] = 16;
                 this._rightHeightmap[i] = 0;
             }
+            return this;
+        }
+        offsetAndCopy(amount) {
+            var rhm = new Array();
+            var lhm = new Array();
+            var thm = new Array();
+            var bhm = new Array();
+            for (var i = 0; i < 16; i++) {
+                thm.push(this._topHeightmap[i]);
+                lhm.push(this._leftHeightmap[i]);
+                rhm.push(this._rightHeightmap[i]);
+                bhm.push(this._bottomHeightmap[i]);
+            }
+            for (var i = 0; i < thm.length; i++)
+                thm[i] += amount;
+            for (var i = 0; i < amount; i++) {
+                lhm[i] = 16;
+                rhm[i] = 0;
+            }
+            if (this instanceof objects.GroundTile)
+                return new objects.GroundTile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+            else
+                return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+        }
+        flipAndCopy() {
+            var rhm = new Array();
+            var lhm = new Array();
+            var thm = new Array();
+            var bhm = new Array();
+            for (var i = 0; i < 16; i++) {
+                thm.push(this._topHeightmap[i]);
+                lhm.push(this._leftHeightmap[i]);
+                rhm.push(this._rightHeightmap[i]);
+                bhm.push(this._bottomHeightmap[i]);
+            }
+            thm.reverse();
+            bhm.reverse();
+            //swap the two side heightmaps
+            var tempLeftHeightmap = lhm;
+            lhm = rhm;
+            rhm = lhm;
+            //correct their values to work with their new sides
+            for (var i = 0; i < this._leftHeightmap.length; i++) {
+                lhm[i] = 16 - lhm[i];
+                rhm[i] = 16 - rhm[i];
+            }
+            if (this instanceof objects.GroundTile)
+                return new objects.GroundTile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+            else
+                return new objects.Tile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+        }
+        copy() {
+            var rhm = new Array();
+            var lhm = new Array();
+            var thm = new Array();
+            var bhm = new Array();
+            for (var i = 0; i < 16; i++) {
+                thm.push(this._topHeightmap[i]);
+                lhm.push(this._leftHeightmap[i]);
+                rhm.push(this._rightHeightmap[i]);
+                bhm.push(this._bottomHeightmap[i]);
+            }
+            if (this instanceof objects.GroundTile)
+                return new objects.GroundTile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+            else
+                return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
         }
         start() { }
         update() { }

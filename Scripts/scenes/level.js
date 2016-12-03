@@ -150,58 +150,29 @@ var scenes;
             this._tileSpriteContainer.tickChildren = false;
             this._spriteContainer.snapToPixel = true;
         }
-        createGridFromTileGroups(stringGrid) {
-            this._tileGrid = new Array(stringGrid[0].length * 16);
-            var tileGroup = new Array(stringGrid[0].length * 16);
-            for (var x = 0; x < stringGrid[0].length * 16; x++) {
-                this._tileGrid[x] = new Array(stringGrid.length * 16);
+        createGridFromTileGroups(numGrid) {
+            this._tileGrid = new Array(numGrid[0].length * 16);
+            var tileGroup = new Array(numGrid[0].length * 16);
+            for (var x = 0; x < numGrid[0].length * 16; x++) {
+                this._tileGrid[x] = new Array(numGrid.length * 16);
             }
-            for (var groupX = 0; groupX < stringGrid[0].length; groupX++) {
-                for (var groupY = 0; groupY < stringGrid.length; groupY++) {
-                    if (stringGrid[groupY].charAt(groupX) == ' ')
-                        tileGroup = objects.TileGroup.EMPTY;
-                    else if (stringGrid[groupY].charAt(groupX) == '0')
-                        tileGroup = objects.TileGroup.GHZ_1;
-                    else if (stringGrid[groupY].charAt(groupX) == '1')
-                        tileGroup = objects.TileGroup.GHZ_2;
-                    else if (stringGrid[groupY].charAt(groupX) == '2')
-                        tileGroup = objects.TileGroup.GHZ_3;
-                    else if (stringGrid[groupY].charAt(groupX) == '3')
-                        tileGroup = objects.TileGroup.GHZ_4;
-                    else if (stringGrid[groupY].charAt(groupX) == '4')
-                        tileGroup = objects.TileGroup.GHZ_5;
-                    else if (stringGrid[groupY].charAt(groupX) == '5')
-                        tileGroup = objects.TileGroup.GHZ_6;
-                    else if (stringGrid[groupY].charAt(groupX) == '6')
-                        tileGroup = objects.TileGroup.GHZ_7;
-                    else if (stringGrid[groupY].charAt(groupX) == '7')
-                        tileGroup = objects.TileGroup.GHZ_8;
-                    else if (stringGrid[groupY].charAt(groupX) == '8')
-                        tileGroup = objects.TileGroup.GHZ_9;
-                    else if (stringGrid[groupY].charAt(groupX) == '9')
-                        tileGroup = objects.TileGroup.GHZ_10;
-                    else if (stringGrid[groupY].charAt(groupX) == 'A')
-                        tileGroup = objects.TileGroup.GHZ_11;
-                    else if (stringGrid[groupY].charAt(groupX) == 'B')
-                        tileGroup = objects.TileGroup.GHZ_12;
-                    for (var tileX = 0; tileX < tileGroup.length; tileX++) {
-                        for (var tileY = 0; tileY < tileGroup[0].length; tileY++) {
+            for (var groupY = 0; groupY < numGrid.length; groupY++) {
+                for (var groupX = 0; groupX < numGrid[0].length; groupX++) {
+                    tileGroup = objects.TileGroup.TILEGROUPLIST[numGrid[groupY][groupX]];
+                    for (var tileX = 0; tileX < tileGroup[0].length; tileX++) {
+                        for (var tileY = 0; tileY < tileGroup.length; tileY++) {
                             if (tileGroup[tileX][tileY] != null) {
                                 if (tileGroup[tileX][tileY] instanceof objects.GroundTile) {
                                     this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.GroundTile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
                                     this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(tileGroup[tileX][tileY]);
                                     this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
                                     this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
-                                    if (this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].visible)
-                                        this._tileSpriteContainer.addChild(this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY]);
                                 }
-                                else {
+                                else if (tileGroup[tileX][tileY].visible) {
                                     this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.Tile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
-                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(tileGroup[tileX][tileY]);
                                     this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
                                     this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
-                                    if (this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].visible)
-                                        this._tileSpriteContainer.addChild(this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY]);
+                                    this._tileSpriteContainer.addChild(this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY]);
                                 }
                             }
                             else if (groupX * 16 + tileX == 0 || groupX * 16 + tileX == this._tileGrid.length - 1) {
@@ -218,7 +189,7 @@ var scenes;
             this._camRightBoundary = this._tileGrid.length * -16 + config.Screen.WIDTH;
             this._camBottomBoundary = this._tileGrid[0].length * -16 + config.Screen.HEIGHT;
             this._spriteContainer.addChild(this._tileSpriteContainer);
-            //increasing performance slightly more by disabling ticking for the tiles, which shouldn't move anyway
+            //increasing performance slightly more by disabling ticking for the tiles, which shouldn't move or animate anyway
             this._tileSpriteContainer.tickEnabled = false;
             this._tileSpriteContainer.tickChildren = false;
             this._spriteContainer.snapToPixel = true;
@@ -352,4 +323,80 @@ var scenes;
     }
     scenes.Level = Level;
 })(scenes || (scenes = {}));
+/*protected createGridFromTileGroups(stringGrid: string[]) {//, tileGroup: Array<Array<objects.Tile>>) {
+            this._tileGrid = new Array<Array<objects.Tile>>(stringGrid[0].length * 16);
+            var tileGroup = new Array<Array<objects.Tile>>(stringGrid[0].length * 16);
+            for (var x = 0; x < stringGrid[0].length * 16; x++) {
+                this._tileGrid[x] = new Array<objects.Tile>(stringGrid.length * 16);
+            }
+            for (var groupX = 0; groupX < stringGrid[0].length; groupX++) {
+                for (var groupY = 0; groupY < stringGrid.length; groupY++) {
+                    if (stringGrid[groupY].charAt(groupX) == ' ')
+                        tileGroup = objects.TileGroup.EMPTY;
+                    else if (stringGrid[groupY].charAt(groupX) == '0')
+                        tileGroup = objects.TileGroup.GHZ_1;
+                    else if (stringGrid[groupY].charAt(groupX) == '1')
+                        tileGroup = objects.TileGroup.GHZ_2;
+                    else if (stringGrid[groupY].charAt(groupX) == '2')
+                        tileGroup = objects.TileGroup.GHZ_3;
+                    else if (stringGrid[groupY].charAt(groupX) == '3')
+                        tileGroup = objects.TileGroup.GHZ_4;
+                    else if (stringGrid[groupY].charAt(groupX) == '4')
+                        tileGroup = objects.TileGroup.GHZ_5;
+                    else if (stringGrid[groupY].charAt(groupX) == '5')
+                        tileGroup = objects.TileGroup.GHZ_6;
+                    else if (stringGrid[groupY].charAt(groupX) == '6')
+                        tileGroup = objects.TileGroup.GHZ_7;
+                    else if (stringGrid[groupY].charAt(groupX) == '7')
+                        tileGroup = objects.TileGroup.GHZ_8;
+                    else if (stringGrid[groupY].charAt(groupX) == '8')
+                        tileGroup = objects.TileGroup.GHZ_9;
+                    else if (stringGrid[groupY].charAt(groupX) == '9')
+                        tileGroup = objects.TileGroup.GHZ_10;
+                    else if (stringGrid[groupY].charAt(groupX) == 'A')
+                        tileGroup = objects.TileGroup.GHZ_11;
+                    else if (stringGrid[groupY].charAt(groupX) == 'B')
+                        tileGroup = objects.TileGroup.GHZ_12;
+
+                    for (var tileX = 0; tileX < tileGroup.length; tileX++) {
+                        for (var tileY = 0; tileY < tileGroup[0].length; tileY++) {
+                            if (tileGroup[tileX][tileY] != null) {
+                                if (tileGroup[tileX][tileY] instanceof objects.GroundTile) {
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.GroundTile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(tileGroup[tileX][tileY]);
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
+                                    if (this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].visible)
+                                        this._tileSpriteContainer.addChild(this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY]);
+                                }
+                                else {
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.Tile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(tileGroup[tileX][tileY]);
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
+                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
+                                    if (this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].visible)
+                                        this._tileSpriteContainer.addChild(this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY]);
+
+                                }
+                            }
+                            else if (groupX * 16 + tileX == 0 || groupX * 16 + tileX == this._tileGrid.length - 1) {
+                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.GroundTile("block", 0, 0, 0, 0, false);
+                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(objects.LinearTile.FLAT);
+                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
+                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
+                                objects.LinearTile.resetTiles();
+                            }
+                        }
+                    }
+                }
+            }
+            this._camRightBoundary = this._tileGrid.length * -16 + config.Screen.WIDTH;
+            this._camBottomBoundary = this._tileGrid[0].length * -16 + config.Screen.HEIGHT;
+            this._spriteContainer.addChild(this._tileSpriteContainer);
+
+            //increasing performance slightly more by disabling ticking for the tiles, which shouldn't move anyway
+            this._tileSpriteContainer.tickEnabled = false;
+            this._tileSpriteContainer.tickChildren = false;
+            this._spriteContainer.snapToPixel = true;
+        }*/ 
 //# sourceMappingURL=level.js.map

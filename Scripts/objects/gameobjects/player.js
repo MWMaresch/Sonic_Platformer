@@ -82,9 +82,8 @@ var objects;
             //called when one foot is in the air
             //if both of our feet detect no ground, we're in the air
             this._sensorsInAir++;
-            if (this._sensorsInAir >= 2) {
+            if (this._sensorsInAir >= 2)
                 this._startFalling();
-            }
         }
         get rightSideSensor() { return this._sideSensorR; }
         get leftSideSensor() { return this._sideSensorL; }
@@ -155,7 +154,7 @@ var objects;
             this._mode = Quadrant.Floor;
             this._angle = 0;
             this.rotation = 0;
-            this._gSpeed = 0;
+            //this._gSpeed = 0;
             this._footRayCastLength = 20;
         }
         updateMovement() {
@@ -225,6 +224,7 @@ var objects;
                 //if we're too slow when running on walls, we fall
                 if (this._mode != Quadrant.Floor && Math.abs(this._gSpeed) < 2.5 && this._hcLockTimer <= 0) {
                     this._hcLockTimer = 30;
+                    console.log("fell because we're too slow");
                     this._startFalling();
                 }
             }
@@ -325,7 +325,6 @@ var objects;
                     this._setAirSensor();
             }
             else {
-                console.log(this._mode);
                 if (tileGrid[Math.floor((sensorPos.x - (this._curFootDist - 1)) / 16)][py] != null)
                     tileGrid[Math.floor((sensorPos.x - (this._curFootDist - 1)) / 16)][py].onFloorCollisionL(this, sensorPos);
                 else if (tileGrid[Math.floor((sensorPos.x - 20) / 16)][py] != null)
@@ -424,7 +423,6 @@ var objects;
         }
         collideWithCeiling(ceilingHeight, angle) {
             //we hit our head on the ceiling
-            console.log("collide with ceiling");
             if (this.y < ceilingHeight + this._curFootDist) {
                 this.y = ceilingHeight + this._curFootDist;
                 if (this._velY < 0) {
@@ -438,14 +436,9 @@ var objects;
                         else
                             this._velY = 0;
                     }
-                    else {
+                    else
                         this._velY = 0;
-                        console.log("bumped because angle wasn't generous enough");
-                    }
                 }
-            }
-            else {
-                console.log("wasn't high enough");
             }
         }
         checkOneMoreCollision(posY, posX) {

@@ -100,9 +100,8 @@ module objects {
             //called when one foot is in the air
             //if both of our feet detect no ground, we're in the air
             this._sensorsInAir++;
-            if (this._sensorsInAir >= 2) {
+            if (this._sensorsInAir >= 2) 
                 this._startFalling();
-            }
         }
 
         get rightSideSensor(): Vector2 { return this._sideSensorR; }
@@ -191,7 +190,7 @@ module objects {
             this._mode = Quadrant.Floor;
             this._angle = 0;
             this.rotation = 0;
-            this._gSpeed = 0;
+            //this._gSpeed = 0;
             this._footRayCastLength = 20;
         }
 
@@ -268,6 +267,7 @@ module objects {
                 //if we're too slow when running on walls, we fall
                 if (this._mode != Quadrant.Floor && Math.abs(this._gSpeed) < 2.5 && this._hcLockTimer <= 0) {
                     this._hcLockTimer = 30;
+                    console.log("fell because we're too slow");
                     this._startFalling();
                 }
             }
@@ -351,7 +351,7 @@ module objects {
                     tileGrid[px][Math.floor((sensorPos.y + 20) / 16)].onFloorCollision(this, sensorPos);
                 else if (tileGrid[px][Math.floor((sensorPos.y + length) / 16)] != null)
                     tileGrid[px][Math.floor((sensorPos.y + length) / 16)].onFloorCollision(this, sensorPos);
-                else //if we detect no tile, then this foot must be in the air
+                else  //if we detect no tile, then this foot must be in the air 
                     this._setAirSensor();
             }
             else if (this._mode == Quadrant.RightWall) {
@@ -375,14 +375,13 @@ module objects {
                     this._setAirSensor();
             }
             else { //quadrant must be left wall
-                console.log(this._mode);
                 if (tileGrid[Math.floor((sensorPos.x - (this._curFootDist - 1)) / 16)][py] != null)
                     tileGrid[Math.floor((sensorPos.x - (this._curFootDist - 1)) / 16)][py].onFloorCollisionL(this, sensorPos);
                 else if (tileGrid[Math.floor((sensorPos.x - 20) / 16)][py] != null)
                     tileGrid[Math.floor((sensorPos.x - 20) / 16)][py].onFloorCollisionL(this, sensorPos);
                 else if (tileGrid[Math.floor((sensorPos.x - length) / 16)][py] != null)
                     tileGrid[Math.floor((sensorPos.x - length) / 16)][py].onFloorCollisionL(this, sensorPos);
-                else
+                else 
                     this._setAirSensor();
             }
         }
@@ -488,7 +487,6 @@ module objects {
 
         public collideWithCeiling(ceilingHeight: number, angle: number): void {
             //we hit our head on the ceiling
-            console.log("collide with ceiling");
             if (this.y < ceilingHeight + this._curFootDist) {
                 this.y = ceilingHeight + this._curFootDist;
                 if (this._velY < 0) {
@@ -502,14 +500,9 @@ module objects {
                         else
                             this._velY = 0;
                     }
-                    else {
+                    else 
                         this._velY = 0;
-                        console.log("bumped because angle wasn't generous enough");
-                    }
                 }
-            }
-            else {
-                console.log("wasn't high enough");
             }
         }
 

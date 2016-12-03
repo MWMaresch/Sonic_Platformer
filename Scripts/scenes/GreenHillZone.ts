@@ -4,19 +4,28 @@ module scenes {
         private _returnBtn: objects.Button;
 
         //Green Hill Zone Act 1 will be 40x5
-        private _act1Grid: string[] =
+        private _act1StrGrid: string[] =
            ["                       00000            ",
             "                  00  000000            ",
             "            020 000000000000            ",
             "00123456789AB777000000000000 0000000    ",
             "                       00000000000000000"];
 
+        private _act1Grid: number[];
+
         constructor() {
             super();
+            this._act1Grid =
+           [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3,14, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,15, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]];
+
             this.createBackground();
             this.createGridFromTileGroups(this._act1Grid);//, objects.TileGroup.GHZ_1);
 
-            for (var t = 1; t < 5; t ++) {
+            for (var t = 1; t < 5; t++) {
                 this._tileGrid[192][43 + t] = new objects.GroundTile("");
                 this._tileGrid[192][43 + t].setDataToTile(objects.LinearTile.FLAT);
                 this._tileGrid[192][43 + t].x = 192 * 16;
@@ -35,7 +44,7 @@ module scenes {
             for (let obj of this._obstacles) {
                 this._spriteContainer.addChild(obj);
             }
-            
+
 
             stage.addChild(this._spriteContainer);
 
@@ -52,7 +61,7 @@ module scenes {
                 //the main loop
                 this._player.update();
                 this._player.checkCollisionWithGrid(this._tileGrid);
-                this.updateHUD(); 
+                this.updateHUD();
                 this.updateCamera();
                 this.updateObjects();
             }

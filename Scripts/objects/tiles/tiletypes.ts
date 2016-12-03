@@ -1,240 +1,296 @@
 module objects {
 
-    var tileGroupEmptyStr =
-        ["                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                "];
-
-    var tileGroup1Str =
-        [".               ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "-24M5311--------",
-            "                ",
-            "                ",
-            "                "];
-
-    var tileGroup2Str =
-        [".               ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "  ------------  ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "---2468997531---",
-            "                ",
-            "                ",
-            "                "];
 
 
-    var tileGroup3Str =
-        [".               ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "            P51-",
-            "          PR-   ",
-            "        PR-     ",
-            "      PR-       ",
-            "02M9LN-         ",
-            "                ",
-            "                ",
-            "                "];
+    var tileGroupCollisions = new Array(
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
 
-    var tileGroup4Str =
-        [".               ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "----            ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                "];
+        //var tileGroup1 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 4, 6, 24, 7, 5, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
 
-    var tileGroup5Str =
-        [".               ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "-246531--246693-",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                "];
+        //var tileGroup2 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 2, 4, 6, 8, 10, 11, 11, 9, 7, 5, 3, 2, 2, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
 
-    var tileGroup6Str =
-        [".               ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "-D-OMKI         ",
-            "      -SQ       ",
-            "        -SQ     ",
-            "          -OMKI ",
-            "              --",
-            "                ",
-            "                ",
-            "                "];
+        //var tileGroup3 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 7, 3, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 29, 2, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 27, 29, 2, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 27, 29, 2, 0, 0, 0, 0, 0, 0, 0],
+        [1, 4, 24, 11, 23, 25, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
 
+        //var tileGroup4 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
 
-    var tileGroup7Str =
-        [".               ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "      r-2431----",
-            "      p-        ",
-            "     n-         ",
-            "  Vdj-          ",
-            "--              ",
-            "                ",
-            "                ",
-            "                "];
+        //var tileGroup5 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 4, 6, 8, 7, 5, 3, 2, 2, 4, 6, 8, 8, 11, 5, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
 
-        var tileGroup8Str =
-        [".               ",
-            "                ",
-            "                ",
-            "                ",
-            "            0---",
-            "            0   ",
-            "        0---0   ",
-            "        0       ",
-            "-221----0       ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                "];
+        //var tileGroup6 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 15, 2, 26, 24, 22, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 2, 30, 28, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 2, 30, 28, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 26, 24, 22, 20, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
 
-        var tileGroup9Str =
-           [".     DE   DBCE ",
-            "    0-----------",
-            "    0           ",
-            "    0           ",
-            "----0           ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                "];
+        //var tileGroup7 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 55, 2, 4, 6, 5, 3, 2, 2, 2, 2],
+        [0, 0, 0, 0, 0, 0, 53, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 51, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 33, 41, 47, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
 
-        var tileGroup10Str =
-           [".DE             ",
-            "----            ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                "];
+        //var tileGroup8 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+        [2, 4, 4, 3, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
 
-        var tileGroup11Str =
-           [". DE   DBCE  DDD",
-            "----------------",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                "];
+        //var tileGroup9 =
+        [[0, 0, 0, 0, 0, 0, 15, 16, 0, 0, 0, 15, 13, 14, 16, 0],
+        [0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
 
-        var tileGroup12Str =
-           [".               ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                ",
-            "                "];
+        //var tileGroup10 =
+        [[0, 15, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+
+        //var tileGroup11 =
+        [[0, 15, 16, 0, 0, 0, 15, 13, 14, 16, 0, 0, 0, 15, 15, 15],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+
+        //var tileGroup12 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+
+        //var tileGroup13 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 2, 4, 6, 8, 10, 10, 9, 7, 5, 3, 2, 2, 2, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+
+        //var tileGroup14 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+
+        //tileGroup15 =
+        [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 2, 2, 4, 8, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 30, 28, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 28, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 28, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, 3, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    )
+
 
     var hmFlat = [];
     var hmFlatB = [];
@@ -243,6 +299,7 @@ module objects {
     var hm11 = [];
     var hm22 = [];
     export class LinearTile {
+        public static EMPTY: objects.Tile;
         public static FLAT: objects.GroundTile;
         public static PLATFORM: objects.GroundTile;
         public static ANGLE3: objects.GroundTile;
@@ -257,11 +314,12 @@ module objects {
             hm11 = [3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0];
             hm22 = [7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0];
 
+            LinearTile.EMPTY = new objects.Tile("empty", 0, 0, 0, 0, false, hmFlat, hmFlatB, hmFlat, hmFlatB); //in order: top, bottom, left, right
             LinearTile.FLAT = new objects.GroundTile("empty", 0, 180, 90, 270, false, hmFlat, hmFlatB, hmFlat, hmFlatB, true); //in order: top, bottom, left, right
             LinearTile.PLATFORM = new objects.GroundTile("empty", 0, 180, 90, 270, false, hmFlat, hmFlatB, hmFlat, hmFlatB, false); //in order: top, bottom, left, right
-            LinearTile.ANGLE3 = new objects.GroundTile("empty", 3, 180, 90, 270, false, hm3, hmFlatB, hmFlat, hmFlatB, true);
-            LinearTile.ANGLE11 = new objects.GroundTile("empty", 11, 180, 90, 270, false, hm11, hmFlatB, hmFlat, hmFlatB, true);
-            LinearTile.ANGLE22 = new objects.GroundTile("empty", 22, 180, 90, 270, false, hm22, hmFlatB, hmFlat, hmFlatB, true);
+            LinearTile.ANGLE3 = new objects.GroundTile("empty", 3, 180, 90, 270, false, hm3, hmFlatB, hmFlat, hmFlatB, false);
+            LinearTile.ANGLE11 = new objects.GroundTile("empty", 11, 180, 90, 270, false, hm11, hmFlatB, hmFlat, hmFlatB, false);
+            LinearTile.ANGLE22 = new objects.GroundTile("empty", 22, 180, 90, 270, false, hm22, hmFlatB, hmFlat, hmFlatB, false);
         }
     }
 
@@ -338,426 +396,74 @@ module objects {
             CurvedTile.ANGLE7 = new objects.GroundTile("empty", 7, 180, 7, 270, false, hm7c, hmFlatB, hm7cS, hmFlatB, true);
             CurvedTile.ANGLE11 = new objects.GroundTile("empty", 11, 180, 11, 270, false, hm11c, hmFlatB, hm11cS, hmFlatB, true);
             CurvedTile.ANGLE15 = new objects.GroundTile("empty", 15, 180, 15, 270, false, hm15c, hmFlatB, hm15cS, hmFlatB, true);
-            CurvedTile.ANGLE20 = new objects.GroundTile("empty", 20, 180, 20, 270, false, hm20c, hmFlatB, hm20cS, hmFlatB, true); 
-            CurvedTile.ANGLE26 = new objects.GroundTile("empty", 26, 180, 26, 270, false, hm26c, hmFlatB, hm26cS, hmFlatB, true); 
-            CurvedTile.ANGLE28 = new objects.GroundTile("empty", 28, 180, 28, 270, false, hm28c, hmFlatB, hm28cS, hmFlatB, true); 
-            CurvedTile.ANGLE36 = new objects.GroundTile("empty", 36, 180, 36, 270, false, hm36c, hmFlatB, hm36cS, hmFlatB, true); 
-            CurvedTile.ANGLE45 = new objects.GroundTile("empty", 45, 180, 45, 270, false, hm45c, hmFlatB, hm45cS, hmFlatB, true); 
-            CurvedTile.ANGLE62 = new objects.GroundTile("empty", 62, 180, 62, 270, false, hm62c, hmFlatB, hm62cS, hmFlatB, true); 
-            CurvedTile.ANGLE75 = new objects.GroundTile("empty", 0, 180, 75, 270, false, hm75c, hmFlatB, hm75cS, hmFlatB, true); 
-            CurvedTile.ANGLE86 = new objects.GroundTile("empty", 86, 180, 86, 270, false, hm86c, hmFlatB, hm86cS, hmFlatB, true); 
+            CurvedTile.ANGLE20 = new objects.GroundTile("empty", 20, 180, 20, 270, false, hm20c, hmFlatB, hm20cS, hmFlatB, true);
+            CurvedTile.ANGLE26 = new objects.GroundTile("empty", 26, 180, 26, 270, false, hm26c, hmFlatB, hm26cS, hmFlatB, true);
+            CurvedTile.ANGLE28 = new objects.GroundTile("empty", 28, 180, 28, 270, false, hm28c, hmFlatB, hm28cS, hmFlatB, true);
+            CurvedTile.ANGLE36 = new objects.GroundTile("empty", 36, 180, 36, 270, false, hm36c, hmFlatB, hm36cS, hmFlatB, true);
+            CurvedTile.ANGLE45 = new objects.GroundTile("empty", 45, 180, 45, 270, false, hm45c, hmFlatB, hm45cS, hmFlatB, true);
+            CurvedTile.ANGLE62 = new objects.GroundTile("empty", 62, 180, 62, 270, false, hm62c, hmFlatB, hm62cS, hmFlatB, true);
+            CurvedTile.ANGLE75 = new objects.GroundTile("empty", 0, 180, 75, 270, false, hm75c, hmFlatB, hm75cS, hmFlatB, true);
+            CurvedTile.ANGLE86 = new objects.GroundTile("empty", 86, 180, 86, 270, false, hm86c, hmFlatB, hm86cS, hmFlatB, true);
         }
     }
 
     export class TileGroup {
-        public static GHZ_1: Array<Array<objects.Tile>>;
-        public static GHZ_2: Array<Array<objects.Tile>>;
-        public static GHZ_3: Array<Array<objects.Tile>>;
-        public static GHZ_4: Array<Array<objects.Tile>>;
-        public static GHZ_5: Array<Array<objects.Tile>>;
-        public static GHZ_6: Array<Array<objects.Tile>>;
-        public static GHZ_7: Array<Array<objects.Tile>>;
-        public static GHZ_8: Array<Array<objects.Tile>>;
-        public static GHZ_9: Array<Array<objects.Tile>>;
-        public static GHZ_10: Array<Array<objects.Tile>>;
-        public static GHZ_11: Array<Array<objects.Tile>>;
-        public static GHZ_12: Array<Array<objects.Tile>>;
-        public static EMPTY: Array<Array<objects.Tile>>;
+        public static TILELIST: Array<objects.Tile>;
+        public static TILEGROUPLIST: Array<Array<Array<objects.Tile>>>;
 
         public static initialize() {
+
             LinearTile.resetTiles();
             CurvedTile.resetTiles();
-            TileGroup.EMPTY = this.generateGroup(TileGroup.EMPTY, tileGroupEmptyStr, "empty");
-            TileGroup.GHZ_1 = this.generateGroup(TileGroup.GHZ_1, tileGroup1Str, "ghz1");
-            TileGroup.GHZ_2 = this.generateGroup(TileGroup.GHZ_2, tileGroup2Str, "ghz2");
-            TileGroup.GHZ_3 = this.generateGroup(TileGroup.GHZ_3, tileGroup3Str, "ghz3");
-            TileGroup.GHZ_4 = this.generateGroup(TileGroup.GHZ_4, tileGroup4Str, "ghz4");
-            TileGroup.GHZ_5 = this.generateGroup(TileGroup.GHZ_5, tileGroup5Str, "ghz5");
-            TileGroup.GHZ_6 = this.generateGroup(TileGroup.GHZ_6, tileGroup6Str, "ghz6");
-            TileGroup.GHZ_7 = this.generateGroup(TileGroup.GHZ_7, tileGroup7Str, "ghz7");
-            TileGroup.GHZ_8 = this.generateGroup(TileGroup.GHZ_8, tileGroup8Str, "ghz8");
-            TileGroup.GHZ_9 = this.generateGroup(TileGroup.GHZ_9, tileGroup9Str, "ghz9");
-            TileGroup.GHZ_10 = this.generateGroup(TileGroup.GHZ_10, tileGroup10Str, "ghz10");
-            TileGroup.GHZ_11 = this.generateGroup(TileGroup.GHZ_11, tileGroup11Str, "ghz11");
-            TileGroup.GHZ_12 = this.generateGroup(TileGroup.GHZ_12, tileGroup12Str, "ghz12");
+            TileGroup.TILELIST = new Array<Tile>();
+            TileGroup.TILEGROUPLIST = new Array(tileGroupCollisions.length);
+            TileGroup.TILELIST.push(null, LinearTile.FLAT, LinearTile.PLATFORM,
+                LinearTile.ANGLE3.offsetAndCopy(1), LinearTile.ANGLE3.offsetAndCopy(1).flipAndCopy(),
+                LinearTile.ANGLE3.offsetAndCopy(3), LinearTile.ANGLE3.offsetAndCopy(3).flipAndCopy(),
+                LinearTile.ANGLE3.offsetAndCopy(5), LinearTile.ANGLE3.offsetAndCopy(5).flipAndCopy(),
+                LinearTile.ANGLE3.offsetAndCopy(6), LinearTile.ANGLE3.offsetAndCopy(6).flipAndCopy(),
+                LinearTile.ANGLE3.offsetAndCopy(7), LinearTile.ANGLE3.offsetAndCopy(7).flipAndCopy(),
+                LinearTile.ANGLE3.offsetAndCopy(11), LinearTile.ANGLE3.offsetAndCopy(11).flipAndCopy(),
+                LinearTile.ANGLE3.offsetAndCopy(13), LinearTile.ANGLE3.offsetAndCopy(13).flipAndCopy(),
+                LinearTile.ANGLE3.offsetAndCopy(14), LinearTile.ANGLE3.offsetAndCopy(14).flipAndCopy(),
+                LinearTile.ANGLE11.offsetAndCopy(12), LinearTile.ANGLE11.offsetAndCopy(12).flipAndCopy(),
+                LinearTile.ANGLE11.offsetAndCopy(8), LinearTile.ANGLE11.offsetAndCopy(8).flipAndCopy(),
+                LinearTile.ANGLE11.offsetAndCopy(4), LinearTile.ANGLE11.offsetAndCopy(4).flipAndCopy(),
+                LinearTile.ANGLE11.offsetAndCopy(0), LinearTile.ANGLE11.offsetAndCopy(0).flipAndCopy(),
+                LinearTile.ANGLE22.offsetAndCopy(8), LinearTile.ANGLE22.offsetAndCopy(8).flipAndCopy(),
+                LinearTile.ANGLE22.offsetAndCopy(0), LinearTile.ANGLE22.offsetAndCopy(0).flipAndCopy(),
+                CurvedTile.ANGLE3.offsetAndCopy(13), CurvedTile.ANGLE3.offsetAndCopy(13).flipAndCopy(),
+                CurvedTile.ANGLE3.offsetAndCopy(14), CurvedTile.ANGLE3.offsetAndCopy(14).flipAndCopy(),
+                CurvedTile.ANGLE3_B.copy(), CurvedTile.ANGLE3_B.flipAndCopy(),
+                CurvedTile.ANGLE7.offsetAndCopy(10), CurvedTile.ANGLE7.offsetAndCopy(10).flipAndCopy(),
+                CurvedTile.ANGLE11.offsetAndCopy(7), CurvedTile.ANGLE11.offsetAndCopy(7).flipAndCopy(),
+                CurvedTile.ANGLE15.offsetAndCopy(9), CurvedTile.ANGLE15.offsetAndCopy(9).flipAndCopy(),
+                CurvedTile.ANGLE20.copy(), CurvedTile.ANGLE20.flipAndCopy(),
+                CurvedTile.ANGLE26.offsetAndCopy(11), CurvedTile.ANGLE26.offsetAndCopy(11).flipAndCopy(),
+                CurvedTile.ANGLE28.copy(), CurvedTile.ANGLE28.flipAndCopy(),
+                CurvedTile.ANGLE36.copy(), CurvedTile.ANGLE36.flipAndCopy(),
+                CurvedTile.ANGLE45.copy(), CurvedTile.ANGLE45.flipAndCopy(),
+                CurvedTile.ANGLE62.copy(), CurvedTile.ANGLE62.flipAndCopy(),
+                CurvedTile.ANGLE75.copy(), CurvedTile.ANGLE75.flipAndCopy(),
+                CurvedTile.ANGLE86.copy(), CurvedTile.ANGLE86.flipAndCopy(),
+            )
+
+            for (var tg = 0; tg < TileGroup.TILEGROUPLIST.length; tg++) {
+                TileGroup.TILEGROUPLIST[tg] = this.generateGroup(tileGroupCollisions[tg], "ghz" + tg);
+            }
         }
 
-        private static generateGroup(tileGroupArray: Array<Array<objects.Tile>>, tileGroupStr: string[], stringImage: string): Array<Array<objects.Tile>> {
-            tileGroupArray = new Array(16);
-
-            for (var x = 0; x < tileGroupStr[0].length; x++) {
-                tileGroupArray[x] = new Array(16);
-                for (var y = 0; y < tileGroupStr.length; y++) {
-                    LinearTile.resetTiles();
-                    CurvedTile.resetTiles();
-                    if (tileGroupStr[y].charAt(x) == ' ') {
-                        tileGroupArray[x][y] = null;
-                    }
-                    else if (tileGroupStr[y].charAt(x) == '.') {
-                        tileGroupArray[x][y] = new objects.Tile(stringImage);
-                        tileGroupArray[x][y].visible = true;
-                        tileGroupArray[x][y].isSolid = false;
-                    }
-                    else {
-                        if (tileGroupStr[y].charAt(x) == '0') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.FLAT);
-                        }
-                        else if (tileGroupStr[y].charAt(x) == '-') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.PLATFORM);
-                        }
-                        else if (tileGroupStr[y].charAt(x) == '1') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(1);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == '2') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(1);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == '3') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(3);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == '4') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(3);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == '5') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(5);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == '6') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(5);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == '7') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(6);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == '8') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(6);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == '9') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(7);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'A') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(7);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'B') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(11);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'C') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(11);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'D') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(13);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'E') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(13);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'F') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(14);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'G') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(14);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'H') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
-                            tileGroupArray[x][y].offsetHeightmap(12);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'I') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
-                            tileGroupArray[x][y].offsetHeightmap(12);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'J') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
-                            tileGroupArray[x][y].offsetHeightmap(8);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'K') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
-                            tileGroupArray[x][y].offsetHeightmap(8);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'L') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
-                            tileGroupArray[x][y].offsetHeightmap(4);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'M') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
-                            tileGroupArray[x][y].offsetHeightmap(4);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'N') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'O') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE11);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'P') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE22);
-                            tileGroupArray[x][y].offsetHeightmap(8);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'Q') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE22);
-                            tileGroupArray[x][y].offsetHeightmap(8);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'R') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE22);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'S') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(LinearTile.ANGLE22);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'T') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(13);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'U') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(13);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'V') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(14);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'W') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3);
-                            tileGroupArray[x][y].offsetHeightmap(14);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'X') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3_B);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'Y') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE3_B);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'Z') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE7);
-                            tileGroupArray[x][y].offsetHeightmap(10);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'a') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE7);
-                            tileGroupArray[x][y].offsetHeightmap(10);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'b') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE11);
-                            tileGroupArray[x][y].offsetHeightmap(7);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'c') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE11);
-                            tileGroupArray[x][y].offsetHeightmap(7);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'd') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE15);
-                            tileGroupArray[x][y].offsetHeightmap(9);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'e') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE15);
-                            tileGroupArray[x][y].offsetHeightmap(9);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'f') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE20);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'g') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE20);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'h') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE26);
-                            tileGroupArray[x][y].offsetHeightmap(11);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'i') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE26);
-                            tileGroupArray[x][y].offsetHeightmap(11);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'j') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE28);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'k') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE28);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'l') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE36);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'm') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE36);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'n') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE45);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'o') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE45);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'p') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE62);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'q') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE62);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'r') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE75);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 's') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE75);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 't') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE86);
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        else if (tileGroupStr[y].charAt(x) == 'u') {
-                            tileGroupArray[x][y] = new objects.GroundTile("");
-                            tileGroupArray[x][y].setDataToTile(CurvedTile.ANGLE86);
-                            tileGroupArray[x][y].flipHorizontally();
-                            tileGroupArray[x][y].isSolid = false;
-                        }
-                        tileGroupArray[x][y].visible = false;
-                    }
+        private static generateGroup(tileData: number[][], stringImage: string): Array<Array<objects.Tile>> {
+            var tileGroup = new Array<Array<Tile>>(16);
+            for (var x = 0; x < 16; x++) {
+                tileGroup[x] = new Array<Tile>(16);
+                for (var y = 0; y < 16; y++) {
+                    tileGroup[x][y] = TileGroup.TILELIST[tileData[y][x]];
                 }
             }
-            return tileGroupArray;
+            if (tileData != tileGroupCollisions[0])
+                tileGroup[0][0] = new Tile(stringImage);
+            return tileGroup;
         }
     }
-    //var hmFlat = [15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15];
-    console.log("loading tile types");
 }
