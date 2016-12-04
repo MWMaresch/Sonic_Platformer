@@ -16,6 +16,7 @@
 /// <reference path="../objects/tiles/emerald.ts" />
 /// <reference path="../objects/gameobjects/motobug.ts" />
 /// <reference path="../objects/gameobjects/spike.ts" />
+/// <reference path="../objects/gameobjects/rock.ts" />
 /// <reference path="../objects/gameobjects/player.ts" />
 /// <reference path="../objects/gameobjects/gameobject.ts" />
 /// <reference path="../objects/gameobjects/physgameobject.ts" />
