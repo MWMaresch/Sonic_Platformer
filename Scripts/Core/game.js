@@ -147,7 +147,9 @@ function init() {
             [2011, 266, 256, 256],
             [2272, 266, 256, 256],
             [1228, 5527, 256, 256],
-            [1750, 2615, 256, 256]],
+            [1750, 2615, 256, 256],
+            [1307, 3634, 48, 33],
+            [452, 330, 43, 32], [500, 330, 46, 32], [503, 365, 46, 32], [514, 403, 48, 31]],
         animations: {
             "stand": { frames: [0] },
             "lookup": { frames: [1, 2] },
@@ -195,7 +197,11 @@ function init() {
             "ghz21": { frames: [81] },
             "ghz22": { frames: [82] },
             "ghz23": { frames: [83] },
-            "ghz24": { frames: [84] }
+            "ghz24": { frames: [84] },
+            "rock": { frames: [85] },
+            "crabmeat_idle": { frames: [86] },
+            "crabmeat_shoot": { frames: [89] },
+            "crabmeat_move": { frames: [86, 87, 88], speed: 1 / 8 }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",

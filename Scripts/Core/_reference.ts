@@ -15,6 +15,7 @@
 /// <reference path="../objects/tiles/tiletypes.ts" />
 /// <reference path="../objects/tiles/emerald.ts" />
 /// <reference path="../objects/gameobjects/motobug.ts" />
+/// <reference path="../objects/gameobjects/crabmeat.ts" />
 /// <reference path="../objects/gameobjects/spike.ts" />
 /// <reference path="../objects/gameobjects/rock.ts" />
 /// <reference path="../objects/gameobjects/player.ts" />

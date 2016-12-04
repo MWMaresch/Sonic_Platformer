@@ -165,7 +165,8 @@ function init() {
         [2272, 266, 256, 256],//GHZ22
         [1228, 5527, 256, 256],//GHZ23
         [1750, 2615, 256, 256],//GHZ24 & 25
-        [1307, 3634, 48, 33]], // rock
+        [1307, 3634, 48, 33], // rock
+        [452, 330, 43, 32], [500, 330, 46, 32], [503, 365, 46, 32], [514, 403, 48, 31]], // crabmeat enemy
 
 
 
@@ -217,7 +218,10 @@ function init() {
             "ghz22": { frames: [82] },
             "ghz23": { frames: [83] },
             "ghz24": { frames: [84] },
-            "rock": { frames: [85] }
+            "rock": { frames: [85] },
+            "crabmeat_idle": { frames: [86] },
+            "crabmeat_shoot": { frames: [89] },
+            "crabmeat_move": { frames: [86, 87, 88], speed : 1/8}
         },
 
         "texturepacker": [

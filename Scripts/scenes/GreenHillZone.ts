@@ -39,6 +39,7 @@ module scenes {
 
             //creating obstacles
             this._obstacles.push(new objects.Motobug(813, 925));
+            this._obstacles.push(new objects.Crabmeat(200, 925));
             //1 puts him behind the stage
             this._obstacles.push(new objects.PathSwitcher(5488, 528, 16, 16, 1));
             this._obstacles.push(new objects.PathSwitcher(5504, 528, 16, 16, 0));
