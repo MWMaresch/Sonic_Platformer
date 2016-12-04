@@ -4,6 +4,7 @@ module keys {
     export var A: number = 65;
     export var S: number = 83;
     export var D: number = 68;
+    export var F: number = 70;
     export var LEFT: number = 37;
     export var UP: number = 38;
     export var RIGHT: number = 39;

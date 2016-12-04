@@ -19,7 +19,13 @@ module objects {
             
         }
 
-        public getTileGrid() { }
+        public getTileGrid(layer : number) { }
 
+        public setObjectIndex(obj: objects.GameObject, container: createjs.SpriteContainer, index : number) {
+            container.setChildIndex(obj, index);
+        }
+        public getSpriteContainer() : createjs.SpriteContainer{
+            return null;
+        };
     }
 }

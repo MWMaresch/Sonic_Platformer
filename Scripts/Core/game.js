@@ -64,6 +64,12 @@ function exitBtnClick(event) {
     scene = config.Scene.MENU;
     changeScene();
 }
+function frameAdvance() {
+    if (paused) {
+        currentScene.update();
+        stage.update();
+    }
+}
 function togglePause() {
     //pause functionality is here so we can use it in multiple scenes
     if (!paused && canPause) {
@@ -83,7 +89,7 @@ function toRadians(angle) {
 }
 function init() {
     pauseBg = new createjs.Bitmap(assets.getResult("Pause"));
-    exitBtn = new objects.Button("ExitBtn", config.Screen.CENTER_X, config.Screen.CENTER_Y, 177, 84);
+    exitBtn = new objects.Button("ExitBtn", 0, 0, 177, 84);
     // Reference to canvas element
     canvas = document.getElementById("canvas");
     stage = new createjs.SpriteStage("canvas", false, false);
@@ -138,7 +144,10 @@ function init() {
             [2272, 2615, 256, 256],
             [2011, 1832, 256, 256],
             [1228, 1832, 256, 256],
-            [2011, 266, 256, 256]],
+            [2011, 266, 256, 256],
+            [2272, 266, 256, 256],
+            [1228, 5527, 256, 256],
+            [1750, 2615, 256, 256]],
         animations: {
             "stand": { frames: [0] },
             "lookup": { frames: [1, 2] },
@@ -183,7 +192,10 @@ function init() {
             "ghz18": { frames: [78] },
             "ghz19": { frames: [79] },
             "ghz20": { frames: [80] },
-            "ghz21": { frames: [81] }
+            "ghz21": { frames: [81] },
+            "ghz22": { frames: [82] },
+            "ghz23": { frames: [83] },
+            "ghz24": { frames: [84] }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",

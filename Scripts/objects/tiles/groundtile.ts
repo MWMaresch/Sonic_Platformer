@@ -62,7 +62,7 @@ module objects {
             if (this._topHeightmap[Math.floor(h)] < 16)
                 other.collideWithGround(this.y + this._topHeightmap[Math.floor(h)], this._topAngle);
             else {
-                other.checkOneMoreCollision(this.y + 17, sensor.x);
+                other.checkOneMoreCollision(1 + Math.floor(this.y/16), Math.floor(px), sensor);
             }
         }
 

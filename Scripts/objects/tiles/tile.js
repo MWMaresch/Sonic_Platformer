@@ -63,36 +63,6 @@ var objects;
             this._leftHeightmap = heightmapLeft;
             this._rightHeightmap = heightmapRight;
         }
-        flipHorizontally() {
-            this._topHeightmap.reverse();
-            this._bottomHeightmap.reverse();
-            //swap the two side heightmaps
-            var tempLeftHeightmap = this._leftHeightmap;
-            this._leftHeightmap = this._rightHeightmap;
-            this._rightHeightmap = tempLeftHeightmap;
-            //correct their values to work with their new sides
-            for (var i = 0; i < this._leftHeightmap.length; i++) {
-                this._leftHeightmap[i] = 16 - this._leftHeightmap[i];
-                this._rightHeightmap[i] = 16 - this._rightHeightmap[i];
-            }
-            //change the angles as well
-            this._topAngle = 360 - this._topAngle;
-            var tempLeftAngle = this._lSideAngle;
-            this._lSideAngle = this._rSideAngle;
-            this._rSideAngle = tempLeftAngle;
-        }
-        offsetHeightmap(amount) {
-            //when we want this tile to be shorter than it initially was
-            //useful for when there are many similar tile types with their only difference being their height
-            for (var i = 0; i < this._topHeightmap.length; i++) {
-                this._topHeightmap[i] += amount;
-            }
-            for (var i = 0; i < amount; i++) {
-                this._leftHeightmap[i] = 16;
-                this._rightHeightmap[i] = 0;
-            }
-            return this;
-        }
         offsetAndCopy(amount) {
             var rhm = new Array();
             var lhm = new Array();
@@ -115,7 +85,7 @@ var objects;
             else
                 return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
         }
-        flipAndCopy() {
+        flipXAndCopy() {
             var rhm = new Array();
             var lhm = new Array();
             var thm = new Array();
@@ -131,9 +101,9 @@ var objects;
             //swap the two side heightmaps
             var tempLeftHeightmap = lhm;
             lhm = rhm;
-            rhm = lhm;
+            rhm = tempLeftHeightmap;
             //correct their values to work with their new sides
-            for (var i = 0; i < this._leftHeightmap.length; i++) {
+            for (var i = 0; i < 16; i++) {
                 lhm[i] = 16 - lhm[i];
                 rhm[i] = 16 - rhm[i];
             }
@@ -141,6 +111,31 @@ var objects;
                 return new objects.GroundTile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
             else
                 return new objects.Tile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+        }
+        flipYAndCopy() {
+            var rhm = new Array();
+            var lhm = new Array();
+            var thm = new Array();
+            var bhm = new Array();
+            for (var i = 0; i < 16; i++) {
+                thm.push(this._topHeightmap[i]);
+                lhm.push(this._leftHeightmap[i]);
+                rhm.push(this._rightHeightmap[i]);
+                bhm.push(this._bottomHeightmap[i]);
+            }
+            lhm.reverse();
+            rhm.reverse();
+            var tempTopHeightmap = thm;
+            thm = bhm;
+            bhm = tempTopHeightmap;
+            for (var i = 0; i < 16; i++) {
+                thm[i] = 16 - thm[i];
+                bhm[i] = 16 - bhm[i];
+            }
+            if (this instanceof objects.GroundTile)
+                return new objects.GroundTile(this.currentAnimation, 180 - this._bottomAngle, 180 - this._topAngle, 180 - this._lSideAngle, 180 - this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+            else
+                return new objects.Tile(this.currentAnimation, 180 - this._bottomAngle, 180 - this._topAngle, 180 - this._lSideAngle, 180 - this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
         }
         copy() {
             var rhm = new Array();

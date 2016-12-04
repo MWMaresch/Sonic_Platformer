@@ -19,6 +19,7 @@
 /// <reference path="../objects/gameobjects/player.ts" />
 /// <reference path="../objects/gameobjects/gameobject.ts" />
 /// <reference path="../objects/gameobjects/physgameobject.ts" />
+/// <reference path="../objects/gameobjects/pathswitcher.ts" />
 
 /// <reference path="../managers/collision.ts" />
 

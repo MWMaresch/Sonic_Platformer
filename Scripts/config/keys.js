@@ -5,6 +5,7 @@ var keys;
     keys.A = 65;
     keys.S = 83;
     keys.D = 68;
+    keys.F = 70;
     keys.LEFT = 37;
     keys.UP = 38;
     keys.RIGHT = 39;

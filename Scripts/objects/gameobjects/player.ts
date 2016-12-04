@@ -39,7 +39,7 @@ module objects {
 
         private _angleThreshold: number = 45;
         private _angleRadians: number = 0;
-        private _layer: number = 1;
+        public curLayer: number = 0;
 
         //private _velX : number = 0;
         //private _velY : number = 0;
@@ -100,8 +100,10 @@ module objects {
             //called when one foot is in the air
             //if both of our feet detect no ground, we're in the air
             this._sensorsInAir++;
-            if (this._sensorsInAir >= 2) 
+            if (this._sensorsInAir >= 2) {
+                //console.log("2 sensors in air");
                 this._startFalling();
+            }
         }
 
         get rightSideSensor(): Vector2 { return this._sideSensorR; }
@@ -142,6 +144,7 @@ module objects {
         }
 
         public update(): void {
+            console.log("frame advance");
             //super.update(); //reserved for other gameobjects, would just interfere with what we already have here
             if (!this._isDead) {
                 this._sensorsInAir = 0;
@@ -177,9 +180,9 @@ module objects {
             if (controls.JUMP)
                 this.jump();
             else {
-                //let sonic's jump be shorter if he let go of the button
+                //sonic's jump shortens if we let go of the button
                 this._pressedJump = false;
-                if (this._velY < -this._SHORTJUMPVELOCITY)
+                if (!this._isGrounded && this._isRolling && this._velY < -this._SHORTJUMPVELOCITY)
                     this._velY = -this._SHORTJUMPVELOCITY;
             }
         }
@@ -191,7 +194,7 @@ module objects {
             this._angle = 0;
             this.rotation = 0;
             //this._gSpeed = 0;
-            this._footRayCastLength = 20;
+            //this._footRayCastLength = 20;
         }
 
         protected updateMovement() {
@@ -253,9 +256,9 @@ module objects {
                     this.spriteSheet.getAnimation("jump").speed = Math.min(1, Math.max(0, 1 / (5 - Math.abs(this._gSpeed))));
                 }
 
-                if (Math.abs(this._gSpeed) > 15) {
+                if (Math.abs(this._gSpeed) > 16) {
                     console.log("reaching terminal velocity at " + this._gSpeed);
-                    this._gSpeed = Math.sign(this._gSpeed) * 15;
+                    this._gSpeed = Math.sign(this._gSpeed) * 16;
                 }
 
                 this._velX = this._gSpeed * Math.cos(this._angleRadians);
@@ -279,6 +282,7 @@ module objects {
             //move all sensors to their correct locations relating to sonic
             if (this._angle < this._angleThreshold && this._angle >= -this._angleThreshold || this._angle >= 315) {
                 this._mode = Quadrant.Floor;
+                //this.rotation = 0;
                 this._footSensorL.x = this.x - this._footOffset.x;
                 this._footSensorR.x = this.x + this._footOffset.x;
                 this._footSensorL.y = this.y + this._footOffset.y;
@@ -286,6 +290,7 @@ module objects {
             }
             else if (this._angle < this._angleThreshold * 3) {
                 this._mode = Quadrant.RightWall;
+                //this.rotation = -90;
                 this._footSensorL.x = this.x + this._footOffset.y;
                 this._footSensorR.x = this.x + this._footOffset.y;
                 this._footSensorL.y = this.y + this._footOffset.x;
@@ -314,10 +319,12 @@ module objects {
         public checkCollisionWithGrid(tileGrid: Tile[][]) {
             if (!this._isDead) {
                 //only do wall collisions if we're moving forwards
-                if (this._velX < 0 && tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)] != null)
-                    tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)].onLeftWallCollision(this, this._sideSensorL);
-                else if (this._velX > 0 && tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)] != null)
-                    tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)].onRightWallCollision(this, this._sideSensorR);
+                if (this._mode == Quadrant.Floor) {
+                    if (this._velX < 0 && tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)] != null)
+                        tileGrid[Math.floor(this._sideSensorL.x / 16)][Math.floor(this._sideSensorL.y / 16)].onLeftWallCollision(this, this._sideSensorL);
+                    else if (this._velX > 0 && tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)] != null)
+                        tileGrid[Math.floor(this._sideSensorR.x / 16)][Math.floor(this._sideSensorR.y / 16)].onRightWallCollision(this, this._sideSensorR);
+                }
 
                 //only check head collision if we're in the air
                 if (!this._isGrounded) {
@@ -361,8 +368,10 @@ module objects {
                     tileGrid[Math.floor((sensorPos.x + 20) / 16)][py].onFloorCollisionR(this, sensorPos);
                 else if (tileGrid[Math.floor((sensorPos.x + length) / 16)][py] != null)
                     tileGrid[Math.floor((sensorPos.x + length) / 16)][py].onFloorCollisionR(this, sensorPos);
-                else
+                else {
+                    //console.log("from right wall mode");
                     this._setAirSensor();
+                }
             }
             else if (this._mode == Quadrant.Ceiling) {
                 if (tileGrid[px][Math.floor((sensorPos.y - (this._curFootDist - 1)) / 16)] != null)
@@ -381,7 +390,7 @@ module objects {
                     tileGrid[Math.floor((sensorPos.x - 20) / 16)][py].onFloorCollisionL(this, sensorPos);
                 else if (tileGrid[Math.floor((sensorPos.x - length) / 16)][py] != null)
                     tileGrid[Math.floor((sensorPos.x - length) / 16)][py].onFloorCollisionL(this, sensorPos);
-                else 
+                else
                     this._setAirSensor();
             }
         }
@@ -403,7 +412,7 @@ module objects {
             if (groundHeight < this._higherGround) {
                 this._higherGround = groundHeight;
                 this._isGrounded = true;
-                this._footRayCastLength = 35;
+                //this._footRayCastLength = 35;
                 this.x = groundHeight - this._curFootDist;
                 this._angle = angle;
                 this.rotation = -angle;
@@ -415,7 +424,7 @@ module objects {
             if (groundHeight > this._lowerGround) {
                 this._lowerGround = groundHeight;
                 this._isGrounded = true;
-                this._footRayCastLength = 35;
+                //this._footRayCastLength = 35;
                 this.x = groundHeight + this._curFootDist;
                 this._angle = angle;
                 this.rotation = -angle;
@@ -437,7 +446,7 @@ module objects {
                     this._stopRolling();
 
                     this._higherGround = groundHeight;
-                    this._footRayCastLength = 35;
+                    //this._footRayCastLength = 35;
                     this.y = groundHeight - this._curFootDist;
                     this._angle = angle;
                     this.rotation = -angle;
@@ -468,7 +477,7 @@ module objects {
                     this._velY = 0;
                 }
                 //else {
-                    //this._setAirSensor();
+                //this._setAirSensor();
                 //}
             }
         }
@@ -478,7 +487,7 @@ module objects {
             if (groundHeight > this._lowerGround) {
                 this._lowerGround = groundHeight;
                 this._isGrounded = true;
-                this._footRayCastLength = 35;
+                //this._footRayCastLength = 35;
                 this.y = groundHeight + this._curFootDist;
                 this._angle = angle;
                 this.rotation = -angle;
@@ -500,24 +509,15 @@ module objects {
                         else
                             this._velY = 0;
                     }
-                    else 
+                    else
                         this._velY = 0;
                 }
             }
         }
 
-        public checkOneMoreCollision(posY: number, posX: number) {
-            if (posY - this.y < this._curFootDist) {
-                var tileGrid = currentScene.getTileGrid();
-                var sensorPos = new Vector2(posX, this.y + posY)
-                var px = Math.floor(posX / 16);
-                var py = Math.floor((this.y + posY) / 16);
-
-                //if (this._mode == Quadrant.Floor) //right now the only way this is called is from floor collision anyway
-                tileGrid[px][py].onFloorCollision(this, new Vector2(posX, posY));
-            }
-            else
-                this._setAirSensor();
+        public checkOneMoreCollision(posY: number, posX: number, sensor: Vector2) {
+            //console.log("checking one more");
+            currentScene.getTileGrid(this.curLayer)[posX][posY].onFloorCollision(this, sensor);
         }
 
         public collideWithLeftWall(x: number): void {
@@ -608,28 +608,31 @@ module objects {
         private _onKeyDown(event: KeyboardEvent) {
             switch (event.keyCode) {
                 case keys.W:
-                    console.log("W key pressed");
+                    //console.log("W key pressed");
                     controls.UP = true;
                     break;
                 case keys.S:
-                    console.log("S key pressed");
+                    //console.log("S key pressed");
                     controls.DOWN = true;
                     break;
                 case keys.A:
-                    console.log("A key pressed");
+                    //console.log("A key pressed");
                     controls.LEFT = true;
                     break;
                 case keys.D:
-                    console.log("D key pressed");
+                    //console.log("D key pressed");
                     controls.RIGHT = true;
                     break;
                 case keys.SPACE:
-                    console.log("SPACEBAR pressed");
+                    //console.log("SPACEBAR pressed");
                     controls.JUMP = true;
                     break;
                 case keys.ESC:
                     console.log("ESC key pressed");
                     togglePause();
+                    break;
+                case keys.F:
+                    frameAdvance();
                     break;
             }
         }

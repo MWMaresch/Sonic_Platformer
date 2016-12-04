@@ -15,7 +15,14 @@ var objects;
         }
         update() {
         }
-        getTileGrid() { }
+        getTileGrid(layer) { }
+        setObjectIndex(obj, container, index) {
+            container.setChildIndex(obj, index);
+        }
+        getSpriteContainer() {
+            return null;
+        }
+        ;
     }
     objects.Scene = Scene;
 })(objects || (objects = {}));

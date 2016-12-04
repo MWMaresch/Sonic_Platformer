@@ -11,7 +11,6 @@ var scenes;
             this._bottomCamBorder = 128;
             //other variables
             this._alreadyWon = false;
-            this._tileGrid = [];
         }
         start() {
             this._tileSpriteContainer = new createjs.SpriteContainer(spriteAtlas);
@@ -26,7 +25,7 @@ var scenes;
             if (!gameWon) {
                 //the main loop
                 this._player.update();
-                this._player.checkCollisionWithGrid(this._tileGrid);
+                this._player.checkCollisionWithGrid(this._tileGrids[0]);
                 this.updateHUD();
                 this.updateCameraAndTiles();
                 this.updateObjects();
@@ -44,9 +43,9 @@ var scenes;
         }
         setInitialTilesVisible() {
             for (var x = 0; x < 21; x++) {
-                for (var y = 0; y < this._tileGrid[0].length; y++) {
-                    if (this._tileGrid[x][y] != null)
-                        this._tileGrid[x][y].visible = true;
+                for (var y = 0; y < this._tileGrids[0].length; y++) {
+                    if (this._tileGrids[0][x][y] != null)
+                        this._tileGrids[0][x][y].visible = true;
                 }
             }
         }
@@ -55,7 +54,7 @@ var scenes;
                 for (let enemy of this._obstacles) {
                     if (!enemy.isDead) {
                         enemy.update();
-                        enemy.checkCollisionWithGrid(this._tileGrid);
+                        enemy.checkCollisionWithGrid(this._tileGrids[0]);
                     }
                 }
                 this.checkGameOver();
@@ -64,7 +63,7 @@ var scenes;
                 for (let enemy of this._obstacles) {
                     if (Math.abs(enemy.x - this._player.x) < 450 && !enemy.isDead) {
                         enemy.update();
-                        enemy.checkCollisionWithGrid(this._tileGrid);
+                        enemy.checkCollisionWithGrid(this._tileGrids[0]);
                         if (enemy.checkCollisionWithPlayer(this._player))
                             this._spriteContainer.removeChild(enemy);
                     }
@@ -107,95 +106,105 @@ var scenes;
             stage.addChild(this._hudContainer);
         }
         createGridFromTiles(stringGrid) {
-            this._tileGrid = [];
+            this._tileGrids = [];
+            this._tileGrids[0] = [];
             //go through the level string array and add all tiles from it to our sprite container
             for (var x = 0; x < stringGrid[0].length; x++) {
-                this._tileGrid[x] = [];
+                this._tileGrids[0][x] = [];
                 for (var y = 0; y < stringGrid.length; y++) {
                     if (stringGrid[y].charAt(x) == ' ')
-                        this._tileGrid[x][y] = null;
+                        this._tileGrids[0][x][y] = null;
                     else if (stringGrid[y].charAt(x) == 'E')
-                        this._tileGrid[x][y] = new objects.Emerald("emerald", 0, 0, 0, 0);
+                        this._tileGrids[0][x][y] = new objects.Emerald("emerald", 0, 0, 0, 0);
                     else if (stringGrid[y].charAt(x) == '.')
-                        this._tileGrid[x][y] = new objects.GroundTile("block", 0, 180, 90, 270, true);
+                        this._tileGrids[0][x][y] = new objects.GroundTile("block", 0, 180, 90, 270, true);
                     else if (stringGrid[y].charAt(x) == '/')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp45", 45, 180, 45, 270, true);
+                        this._tileGrids[0][x][y] = new objects.GroundTile("ramp45", 45, 180, 45, 270, true);
                     else if (stringGrid[y].charAt(x) == ',')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp45", 44, 180, 44, 270, true);
+                        this._tileGrids[0][x][y] = new objects.GroundTile("ramp45", 44, 180, 44, 270, true);
                     else if (stringGrid[y].charAt(x) == '1')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp315", 315, 180, 90, 315, true);
+                        this._tileGrids[0][x][y] = new objects.GroundTile("ramp315", 315, 180, 90, 315, true);
                     else if (stringGrid[y].charAt(x) == '`')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp315", 314, 180, 90, 314, true);
+                        this._tileGrids[0][x][y] = new objects.GroundTile("ramp315", 314, 180, 90, 314, true);
                     else if (stringGrid[y].charAt(x) == ']')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp135", 0, 135, 135, 270, true);
+                        this._tileGrids[0][x][y] = new objects.GroundTile("ramp135", 0, 135, 135, 270, true);
                     else if (stringGrid[y].charAt(x) == '[')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp225", 0, 225, 90, 225, true);
+                        this._tileGrids[0][x][y] = new objects.GroundTile("ramp225", 0, 225, 90, 225, true);
                     else if (stringGrid[y].charAt(x) == '(')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp225", 0, 224, 90, 224, true);
+                        this._tileGrids[0][x][y] = new objects.GroundTile("ramp225", 0, 224, 90, 224, true);
                     else if (stringGrid[y].charAt(x) == ')')
-                        this._tileGrid[x][y] = new objects.GroundTile("ramp135", 0, 134, 134, 270, true);
-                    if (this._tileGrid[x][y] != null) {
-                        this._tileGrid[x][y].x = x * 16;
-                        this._tileGrid[x][y].y = y * 16;
-                        this._tileSpriteContainer.addChild(this._tileGrid[x][y]);
-                        this._tileGrid[x][y].visible = false;
+                        this._tileGrids[0][x][y] = new objects.GroundTile("ramp135", 0, 134, 134, 270, true);
+                    if (this._tileGrids[0][x][y] != null) {
+                        this._tileGrids[0][x][y].x = x * 16;
+                        this._tileGrids[0][x][y].y = y * 16;
+                        this._tileSpriteContainer.addChild(this._tileGrids[0][x][y]);
+                        this._tileGrids[0][x][y].visible = false;
                     }
                 }
             }
-            this._camRightBoundary = this._tileGrid.length * -16 + config.Screen.WIDTH;
-            this._camBottomBoundary = this._tileGrid[0].length * -16 + config.Screen.HEIGHT;
+            this._camRightBoundary = this._tileGrids[0].length * -16 + config.Screen.WIDTH;
+            this._camBottomBoundary = this._tileGrids[0][0].length * -16 + config.Screen.HEIGHT;
             this._spriteContainer.addChild(this._tileSpriteContainer);
             //increasing performance slightly more by disabling ticking for the tiles, which shouldn't move anyway
             this._tileSpriteContainer.tickEnabled = false;
             this._tileSpriteContainer.tickChildren = false;
             this._spriteContainer.snapToPixel = true;
         }
-        createGridFromTileGroups(numGrid) {
-            this._tileGrid = new Array(numGrid[0].length * 16);
-            var tileGroup = new Array(numGrid[0].length * 16);
-            for (var x = 0; x < numGrid[0].length * 16; x++) {
-                this._tileGrid[x] = new Array(numGrid.length * 16);
-            }
-            for (var groupY = 0; groupY < numGrid.length; groupY++) {
-                for (var groupX = 0; groupX < numGrid[0].length; groupX++) {
-                    tileGroup = objects.TileGroup.TILEGROUPLIST[numGrid[groupY][groupX]];
-                    for (var tileX = 0; tileX < tileGroup[0].length; tileX++) {
-                        for (var tileY = 0; tileY < tileGroup.length; tileY++) {
-                            if (tileGroup[tileX][tileY] != null) {
-                                if (tileGroup[tileX][tileY] instanceof objects.GroundTile) {
-                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.GroundTile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
-                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(tileGroup[tileX][tileY]);
-                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
-                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
+        createGridsFromTileGroups(numGrids) {
+            this._tileGrids = new Array();
+            for (var g = 0; g < numGrids.length; g++) {
+                this._tileGrids[g] = new Array(numGrids[0][0].length * 16);
+                var tileGroup = new Array(numGrids[0][0].length * 16);
+                for (var x = 0; x < numGrids[0][0].length * 16; x++) {
+                    this._tileGrids[g][x] = new Array(numGrids[0].length * 16);
+                }
+                for (var groupY = 0; groupY < numGrids[0].length; groupY++) {
+                    for (var groupX = 0; groupX < numGrids[0][0].length; groupX++) {
+                        tileGroup = objects.TileGroup.TILEGROUPLIST[numGrids[g][groupY][groupX]];
+                        for (var tileX = 0; tileX < tileGroup[0].length; tileX++) {
+                            for (var tileY = 0; tileY < tileGroup.length; tileY++) {
+                                if (tileGroup[tileX][tileY] != null) {
+                                    if (tileGroup[tileX][tileY] instanceof objects.GroundTile) {
+                                        this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY] = new objects.GroundTile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
+                                        this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(tileGroup[tileX][tileY]);
+                                        this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
+                                        this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
+                                        if (tileGroup[tileX][tileY].visible && g == 0) {
+                                            this._tileSpriteContainer.addChild(this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY]);
+                                        }
+                                    }
+                                    else if (tileGroup[tileX][tileY].visible && g == 0) {
+                                        this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY] = new objects.Tile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
+                                        this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
+                                        this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
+                                        this._tileSpriteContainer.addChild(this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY]);
+                                    }
                                 }
-                                else if (tileGroup[tileX][tileY].visible) {
-                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.Tile(tileGroup[tileX][tileY].currentAnimation, 0, 0, 0, 0, false);
-                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
-                                    this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
-                                    this._tileSpriteContainer.addChild(this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY]);
+                                else if (groupX * 16 + tileX == 0 || groupX * 16 + tileX == this._tileGrids[g].length - 1) {
+                                    this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY] = new objects.GroundTile("block", 0, 0, 0, 0, false);
+                                    this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(objects.LinearTile.FLAT);
+                                    this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
+                                    this._tileGrids[g][groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
+                                    objects.LinearTile.resetTiles();
                                 }
-                            }
-                            else if (groupX * 16 + tileX == 0 || groupX * 16 + tileX == this._tileGrid.length - 1) {
-                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY] = new objects.GroundTile("block", 0, 0, 0, 0, false);
-                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].setDataToTile(objects.LinearTile.FLAT);
-                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].x = (groupX * 16 + tileX) * 16;
-                                this._tileGrid[groupX * 16 + tileX][groupY * 16 + tileY].y = (groupY * 16 + tileY) * 16;
-                                objects.LinearTile.resetTiles();
                             }
                         }
                     }
                 }
             }
-            this._camRightBoundary = this._tileGrid.length * -16 + config.Screen.WIDTH;
-            this._camBottomBoundary = this._tileGrid[0].length * -16 + config.Screen.HEIGHT;
+            this._camRightBoundary = this._tileGrids[0].length * -16 + config.Screen.WIDTH;
+            this._camBottomBoundary = this._tileGrids[0][0].length * -16 + config.Screen.HEIGHT;
             this._spriteContainer.addChild(this._tileSpriteContainer);
             //increasing performance slightly more by disabling ticking for the tiles, which shouldn't move or animate anyway
             this._tileSpriteContainer.tickEnabled = false;
             this._tileSpriteContainer.tickChildren = false;
             this._spriteContainer.snapToPixel = true;
         }
-        getTileGrid() {
-            return this._tileGrid;
+        getTileGrid(layer) {
+            return this._tileGrids[layer];
+        }
+        getSpriteContainer() {
+            return this._spriteContainer;
         }
         updateCamera() {
             this._camDifR = this._spriteContainer.x - (this._rightCamBorder - this._player.x);
@@ -258,26 +267,26 @@ var scenes;
             if (this._camDifR > 0) {
                 //move the 'camera' to sonic, unless he's faster than the max cam speed
                 this._spriteContainer.x -= Math.min(this._camDifR, this._maxCamSpeed);
-                for (var y = 0; y < this._tileGrid[0].length; y++) {
+                for (var y = 0; y < this._tileGrids[0][0].length; y++) {
                     //make offscreen tiles invisible, and onscreen tiles visible
                     //older computers can lag if we don't do this
                     var screenTilePos = Math.floor((this._spriteContainer.x * -1) / 16);
-                    if (config.Screen.WIDTH / 16 + screenTilePos < this._tileGrid.length && this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos)][y] != null)
-                        this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos)][y].visible = true;
-                    if (screenTilePos - 2 >= 0 && this._tileGrid[screenTilePos - 2][y] != null)
-                        this._tileGrid[screenTilePos - 2][y].visible = false;
+                    if (config.Screen.WIDTH / 16 + screenTilePos < this._tileGrids[0].length && this._tileGrids[0][(config.Screen.WIDTH / 16 + screenTilePos)][y] != null)
+                        this._tileGrids[0][(config.Screen.WIDTH / 16 + screenTilePos)][y].visible = true;
+                    if (screenTilePos - 2 >= 0 && this._tileGrids[0][screenTilePos - 2][y] != null)
+                        this._tileGrids[0][screenTilePos - 2][y].visible = false;
                 }
             }
             else if (this._camDifL < 0) {
                 //same as above, only for moving left
                 //this had to be separated because of the small window sonic has to move in the middle of the screen
                 this._spriteContainer.x -= Math.max(this._camDifL, -this._maxCamSpeed);
-                for (var y = 0; y < this._tileGrid[0].length; y++) {
+                for (var y = 0; y < this._tileGrids[0][0].length; y++) {
                     var screenTilePos = Math.floor((this._spriteContainer.x * -1) / 16);
-                    if (screenTilePos >= 0 && this._tileGrid[screenTilePos][y] != null)
-                        this._tileGrid[screenTilePos][y].visible = true;
-                    if (config.Screen.WIDTH / 16 + screenTilePos + 1 < this._tileGrid.length && this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos + 1)][y] != null)
-                        this._tileGrid[(config.Screen.WIDTH / 16 + screenTilePos + 1)][y].visible = false;
+                    if (screenTilePos >= 0 && this._tileGrids[0][screenTilePos][y] != null)
+                        this._tileGrids[0][screenTilePos][y].visible = true;
+                    if (config.Screen.WIDTH / 16 + screenTilePos + 1 < this._tileGrids[0].length && this._tileGrids[0][(config.Screen.WIDTH / 16 + screenTilePos + 1)][y] != null)
+                        this._tileGrids[0][(config.Screen.WIDTH / 16 + screenTilePos + 1)][y].visible = false;
                 }
             }
             //vertical camera movement

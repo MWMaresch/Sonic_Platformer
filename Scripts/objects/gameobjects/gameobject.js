@@ -63,7 +63,7 @@ var objects;
         collideWithGround(groundHeight, angle) { }
         collideWithRightWall(x) { }
         collideWithLeftWall(x) { }
-        checkOneMoreCollision(posY, posX) { }
+        checkOneMoreCollision(posY, posX, sensor) { }
     }
     objects.GameObject = GameObject;
 })(objects || (objects = {}));

@@ -3,38 +3,46 @@ var scenes;
     class GreenHillZone extends scenes.Level {
         constructor() {
             super();
-            //Green Hill Zone Act 1 will be 40x5
-            this._act1StrGrid = ["                       00000            ",
-                "                  00  000000            ",
-                "            020 000000000000            ",
-                "00123456789AB777000000000000 0000000    ",
-                "                       00000000000000000"];
-            this._act1Grid =
-                [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 14, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]];
+            //an array of 2d arrays
+            this._act1Grids = new Array();
+            this._act1Grids.push([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 14, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 14, 16, 18, 8, 20, 15, 1, 24, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19, 13, 21, 22, 23, 1, 12, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]], [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 14, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 14, 16, 18, 8, 20, 15, 1, 25, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19, 13, 21, 22, 23, 1, 12, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]);
             this.createBackground();
-            this.createGridFromTileGroups(this._act1Grid); //, objects.TileGroup.GHZ_1);
+            this.createGridsFromTileGroups(this._act1Grids); //, objects.TileGroup.GHZ_1);
             for (var t = 1; t < 5; t++) {
-                this._tileGrid[192][43 + t] = new objects.GroundTile("");
-                this._tileGrid[192][43 + t].setDataToTile(objects.LinearTile.FLAT);
-                this._tileGrid[192][43 + t].x = 192 * 16;
-                this._tileGrid[192][43 + t].y = (43 + t) * 16;
+                this._tileGrids[0][192][43 + t] = new objects.GroundTile("");
+                this._tileGrids[0][192][43 + t].setDataToTile(objects.LinearTile.FLAT);
+                this._tileGrids[0][192][43 + t].x = 192 * 16;
+                this._tileGrids[0][192][43 + t].y = (43 + t) * 16;
             }
             //adding everything to a single sprite container reduces the amount of times we need to draw things to the stage, therefore drastically increasing performance
             this._player = new objects.Player("stand", 80, 940);
+            //this._player = new objects.Player("stand", 5300, 688);
             this._spriteContainer.addChild(this._player);
             //creating obstacles
             this._obstacles.push(new objects.Motobug(813, 925));
-            //push whatever you want into the obstacles list here and it will automatically be updated every frame
+            //1 puts him behind the stage
+            this._obstacles.push(new objects.PathSwitcher(5488, 528, 16, 16, 1));
+            this._obstacles.push(new objects.PathSwitcher(5504, 528, 16, 16, 0));
+            this._obstacles.push(new objects.PathSwitcher(5376, 512, 32, 192, 0));
+            this._obstacles.push(new objects.PathSwitcher(5600, 512, 32, 192, 1));
+            this._obstacles.push(new objects.PathSwitcher(5632, 512, 32, 192, 0));
+            //push whatever you want into the objects list here and it will automatically be updated every frame
             //adding all obstacles to spriteContainer
             for (let obj of this._obstacles) {
                 this._spriteContainer.addChild(obj);
             }
             stage.addChild(this._spriteContainer);
             this.createHUD();
+            //this._spriteContainer.setChildIndex(this._player, 0);
+            console.log(this._spriteContainer.numChildren);
         }
         start() {
             super.start();
@@ -43,7 +51,7 @@ var scenes;
             if (!gameWon) {
                 //the main loop
                 this._player.update();
-                this._player.checkCollisionWithGrid(this._tileGrid);
+                this._player.checkCollisionWithGrid(this._tileGrids[this._player.curLayer]);
                 this.updateHUD();
                 this.updateCamera();
                 this.updateObjects();

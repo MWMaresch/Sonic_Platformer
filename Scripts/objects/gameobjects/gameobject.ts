@@ -80,6 +80,6 @@ module objects {
         public collideWithGround(groundHeight: number, angle: number): void { }
         public collideWithRightWall(x: number) { }
         public collideWithLeftWall(x: number) { }
-        public checkOneMoreCollision(posY:number, posX:number) { }
+        public checkOneMoreCollision(posY:number, posX:number, sensor:Vector2) { }
     }
 }
