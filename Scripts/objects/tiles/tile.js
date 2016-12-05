@@ -1,7 +1,7 @@
 var objects;
 (function (objects) {
     class Tile extends createjs.Sprite {
-        constructor(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid) {
+        constructor(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid, isTunnel) {
             super(spriteAtlas, imageString);
             this.start();
             this._topAngle = angleTop;
@@ -13,7 +13,6 @@ var objects;
             this._leftHeightmap = heightmapLeft;
             this._rightHeightmap = heightmapRight;
             this._isSolid = isSolid;
-            this._layer = 1;
             this.tickEnabled = false;
             if (isSolid == null) {
                 this._isSolid = true;
@@ -30,9 +29,14 @@ var objects;
                 this._leftHeightmap = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 this._rightHeightmap = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             }
+            if (isTunnel == undefined)
+                this._isTunnel = false;
+            else
+                this._isTunnel = isTunnel;
             //console.log([this._topHeightmap, this._bottomHeightmap, this._leftHeightmap, this._rightHeightmap]);
         }
         get isSolid() { return this._isSolid; }
+        get isTunnel() { return this._isTunnel; }
         set isSolid(b) { this._isSolid = b; }
         setDataToTile(tile) {
             let otherHeightmaps = tile.getHeightmaps();
@@ -49,6 +53,7 @@ var objects;
             this._lSideAngle = otherAngles[2];
             this._rSideAngle = otherAngles[3];
             this.visible = tile.visible;
+            this._isTunnel = tile.isTunnel;
         }
         getHeightmaps() {
             //console.log("fetching hm " + this._topHeightmap);
@@ -81,9 +86,9 @@ var objects;
                 rhm[i] = 0;
             }
             if (this instanceof objects.GroundTile)
-                return new objects.GroundTile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new objects.GroundTile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
             else
-                return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
         }
         flipXAndCopy() {
             var rhm = new Array();
@@ -108,9 +113,9 @@ var objects;
                 rhm[i] = 16 - rhm[i];
             }
             if (this instanceof objects.GroundTile)
-                return new objects.GroundTile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new objects.GroundTile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
             else
-                return new objects.Tile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new objects.Tile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
         }
         flipYAndCopy() {
             var rhm = new Array();
@@ -133,9 +138,9 @@ var objects;
                 bhm[i] = 16 - bhm[i];
             }
             if (this instanceof objects.GroundTile)
-                return new objects.GroundTile(this.currentAnimation, 180 - this._bottomAngle, 180 - this._topAngle, 180 - this._lSideAngle, 180 - this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new objects.GroundTile(this.currentAnimation, 180 - this._bottomAngle, 180 - this._topAngle, 180 - this._lSideAngle, 180 - this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
             else
-                return new objects.Tile(this.currentAnimation, 180 - this._bottomAngle, 180 - this._topAngle, 180 - this._lSideAngle, 180 - this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new objects.Tile(this.currentAnimation, 180 - this._bottomAngle, 180 - this._topAngle, 180 - this._lSideAngle, 180 - this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
         }
         copy() {
             var rhm = new Array();
@@ -149,9 +154,9 @@ var objects;
                 bhm.push(this._bottomHeightmap[i]);
             }
             if (this instanceof objects.GroundTile)
-                return new objects.GroundTile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new objects.GroundTile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
             else
-                return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
         }
         start() { }
         update() { }

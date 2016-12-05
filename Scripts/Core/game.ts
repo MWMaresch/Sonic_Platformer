@@ -163,9 +163,15 @@ function init() {
         [1228, 1832, 256, 256],//GHZ20
         [2011, 266, 256, 256],//GHZ21
         [2272, 266, 256, 256],//GHZ22
-        [1228, 5527, 256, 256],//GHZ23
+        [1228, 527, 256, 256],//GHZ23
         [1750, 2615, 256, 256],//GHZ24 & 25
-        [1307, 3634, 48, 33], // rock
+        [1307, 3635, 48, 32], // rock
+        [2011, 1049, 256, 256], // GHZ26
+        [2011, 1571, 256, 256], // GHZ27
+        [1489, 5, 256, 256], // GHZ28
+        [1489, 1571, 256, 256], // GHZ29
+        [1750, 1571, 256, 256], // GHZ30
+        [1228, 788, 256, 256], // GHZ31
         [452, 330, 43, 32], [500, 330, 46, 32], [503, 365, 46, 32], [514, 403, 48, 31]], // crabmeat enemy
 
 
@@ -219,9 +225,16 @@ function init() {
             "ghz23": { frames: [83] },
             "ghz24": { frames: [84] },
             "rock": { frames: [85] },
-            "crabmeat_idle": { frames: [86] },
-            "crabmeat_shoot": { frames: [89] },
-            "crabmeat_move": { frames: [86, 87, 88], speed : 1/8}
+            "ghz26": { frames: [86] },
+            "ghz27": { frames: [87] },
+            "ghz28": { frames: [88] },
+            "ghz29": { frames: [89] },
+            "ghz30": { frames: [90] },
+            "ghz31": { frames: [91] },
+            "crabmeat_idle": { frames: [92] },
+            "crabmeat_shoot": { frames: [95] },
+            "crabmeat_move": { frames: [92, 93, 94], speed : 1/8}
+
         },
 
         "texturepacker": [

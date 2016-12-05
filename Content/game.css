@@ -9,7 +9,7 @@ body {
 canvas {
     border: 1px solid black;
     text-align: center;
-    background-color: white;
+    background-color: #0088EE;
     image-rendering:optimizeSpeed;
     image-rendering:pixelated;
     margin: auto;

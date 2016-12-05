@@ -9,10 +9,9 @@ module objects {
         protected _rSideAngle: number;
         protected _lSideAngle: number;
         protected _isSolid: boolean;
+        protected _isTunnel: boolean;
 
-        protected _layer: number;
-
-        constructor(imageString: string, angleTop?: number, angleBottom?: number, angleL?: number, angleR?: number, autoCalc?: boolean, heightmapTop?: number[], heightmapBottom?: number[], heightmapLeft?: number[], heightmapRight?: number[], isSolid?: boolean) {
+        constructor(imageString: string, angleTop?: number, angleBottom?: number, angleL?: number, angleR?: number, autoCalc?: boolean, heightmapTop?: number[], heightmapBottom?: number[], heightmapLeft?: number[], heightmapRight?: number[], isSolid?: boolean, isTunnel?: boolean) {
             super(spriteAtlas, imageString);
             this.start();
             this._topAngle = angleTop;
@@ -24,7 +23,6 @@ module objects {
             this._leftHeightmap = heightmapLeft;
             this._rightHeightmap = heightmapRight;
             this._isSolid = isSolid;
-            this._layer = 1;
             this.tickEnabled = false;
             if (isSolid == null) {
                 this._isSolid = true;
@@ -41,10 +39,16 @@ module objects {
                 this._leftHeightmap = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 this._rightHeightmap = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             }
+            if (isTunnel == undefined)
+                this._isTunnel = false;
+            else
+                this._isTunnel = isTunnel;
             //console.log([this._topHeightmap, this._bottomHeightmap, this._leftHeightmap, this._rightHeightmap]);
         }
 
         get isSolid(): boolean { return this._isSolid; }
+
+        get isTunnel(): boolean { return this._isTunnel; }
 
         set isSolid(b: boolean) { this._isSolid = b; }
 
@@ -63,6 +67,7 @@ module objects {
             this._lSideAngle = otherAngles[2];
             this._rSideAngle = otherAngles[3];
             this.visible = tile.visible;
+            this._isTunnel = tile.isTunnel;
         }
 
         public getHeightmaps(): Array<number[]> {
@@ -102,9 +107,9 @@ module objects {
                 rhm[i] = 0;
             }
             if (this instanceof objects.GroundTile)
-                return new GroundTile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new GroundTile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
             else
-                return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
         }
 
         public flipXAndCopy(): Tile { //horizontally
@@ -135,9 +140,9 @@ module objects {
             }
 
             if (this instanceof objects.GroundTile)
-                return new objects.GroundTile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new objects.GroundTile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
             else
-                return new objects.Tile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new objects.Tile(this.currentAnimation, 360 - this._topAngle, 360 - this._bottomAngle, 360 - this._rSideAngle, 360 - this._lSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
         }
 
         public flipYAndCopy(): Tile {
@@ -166,9 +171,9 @@ module objects {
             }
 
             if (this instanceof objects.GroundTile)
-                return new objects.GroundTile(this.currentAnimation, 180 - this._bottomAngle, 180 - this._topAngle, 180 - this._lSideAngle, 180 - this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new objects.GroundTile(this.currentAnimation, 180 - this._bottomAngle, 180 - this._topAngle, 180 - this._lSideAngle, 180 - this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
             else
-                return new objects.Tile(this.currentAnimation, 180 - this._bottomAngle, 180 - this._topAngle, 180 - this._lSideAngle, 180 - this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new objects.Tile(this.currentAnimation, 180 - this._bottomAngle, 180 - this._topAngle, 180 - this._lSideAngle, 180 - this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
 
         }
 
@@ -186,9 +191,9 @@ module objects {
             }
 
             if (this instanceof objects.GroundTile)
-                return new GroundTile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new GroundTile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
             else
-                return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid);
+                return new Tile(this.currentAnimation, this._topAngle, this._bottomAngle, this._lSideAngle, this._rSideAngle, false, thm, bhm, lhm, rhm, this.isSolid, this.isTunnel);
         }
 
         public start(): void { }

@@ -129,9 +129,9 @@ var objects;
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 55, 2, 4, 6, 5, 3, 2, 2, 2, 2],
         [0, 0, 0, 0, 0, 0, 53, 2, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 51, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 33, 41, 47, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 51, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 33, 41, 47, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 
@@ -157,11 +157,11 @@ var objects;
         [0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
         [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -264,10 +264,10 @@ var objects;
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [2, 2, 2, 2, 4, 8, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 30, 28, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 28, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 28, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, 3, 2],
+        [0, 0, 0, 0, 0, 0, 2, 30, 28, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 2, 30, 28, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 30, 28, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 26, 3, 2],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 
@@ -440,6 +440,108 @@ var objects;
         [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 
+    //tileGroup26 =
+    [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 
+    //tileGroup27 =
+    [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 
+    //tileGroup28 =
+    [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 4, 6, 8, 7, 5, 3, 2, 2, 4, 6, 8, 8, 7, 5, 3],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], 
+    //tileGroup29 =
+    [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [77, 77, 77, 77, 81, 85, 89, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 93, 97, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 118, 122, 126, 0, 101, 105, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 130, 134, 0, 109, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 138, 0, 113, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 142, 0, 115, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 140, 0, 111, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 132, 136, 0, 107, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 150, 146, 0, 143, 147, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 110, 0, 133, 129, 1, 1, 1, 1, 1, 1, 1, 1]], 
+    //tileGroup30 = 
+    [[1, 1, 1, 1, 114, 0, 137, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 116, 0, 141, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 116, 0, 141, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 112, 0, 139, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 108, 0, 135, 131, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 104, 100, 0, 127, 123, 119, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 96, 92, 0, 0, 0, 0, 77, 77, 77, 77, 77],
+        [1, 1, 1, 1, 1, 1, 88, 84, 80, 76, 0, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]], 
+    //tileGroup 31
+    [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]);
     var hmFlat = [];
     var hmFlatB = [];
@@ -460,11 +562,12 @@ var objects;
             LinearTile.PLATFORM = new objects.GroundTile("empty", 0, 180, 90, 270, false, hmFlat, hmFlatB, hmFlat, hmFlatB, false); //in order: top, bottom, left, right
             LinearTile.ANGLE3 = new objects.GroundTile("empty", 3, 180, 90, 270, false, hm3, hmFlatB, hmFlat, hmFlatB, false);
             LinearTile.ANGLE11 = new objects.GroundTile("empty", 11, 180, 90, 270, false, hm11, hmFlatB, hmFlat, hmFlatB, false);
-            LinearTile.ANGLE23 = new objects.GroundTile("empty", 23, 180, 90, 270, false, hm22, hmFlatB, hmFlat, hmFlatB, false);
+            LinearTile.ANGLE23 = new objects.GroundTile("empty", 22, 180, 90, 270, false, hm22, hmFlatB, hmFlat, hmFlatB, false);
         }
     }
     objects.LinearTile = LinearTile;
     var hm3c = [];
+    var hm16 = [];
     var hm3cB = [];
     var hm7c = [];
     var hm11c = [];
@@ -497,6 +600,7 @@ var objects;
     class CurvedTile {
         static resetTiles() {
             hmFlat = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            hm16 = [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16];
             hmFlatB = [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15];
             hm3c = [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0];
             hm3cB = [16, 16, 16, 16, 16, 16, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15];
@@ -529,21 +633,41 @@ var objects;
             hm176c = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1];
             hm176cS = [0, 9, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16];
             CurvedTile.ANGLE3 = new objects.GroundTile("empty", 3, 180, 90, 270, false, hm3c, hmFlatB, hmFlat, hmFlatB, true); //in order: top, bottom, left, right
-            CurvedTile.ANGLE3_B = new objects.GroundTile("empty", 3, 180, 90, 270, false, hm3cB, hmFlatB, hmFlat, hmFlatB, true); //in order: top, bottom, left, right
+            CurvedTile.ANGLE3_B = new objects.GroundTile("empty", 3, 180, 90, 270, false, hm3cB, hmFlatB, hm86c, hmFlat, true); //in order: top, bottom, left, right
             CurvedTile.ANGLE7 = new objects.GroundTile("empty", 7, 180, 7, 270, false, hm7c, hmFlatB, hm7cS, hmFlatB, true);
             CurvedTile.ANGLE11 = new objects.GroundTile("empty", 11, 180, 11, 270, false, hm11c, hmFlatB, hm11cS, hmFlatB, true);
             CurvedTile.ANGLE15 = new objects.GroundTile("empty", 15, 180, 15, 270, false, hm15c, hmFlatB, hm15cS, hmFlatB, true);
-            CurvedTile.ANGLE20 = new objects.GroundTile("empty", 20, 180, 20, 270, false, hm20c, hmFlatB, hm20cS, hmFlatB, true);
-            CurvedTile.ANGLE26 = new objects.GroundTile("empty", 26, 180, 26, 270, false, hm26c, hmFlatB, hm26cS, hmFlatB, true);
-            CurvedTile.ANGLE28 = new objects.GroundTile("empty", 28, 180, 28, 270, false, hm28c, hmFlatB, hm28cS, hmFlatB, true);
-            CurvedTile.ANGLE36 = new objects.GroundTile("empty", 36, 180, 36, 270, false, hm36c, hmFlatB, hm36cS, hmFlatB, true);
-            CurvedTile.ANGLE45 = new objects.GroundTile("empty", 45, 180, 45, 270, false, hm45c, hmFlatB, hm45cS, hmFlatB, true);
-            CurvedTile.ANGLE62 = new objects.GroundTile("empty", 62, 180, 62, 270, false, hm62c, hmFlatB, hm62cS, hmFlatB, true);
-            CurvedTile.ANGLE75 = new objects.GroundTile("empty", 75, 180, 75, 270, false, hm75c, hmFlatB, hm75cS, hmFlatB, true);
-            CurvedTile.ANGLE86 = new objects.GroundTile("empty", 86, 180, 86, 270, false, hm86c, hmFlatB, hm86cS, hmFlatB, true);
-            CurvedTile.ANGLE152 = new objects.GroundTile("empty", 0, 152, 152, 270, false, hmFlat, hm152c, hm15cS, hmFlatB, true);
-            CurvedTile.ANGLE165 = new objects.GroundTile("empty", 0, 165, 165, 270, false, hmFlat, hm165c, hm165cS, hmFlatB, true);
-            CurvedTile.ANGLE176 = new objects.GroundTile("empty", 0, 176, 176, 270, false, hmFlat, hm176c, hm176cS, hmFlat, true);
+            CurvedTile.ANGLE20 = new objects.GroundTile("empty", 20, 180, 20, 270, false, hm20c, hm16, hm20cS, hmFlatB, true);
+            CurvedTile.ANGLE26 = new objects.GroundTile("empty", 26, 180, 26, 270, false, hm26c, hm16, hm16, hmFlat, true);
+            CurvedTile.ANGLE28 = new objects.GroundTile("empty", 28, 180, 28, 270, false, hm28c, hm16, hm28cS, hmFlatB, true);
+            CurvedTile.ANGLE36 = new objects.GroundTile("empty", 36, 180, 36, 270, false, hm36c, hm16, hm36cS, hmFlatB, true);
+            CurvedTile.ANGLE45 = new objects.GroundTile("empty", 45, 180, 45, 270, false, hm45c, hm16, hm45cS, hmFlatB, true);
+            CurvedTile.ANGLE62 = new objects.GroundTile("empty", 62, 180, 62, 270, false, hm62c, hm16, hm62cS, hmFlatB, true);
+            CurvedTile.ANGLE75 = new objects.GroundTile("empty", 75, 180, 75, 270, false, hm75c, hmFlat, hm75cS, hmFlatB, true);
+            CurvedTile.ANGLE86 = new objects.GroundTile("empty", 86, 180, 86, 270, false, hm86c, hmFlat, hm86cS, hmFlatB, true);
+            CurvedTile.ANGLE152 = new objects.GroundTile("empty", 0, 152, 152, 270, false, hm16, hm152c, hm15cS, hmFlatB, true);
+            CurvedTile.ANGLE165 = new objects.GroundTile("empty", 0, 165, 165, 270, false, hm16, hm165c, hm165cS, hmFlatB, true);
+            CurvedTile.ANGLE176 = new objects.GroundTile("empty", 0, 176, 176, 270, false, hm16, hm176c, hm176cS, hmFlat, true);
+            CurvedTile.TUNNEL3_INNER = new objects.GroundTile("empty", 3, 180, 3, 270, false, [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 14, 14, 14, 14, 14, 14], hm16, hm16, hmFlat, true, true);
+            CurvedTile.TUNNEL15_INNER = new objects.GroundTile("empty", 15, 180, 15, 270, false, [14, 13, 13, 13, 13, 13, 12, 12, 12, 12, 11, 11, 11, 10, 10, 10], hm16, [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 13, 10, 6, 1, 0, 0], hm16, true, true);
+            CurvedTile.TUNNEL20_INNER = new objects.GroundTile("empty", 20, 180, 20, 270, false, [9, 9, 9, 8, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3], hm16, [16, 16, 16, 14, 12, 10, 8, 6, 3, 0, 0, 0, 0, 0, 0, 0], [16, 16, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], true, true);
+            CurvedTile.TUNNEL33_INNER = new objects.GroundTile("empty", 33, 180, 33, 270, false, [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, [3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, true, true);
+            CurvedTile.TUNNEL38_INNER = new objects.GroundTile("empty", 38, 180, 38, 270, false, [16, 16, 16, 16, 16, 15, 14, 14, 13, 12, 11, 11, 10, 9, 8, 7], [0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16], [16, 16, 16, 16, 16, 16, 16, 15, 14, 13, 12, 10, 9, 8, 6, 5], [16, 16, 16, 16, 16, 16, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0], true, true);
+            CurvedTile.TUNNEL45_INNER = new objects.GroundTile("empty", 45, 180, 45, 270, false, [6, 5, 5, 4, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, [6, 5, 5, 4, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, true, true);
+            CurvedTile.TUNNEL50_INNER = new objects.GroundTile("empty", 50, 180, 50, 270, false, [16, 16, 16, 16, 16, 16, 16, 15, 14, 13, 12, 10, 9, 8, 6, 5], [0, 0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16], [16, 16, 16, 16, 16, 15, 14, 14, 13, 12, 11, 11, 10, 9, 8, 7], [16, 16, 16, 16, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], true, true);
+            CurvedTile.TUNNEL63_INNER = new objects.GroundTile("empty", 63, 180, 63, 270, false, [3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, [2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, true, true);
+            CurvedTile.TUNNEL68_INNER = new objects.GroundTile("empty", 68, 180, 68, 270, false, [16, 16, 16, 14, 12, 10, 8, 6, 3, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16], [9, 9, 9, 8, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3], hm16, true, true);
+            CurvedTile.TUNNEL78_INNER = new objects.GroundTile("empty", 78, 180, 78, 270, false, [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 13, 10, 6, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16], [14, 13, 13, 13, 13, 13, 12, 12, 12, 12, 11, 11, 11, 10, 10, 10], hm16, true, true);
+            CurvedTile.TUNNEL90_THIN = new objects.GroundTile("empty", 90, 90, 90, 270, false, [14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 16, 16], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 16], [14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14], hm16, true, true);
+            CurvedTile.TUNNEL8_OUTER = new objects.GroundTile("empty", 8, 180, 8, 270, false, [2, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], hm16, [8, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, true, true);
+            CurvedTile.TUNNEL22_OUTER = new objects.GroundTile("empty", 22, 180, 22, 270, false, [7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 3, 2, 2, 2, 1, 1], hm16, [16, 16, 14, 11, 8, 6, 4, 2, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16], true, true);
+            CurvedTile.TUNNEL35_OUTER = new objects.GroundTile("empty", 35, 180, 35, 270, false, [16, 16, 16, 16, 16, 16, 15, 14, 13, 13, 12, 12, 11, 10, 9, 9], [0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16], [16, 16, 16, 16, 16, 16, 16, 16, 16, 14, 13, 12, 10, 8, 7, 6], [0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16], true, true);
+            CurvedTile.TUNNEL45_OUTER = new objects.GroundTile("empty", 45, 180, 45, 270, false, [5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, [5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, true, true);
+            CurvedTile.TUNNEL56_OUTER = new objects.GroundTile("empty", 56, 180, 56, 270, false, [16, 16, 16, 16, 16, 16, 16, 16, 16, 14, 13, 12, 10, 8, 7, 6], [0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16], [16, 16, 16, 16, 16, 16, 15, 14, 13, 13, 12, 12, 11, 10, 9, 9], [0, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16], true, true);
+            CurvedTile.TUNNEL68_OUTER = new objects.GroundTile("empty", 68, 180, 68, 270, false, [16, 16, 14, 11, 8, 6, 4, 2, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16], [8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 4, 3, 3, 3, 2, 2], hm16, true, true);
+            CurvedTile.TUNNEL90_THICK = new objects.GroundTile("empty", 90, 90, 90, 270, false, [16, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16], [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], hm16, true, true);
+            CurvedTile.TUNNEL50_OUTER = new objects.GroundTile("empty", 50, 180, 50, 270, false, [16, 16, 16, 16, 16, 15, 14, 13, 11, 10, 9, 8, 7, 6, 5, 3], [0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16], [16, 16, 16, 15, 15, 14, 13, 12, 11, 10, 9, 8, 8, 7, 6, 5], [0, 0, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16], true, true);
+            CurvedTile.TUNNEL45_SHORT = new objects.GroundTile("empty", 45, 180, 45, 270, false, [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hm16, true, true);
         }
     }
     objects.CurvedTile = CurvedTile;
@@ -554,8 +678,8 @@ var objects;
             TileGroup.TILELIST = new Array();
             TileGroup.TILEGROUPLIST = new Array(tileGroupCollisions.length);
             TileGroup.TILELIST.push(null, LinearTile.FLAT, LinearTile.PLATFORM, LinearTile.ANGLE3.offsetAndCopy(2), LinearTile.ANGLE3.offsetAndCopy(2).flipXAndCopy(), LinearTile.ANGLE3.offsetAndCopy(4), LinearTile.ANGLE3.offsetAndCopy(4).flipXAndCopy(), LinearTile.ANGLE3.offsetAndCopy(6), LinearTile.ANGLE3.offsetAndCopy(6).flipXAndCopy(), LinearTile.ANGLE3.offsetAndCopy(7), LinearTile.ANGLE3.offsetAndCopy(7).flipXAndCopy(), LinearTile.ANGLE3.offsetAndCopy(8), LinearTile.ANGLE3.offsetAndCopy(8).flipXAndCopy(), LinearTile.ANGLE3.offsetAndCopy(12), LinearTile.ANGLE3.offsetAndCopy(12).flipXAndCopy(), LinearTile.ANGLE3.offsetAndCopy(14), LinearTile.ANGLE3.offsetAndCopy(14).flipXAndCopy(), LinearTile.ANGLE3.offsetAndCopy(15), LinearTile.ANGLE3.offsetAndCopy(15).flipXAndCopy(), LinearTile.ANGLE11.offsetAndCopy(12), LinearTile.ANGLE11.offsetAndCopy(12).flipXAndCopy(), LinearTile.ANGLE11.offsetAndCopy(8), LinearTile.ANGLE11.offsetAndCopy(8).flipXAndCopy(), LinearTile.ANGLE11.offsetAndCopy(4), LinearTile.ANGLE11.offsetAndCopy(4).flipXAndCopy(), LinearTile.ANGLE11.offsetAndCopy(0), LinearTile.ANGLE11.offsetAndCopy(0).flipXAndCopy(), LinearTile.ANGLE23.offsetAndCopy(8), LinearTile.ANGLE23.offsetAndCopy(8).flipXAndCopy(), LinearTile.ANGLE23.offsetAndCopy(0), LinearTile.ANGLE23.offsetAndCopy(0).flipXAndCopy(), CurvedTile.ANGLE3.offsetAndCopy(13), CurvedTile.ANGLE3.offsetAndCopy(13).flipXAndCopy(), CurvedTile.ANGLE3.offsetAndCopy(14), CurvedTile.ANGLE3.offsetAndCopy(14).flipXAndCopy(), CurvedTile.ANGLE3_B.copy(), CurvedTile.ANGLE3_B.flipXAndCopy(), CurvedTile.ANGLE7.offsetAndCopy(10), CurvedTile.ANGLE7.offsetAndCopy(10).flipXAndCopy(), CurvedTile.ANGLE11.offsetAndCopy(7), CurvedTile.ANGLE11.offsetAndCopy(7).flipXAndCopy(), CurvedTile.ANGLE15.offsetAndCopy(9), CurvedTile.ANGLE15.offsetAndCopy(9).flipXAndCopy(), CurvedTile.ANGLE20.copy(), CurvedTile.ANGLE20.flipXAndCopy(), CurvedTile.ANGLE26.copy(), CurvedTile.ANGLE26.flipXAndCopy(), CurvedTile.ANGLE28.copy(), CurvedTile.ANGLE28.flipXAndCopy(), CurvedTile.ANGLE36.copy(), CurvedTile.ANGLE36.flipXAndCopy(), CurvedTile.ANGLE45.copy(), CurvedTile.ANGLE45.flipXAndCopy(), CurvedTile.ANGLE62.copy(), CurvedTile.ANGLE62.flipXAndCopy(), CurvedTile.ANGLE75.copy(), CurvedTile.ANGLE75.flipXAndCopy(), CurvedTile.ANGLE86.copy(), CurvedTile.ANGLE86.flipXAndCopy(), CurvedTile.ANGLE86.flipYAndCopy(), CurvedTile.ANGLE86.flipYAndCopy().flipXAndCopy(), //60
-            CurvedTile.ANGLE75.flipYAndCopy(), CurvedTile.ANGLE75.flipYAndCopy().flipXAndCopy(), CurvedTile.ANGLE62.flipYAndCopy(), CurvedTile.ANGLE62.flipYAndCopy().flipXAndCopy(), CurvedTile.ANGLE45.flipYAndCopy(), CurvedTile.ANGLE45.flipYAndCopy().flipXAndCopy(), CurvedTile.ANGLE152.copy(), CurvedTile.ANGLE152.flipXAndCopy(), CurvedTile.ANGLE165.copy(), CurvedTile.ANGLE165.flipXAndCopy(), CurvedTile.ANGLE176.copy(), CurvedTile.ANGLE176.flipXAndCopy(), CurvedTile.ANGLE15.offsetAndCopy(2), CurvedTile.ANGLE15.offsetAndCopy(2).flipXAndCopy());
-            console.log(TileGroup.TILELIST[59].getHeightmaps());
+            CurvedTile.ANGLE75.flipYAndCopy(), CurvedTile.ANGLE75.flipYAndCopy().flipXAndCopy(), CurvedTile.ANGLE62.flipYAndCopy(), CurvedTile.ANGLE62.flipYAndCopy().flipXAndCopy(), CurvedTile.ANGLE45.flipYAndCopy(), CurvedTile.ANGLE45.flipYAndCopy().flipXAndCopy(), CurvedTile.ANGLE152.copy(), CurvedTile.ANGLE152.flipXAndCopy(), CurvedTile.ANGLE165.copy(), CurvedTile.ANGLE165.flipXAndCopy(), CurvedTile.ANGLE176.copy(), CurvedTile.ANGLE176.flipXAndCopy(), CurvedTile.ANGLE15.offsetAndCopy(2), CurvedTile.ANGLE15.offsetAndCopy(2).flipXAndCopy(), CurvedTile.TUNNEL3_INNER.copy(), CurvedTile.TUNNEL3_INNER.flipXAndCopy(), CurvedTile.TUNNEL3_INNER.flipYAndCopy(), CurvedTile.TUNNEL3_INNER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL15_INNER.copy(), CurvedTile.TUNNEL15_INNER.flipXAndCopy(), CurvedTile.TUNNEL15_INNER.flipYAndCopy(), CurvedTile.TUNNEL15_INNER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL20_INNER.copy(), CurvedTile.TUNNEL20_INNER.flipXAndCopy(), CurvedTile.TUNNEL20_INNER.flipYAndCopy(), CurvedTile.TUNNEL20_INNER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL33_INNER.copy(), CurvedTile.TUNNEL33_INNER.flipXAndCopy(), CurvedTile.TUNNEL33_INNER.flipYAndCopy(), CurvedTile.TUNNEL33_INNER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL38_INNER.copy(), CurvedTile.TUNNEL38_INNER.flipXAndCopy(), CurvedTile.TUNNEL38_INNER.flipYAndCopy(), CurvedTile.TUNNEL38_INNER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL45_INNER.copy(), CurvedTile.TUNNEL45_INNER.flipXAndCopy(), CurvedTile.TUNNEL45_INNER.flipYAndCopy(), CurvedTile.TUNNEL45_INNER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL50_INNER.copy(), CurvedTile.TUNNEL50_INNER.flipXAndCopy(), CurvedTile.TUNNEL50_INNER.flipYAndCopy(), CurvedTile.TUNNEL50_INNER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL63_INNER.copy(), CurvedTile.TUNNEL63_INNER.flipXAndCopy(), CurvedTile.TUNNEL63_INNER.flipYAndCopy(), CurvedTile.TUNNEL63_INNER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL68_INNER.copy(), CurvedTile.TUNNEL68_INNER.flipXAndCopy(), CurvedTile.TUNNEL68_INNER.flipYAndCopy(), CurvedTile.TUNNEL68_INNER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL78_INNER.copy(), CurvedTile.TUNNEL78_INNER.flipXAndCopy(), CurvedTile.TUNNEL78_INNER.flipYAndCopy(), CurvedTile.TUNNEL78_INNER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL90_THIN.copy(), CurvedTile.TUNNEL90_THIN.flipXAndCopy(), CurvedTile.TUNNEL8_OUTER.copy(), CurvedTile.TUNNEL8_OUTER.flipXAndCopy(), CurvedTile.TUNNEL8_OUTER.flipYAndCopy(), CurvedTile.TUNNEL8_OUTER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL22_OUTER.copy(), CurvedTile.TUNNEL22_OUTER.flipXAndCopy(), CurvedTile.TUNNEL22_OUTER.flipYAndCopy(), CurvedTile.TUNNEL22_OUTER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL35_OUTER.copy(), CurvedTile.TUNNEL35_OUTER.flipXAndCopy(), CurvedTile.TUNNEL35_OUTER.flipYAndCopy(), CurvedTile.TUNNEL35_OUTER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL45_OUTER.copy(), CurvedTile.TUNNEL45_OUTER.flipXAndCopy(), CurvedTile.TUNNEL45_OUTER.flipYAndCopy(), CurvedTile.TUNNEL45_OUTER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL56_OUTER.copy(), CurvedTile.TUNNEL56_OUTER.flipXAndCopy(), CurvedTile.TUNNEL56_OUTER.flipYAndCopy(), CurvedTile.TUNNEL56_OUTER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL68_OUTER.copy(), CurvedTile.TUNNEL68_OUTER.flipXAndCopy(), CurvedTile.TUNNEL68_OUTER.flipYAndCopy(), CurvedTile.TUNNEL68_OUTER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL90_THICK.copy(), CurvedTile.TUNNEL90_THICK.flipXAndCopy(), CurvedTile.TUNNEL50_OUTER.copy(), CurvedTile.TUNNEL50_OUTER.flipXAndCopy(), CurvedTile.TUNNEL50_OUTER.flipYAndCopy(), CurvedTile.TUNNEL50_OUTER.flipYAndCopy().flipXAndCopy(), CurvedTile.TUNNEL45_SHORT.copy(), CurvedTile.TUNNEL45_SHORT.flipXAndCopy(), CurvedTile.TUNNEL45_SHORT.flipYAndCopy(), CurvedTile.TUNNEL45_SHORT.flipYAndCopy().flipXAndCopy());
+            console.log(TileGroup.TILELIST[140].getAngles());
             for (var tg = 0; tg < TileGroup.TILEGROUPLIST.length; tg++) {
                 TileGroup.TILEGROUPLIST[tg] = this.generateGroup(tileGroupCollisions[tg], "ghz" + tg);
             }

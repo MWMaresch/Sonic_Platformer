@@ -1,8 +1,8 @@
 module objects {
     export class GroundTile extends Tile {
 
-        constructor(imageString: string, angleTop?: number, angleBottom?: number, angleL?: number, angleR?: number, autoCalc?: boolean, heightmapTop?: number[], heightmapBottom?: number[], heightmapLeft?: number[], heightmapRight?: number[], isSolid?: boolean) {
-            super(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid);
+        constructor(imageString: string, angleTop?: number, angleBottom?: number, angleL?: number, angleR?: number, autoCalc?: boolean, heightmapTop?: number[], heightmapBottom?: number[], heightmapLeft?: number[], heightmapRight?: number[], isSolid?: boolean, isTunnel?: boolean) {
+            super(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid, isTunnel);
             if (autoCalc) {
                 this._calculateHeightmaps();
                 console.log("calculated heightmaps for a tile");
@@ -102,16 +102,31 @@ module objects {
         //TODO: create and use a more accurate detection method using the sensor and side heightmaps
         public onLeftWallCollision(other: GameObject, sensor: Vector2) {
             if (this._isSolid) {
-                if (this._topHeightmap[15] <= 4)
-                    other.collideWithLeftWall(this.x + 16);
+                var arrayIndex = Math.floor(sensor.y - this.y);
+                var hmVal = this._rightHeightmap[arrayIndex];
+                if (hmVal > 0 && sensor.x  - this.x < hmVal) {
+                    other.collideWithLeftWall(this.x + hmVal);
+                }
+
+                //if (this._topHeightmap[15] <= 4)
+                    //other.collideWithLeftWall(this.x + 16);
             }
         }
 
         public onRightWallCollision(other: GameObject, sensor: Vector2) {
             if (this._isSolid) {
+                var arrayIndex = Math.floor(sensor.y - this.y);
+                var hmVal = this._leftHeightmap[arrayIndex];
+                if (hmVal < 16 && sensor.x  - this.x > hmVal) {
+                    console.log("colliding with right wall at (" + this.x + ", " + this.y + "), index is " + arrayIndex + ", value is " + hmVal);
+                    other.collideWithRightWall(this.x + hmVal);
+                }
+            }
+            /*
+            if (this._isSolid) {
                 if (this._topHeightmap[0] <= 4)
                     other.collideWithRightWall(this.x);
-            }
+            }*/
         }
     }
 }

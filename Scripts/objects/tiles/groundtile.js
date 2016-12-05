@@ -1,8 +1,8 @@
 var objects;
 (function (objects) {
     class GroundTile extends objects.Tile {
-        constructor(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid) {
-            super(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid);
+        constructor(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid, isTunnel) {
+            super(imageString, angleTop, angleBottom, angleL, angleR, autoCalc, heightmapTop, heightmapBottom, heightmapLeft, heightmapRight, isSolid, isTunnel);
             if (autoCalc) {
                 this._calculateHeightmaps();
                 console.log("calculated heightmaps for a tile");
@@ -90,15 +90,27 @@ var objects;
         //TODO: create and use a more accurate detection method using the sensor and side heightmaps
         onLeftWallCollision(other, sensor) {
             if (this._isSolid) {
-                if (this._topHeightmap[15] <= 4)
-                    other.collideWithLeftWall(this.x + 16);
+                var arrayIndex = Math.floor(sensor.y - this.y);
+                var hmVal = this._rightHeightmap[arrayIndex];
+                if (hmVal > 0 && sensor.x - this.x < hmVal) {
+                    other.collideWithLeftWall(this.x + hmVal);
+                }
             }
         }
         onRightWallCollision(other, sensor) {
             if (this._isSolid) {
+                var arrayIndex = Math.floor(sensor.y - this.y);
+                var hmVal = this._leftHeightmap[arrayIndex];
+                if (hmVal < 16 && sensor.x - this.x > hmVal) {
+                    console.log("colliding with right wall at (" + this.x + ", " + this.y + "), index is " + arrayIndex + ", value is " + hmVal);
+                    other.collideWithRightWall(this.x + hmVal);
+                }
+            }
+            /*
+            if (this._isSolid) {
                 if (this._topHeightmap[0] <= 4)
                     other.collideWithRightWall(this.x);
-            }
+            }*/
         }
     }
     objects.GroundTile = GroundTile;
