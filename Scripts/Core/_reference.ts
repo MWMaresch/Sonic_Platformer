@@ -22,6 +22,7 @@
 /// <reference path="../objects/gameobjects/gameobject.ts" />
 /// <reference path="../objects/gameobjects/physgameobject.ts" />
 /// <reference path="../objects/gameobjects/pathswitcher.ts" />
+/// <reference path="../objects/gameobjects/goalplate.ts" />
 
 /// <reference path="../managers/collision.ts" />
 

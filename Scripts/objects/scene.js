@@ -22,7 +22,9 @@ var objects;
         getSpriteContainer() {
             return null;
         }
-        ;
+        stopTimer() { }
+        endLevel() { }
+        showScore() { }
     }
     objects.Scene = Scene;
 })(objects || (objects = {}));

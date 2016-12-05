@@ -6,8 +6,9 @@ var config;
     class Scene {
     }
     Scene.MENU = 0;
-    Scene.LEVEL1 = 1;
-    Scene.INSTRUCTIONS = 2;
+    Scene.INSTRUCTIONS = 1;
+    Scene.GHZ1 = 2;
+    Scene.GHZ2 = 3;
     config.Scene = Scene;
     class Screen {
     }

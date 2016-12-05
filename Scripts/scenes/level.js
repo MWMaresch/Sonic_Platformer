@@ -11,6 +11,7 @@ var scenes;
             this._bottomCamBorder = 128;
             //other variables
             this._alreadyWon = false;
+            this._finished = false;
         }
         start() {
             this._tileSpriteContainer = new createjs.SpriteContainer(spriteAtlas);
@@ -193,13 +194,23 @@ var scenes;
                     }
                 }
             }
-            this._camRightBoundary = this._tileGrids[0].length * -16 + config.Screen.WIDTH;
+            this._camRightBoundary = (this._tileGrids[0].length - 32) * -16 + config.Screen.WIDTH;
             this._camBottomBoundary = this._tileGrids[0][0].length * -16 + config.Screen.HEIGHT;
             this._spriteContainer.addChild(this._tileSpriteContainer);
             //increasing performance slightly more by disabling ticking for the tiles, which shouldn't move or animate anyway
             this._tileSpriteContainer.tickEnabled = false;
             this._tileSpriteContainer.tickChildren = false;
             this._spriteContainer.snapToPixel = true;
+        }
+        stopTimer() {
+            this._finished = true;
+            this._timeText.text = "YOU WON IN " + Math.floor((this._timer / 1000) / 60).toString() + ":" + Math.floor(((this._timer / 1000) % 60));
+            this._timeText.scaleX = 1.5;
+            this._timeText.scaleY = 1.5;
+            this._timeText.regX = this._timeText.getBounds().width / 2;
+            this._timeText.regY = this._timeText.getBounds().height / 2;
+            this._timeText.x = config.Screen.WIDTH / 2;
+            this._timeText.y = config.Screen.HEIGHT / 2;
         }
         getTileGrid(layer) {
             return this._tileGrids[layer];

@@ -38,6 +38,7 @@ module scenes {
         //other variables
         protected _alreadyWon: boolean = false;
         protected _tileGrids: Array<Array<Array<objects.Tile>>>; //objects.Tile[][] = [];
+        protected _finished: boolean = false;
 
         public start() {
             this._tileSpriteContainer = new createjs.SpriteContainer(spriteAtlas);
@@ -236,7 +237,7 @@ module scenes {
                     }
                 }
             }
-            this._camRightBoundary = this._tileGrids[0].length * -16 + config.Screen.WIDTH;
+            this._camRightBoundary = (this._tileGrids[0].length - 32) * -16 + config.Screen.WIDTH;
             this._camBottomBoundary = this._tileGrids[0][0].length * -16 + config.Screen.HEIGHT;
             this._spriteContainer.addChild(this._tileSpriteContainer);
 
@@ -246,11 +247,22 @@ module scenes {
             this._spriteContainer.snapToPixel = true;
         }
 
-        public getTileGrid(layer : number) {
+        public stopTimer() {
+            this._finished = true;
+            this._timeText.text = "YOU WON IN " + Math.floor((this._timer / 1000) / 60).toString() + ":" + Math.floor(((this._timer / 1000) % 60));
+            this._timeText.scaleX = 1.5;
+            this._timeText.scaleY = 1.5;
+            this._timeText.regX = this._timeText.getBounds().width / 2;
+            this._timeText.regY = this._timeText.getBounds().height / 2;
+            this._timeText.x = config.Screen.WIDTH / 2;
+            this._timeText.y = config.Screen.HEIGHT / 2;
+        }
+
+        public getTileGrid(layer: number) {
             return this._tileGrids[layer];
         }
 
-        public getSpriteContainer() : createjs.SpriteContainer {
+        public getSpriteContainer(): createjs.SpriteContainer {
             return this._spriteContainer;
         }
 

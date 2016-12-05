@@ -118,7 +118,7 @@ module scenes {
 
         private _playBtnClick(event : createjs.MouseEvent) {
             stage.removeAllChildren();
-            scene = config.Scene.LEVEL1;
+            scene = config.Scene.GHZ1;
             changeScene();
         }
 

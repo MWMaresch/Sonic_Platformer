@@ -71,7 +71,7 @@ module objects {
 
         private _startRolling(): void {
             if (!this._isRolling) {
-                console.log("gspeed before rolling: " + this._gSpeed);
+                //console.log("gspeed before rolling: " + this._gSpeed);
                 this._isRolling = true;
                 this.height = 30;
                 this.width = 14;
@@ -83,7 +83,7 @@ module objects {
                 this.gotoAndPlay("jump");
                 //we don't want the animation speed to be below 0 or above 1
                 this.spriteSheet.getAnimation("jump").speed = Math.min(1, Math.max(0, 1 / (5 - Math.abs(this._gSpeed))));
-                console.log("gspeed after rolling: " + this._gSpeed);
+                //console.log("gspeed after rolling: " + this._gSpeed);
             }
         }
 
@@ -207,9 +207,13 @@ module objects {
             //check for and apply air movement
             if (!this._isGrounded) {
                 this._velY += this._GRAVITY;
-                //we should never go too fast to pass through blocks
-                if (Math.abs(this._velX) > this._MAXRUNSPEED)
-                    this._velX = this._MAXRUNSPEED * Math.sign(this._velX);
+                if (this._isJumping || !this._isRolling) {
+                    if (Math.abs(this._velX) > this._MAXRUNSPEED)
+                        this._velX = this._MAXRUNSPEED * Math.sign(this._velX);
+                }
+                else
+                    if (Math.abs(this._velX) > this._TERMINALVELOCITY)
+                        this._velX = this._TERMINALVELOCITY * Math.sign(this._velX);
                 //weird air drag
                 if (this._velY < 0 && this._velY > -4 && Math.abs(this._velX) >= 0.125)
                     this._velX *= this._AIRDRAG;
@@ -362,7 +366,6 @@ module objects {
                 if (tileGrid[Math.floor(sensorPos.x / 16)][Math.floor((length + sensorPos.y) / 16)].isTunnel) {
                     this._startRolling();
                     if (this._mode == Quadrant.Floor && Math.abs(this._gSpeed) <= 0.3) {
-                        console.log("increase gspeed");
                         if (this._gSpeed == 0) {
                             this._gSpeed = 3;
                         }
@@ -474,7 +477,6 @@ module objects {
                     this._stopRolling();
                     this._alreadyCollided = true;
                     this._higherGround = groundHeight;
-                    //this._footRayCastLength = 35;
                     this.y = groundHeight - this._curFootDist;
                     this._angle = angle;
                     this.rotation = -angle;
@@ -504,9 +506,6 @@ module objects {
                     this._isGrounded = true;
                     this._velY = 0;
                 }
-                //else {
-                //this._setAirSensor();
-                //}
             }
         }
 
@@ -569,7 +568,7 @@ module objects {
         }
 
         public crouch() {
-            if (Math.abs(this._gSpeed) > 0.53125)
+            if (this._isGrounded && Math.abs(this._gSpeed) > 0.53125)
                 this._startRolling();
             //TODO: crouching and spindash
         }

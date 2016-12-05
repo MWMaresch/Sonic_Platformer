@@ -1,7 +1,5 @@
 module objects {
     export class Rock extends objects.GameObject {
-        //might be a different class in the future
-        protected _layer: number;
 
         constructor(x: number, y: number) {
             super("rock", x, y);
@@ -13,8 +11,6 @@ module objects {
         public update(): void { }
 
         public checkCollisionWithPlayer(player: objects.Player) {
-            //otherwise, check if he's colliding with any spikes
-            //sonic only gets hurt if he's on top of the spikes: from the side they should act like solid walls
             if (collision.sensorBoxCheck(player.leftSideSensor, this)) {
                 player.collideWithLeftWall(this.rightLine);
             }
@@ -33,6 +29,5 @@ module objects {
                 console.log("did not collide");
             }
         }
-
     }
 }

@@ -58,6 +58,7 @@ function preload() {
     assets.loadManifest(assetData);
 }
 function exitBtnClick(event) {
+    stage.tickEnabled = true;
     stage.removeAllChildren();
     canPause = false;
     paused = false;
@@ -66,8 +67,10 @@ function exitBtnClick(event) {
 }
 function frameAdvance() {
     if (paused) {
+        stage.tickEnabled = true;
         currentScene.update();
         stage.update();
+        stage.tickEnabled = false;
     }
 }
 function togglePause() {
@@ -77,11 +80,13 @@ function togglePause() {
         stage.addChild(exitBtn);
         exitBtn.on("click", exitBtnClick, this);
         paused = true;
+        stage.tickEnabled = false;
     }
     else {
         stage.removeChild(pauseBg);
         stage.removeChild(exitBtn);
         paused = false;
+        stage.tickEnabled = true;
     }
 }
 function toRadians(angle) {
@@ -155,7 +160,15 @@ function init() {
             [1489, 1571, 256, 256],
             [1750, 1571, 256, 256],
             [1228, 788, 256, 256],
-            [452, 330, 43, 32], [500, 330, 46, 32], [503, 365, 46, 32], [514, 403, 48, 31]],
+            [452, 330, 43, 32], [500, 330, 46, 32], [503, 365, 46, 32], [514, 403, 48, 31],
+            [2272, 1571, 256, 256],
+            [1750, 527, 256, 256],
+            [2011, 527, 256, 256],
+            [1750, 1049, 256, 256],
+            [1489, 1049, 256, 256],
+            [1228, 1310, 256, 256],
+            [2011, 2615, 256, 256],
+            [989, 268, 48, 48], [1042, 268, 48, 48], [1095, 268, 48, 48], [1148, 268, 48, 48], [989, 325, 48, 48]],
         animations: {
             "stand": { frames: [0] },
             "lookup": { frames: [1, 2] },
@@ -212,8 +225,19 @@ function init() {
             "ghz30": { frames: [90] },
             "ghz31": { frames: [91] },
             "crabmeat_idle": { frames: [92] },
+            "crabmeat_move": { frames: [92, 93, 94], speed: 1 / 8 },
             "crabmeat_shoot": { frames: [95] },
-            "crabmeat_move": { frames: [92, 93, 94], speed: 1 / 8 }
+            "ghz32": { frames: [96] },
+            "ghz33": { frames: [97] },
+            "ghz34": { frames: [98] },
+            "ghz35": { frames: [99] },
+            "ghz36": { frames: [100] },
+            "ghz37": { frames: [101] },
+            "ghz38": { frames: [102] },
+            "goal": { frames: [103] },
+            "goalSpin1": { frames: [103, 104, 105, 106], speed: 0.5 },
+            "goalSpin2": { frames: [107, 104, 105, 106], speed: 0.5 },
+            "goalEnd": { frames: [107] }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",
@@ -292,10 +316,15 @@ function changeScene() {
             ;
             console.log("Starting MENU scene");
             break;
-        case config.Scene.LEVEL1:
+        case config.Scene.GHZ1:
             stage.removeAllChildren();
-            currentScene = new scenes.GreenHillZone();
-            console.log("Starting LEVEL1 scene");
+            currentScene = new scenes.GreenHillZone1();
+            console.log("Starting ACT 1");
+            break;
+        case config.Scene.GHZ2:
+            stage.removeAllChildren();
+            currentScene = new scenes.GreenHillZone2();
+            console.log("Starting ACT 2");
             break;
         case config.Scene.INSTRUCTIONS:
             stage.removeAllChildren();

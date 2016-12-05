@@ -4,8 +4,9 @@
 module config {
     export class Scene {
         public static MENU : number = 0;
-        public static LEVEL1 : number = 1;
-        public static INSTRUCTIONS : number = 2;
+        public static INSTRUCTIONS : number = 1;
+        public static GHZ1 : number = 2;
+        public static GHZ2 : number = 3;
     }
 
     export class Screen {

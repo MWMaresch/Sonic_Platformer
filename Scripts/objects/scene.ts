@@ -26,6 +26,9 @@ module objects {
         }
         public getSpriteContainer() : createjs.SpriteContainer{
             return null;
-        };
+        }
+        public stopTimer() : void {}
+        public endLevel(): void{}
+        public showScore(): void{}
     }
 }

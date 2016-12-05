@@ -92,7 +92,7 @@ var scenes;
         }
         _playBtnClick(event) {
             stage.removeAllChildren();
-            scene = config.Scene.LEVEL1;
+            scene = config.Scene.GHZ1;
             changeScene();
         }
         _instBtnClick(event) {

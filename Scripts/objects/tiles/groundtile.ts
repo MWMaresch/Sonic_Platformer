@@ -105,6 +105,7 @@ module objects {
                 var arrayIndex = Math.floor(sensor.y - this.y);
                 var hmVal = this._rightHeightmap[arrayIndex];
                 if (hmVal > 0 && sensor.x  - this.x < hmVal) {
+                    console.log("colliding with left wall at (" + this.x + ", " + this.y + "), index is " + arrayIndex + ", value is " + hmVal + ", angles are " + this.getAngles());
                     other.collideWithLeftWall(this.x + hmVal);
                 }
 
@@ -118,7 +119,7 @@ module objects {
                 var arrayIndex = Math.floor(sensor.y - this.y);
                 var hmVal = this._leftHeightmap[arrayIndex];
                 if (hmVal < 16 && sensor.x  - this.x > hmVal) {
-                    console.log("colliding with right wall at (" + this.x + ", " + this.y + "), index is " + arrayIndex + ", value is " + hmVal);
+                    console.log("colliding with right wall at (" + this.x + ", " + this.y + "), index is " + arrayIndex + ", value is " + hmVal + ", angles are " + this.getAngles());
                     other.collideWithRightWall(this.x + hmVal);
                 }
             }

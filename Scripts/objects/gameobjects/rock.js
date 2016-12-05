@@ -8,8 +8,6 @@ var objects;
         start() { }
         update() { }
         checkCollisionWithPlayer(player) {
-            //otherwise, check if he's colliding with any spikes
-            //sonic only gets hurt if he's on top of the spikes: from the side they should act like solid walls
             if (collision.sensorBoxCheck(player.leftSideSensor, this)) {
                 player.collideWithLeftWall(this.rightLine);
             }
