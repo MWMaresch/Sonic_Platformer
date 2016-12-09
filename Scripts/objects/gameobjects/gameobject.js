@@ -3,6 +3,7 @@ var objects;
     class GameObject extends createjs.Sprite {
         constructor(imageString, x, y) {
             super(spriteAtlas, imageString);
+            this._updateDistance = 450;
             this._isDead = false;
             this._velX = 0;
             this._velY = 0;
@@ -17,6 +18,7 @@ var objects;
         get height() { return this._height; }
         set height(h) { this._height = h; }
         get isDead() { return this._isDead; }
+        get updateDistance() { return this._updateDistance; }
         //to make the collision class more readable
         get topLine() {
             return this.y - this.height / 2;
@@ -53,8 +55,8 @@ var objects;
             this._sideSensorR.y = (this.y + this.height / 2) - 14;
             this._footSensorL.x = this._sideSensorL.x + 2;
             this._footSensorR.x = this._sideSensorR.x - 2;
-            this._footSensorL.y = (this.y + this.height / 2) - 2;
-            this._footSensorR.y = (this.y + this.height / 2) - 2;
+            this._footSensorL.y = (this.y + this.height / 2) + 1;
+            this._footSensorR.y = (this.y + this.height / 2) + 1;
         }
         checkCollisionWithGrid(tileGrid) { }
         checkCollisionWithPlayer(player) { }

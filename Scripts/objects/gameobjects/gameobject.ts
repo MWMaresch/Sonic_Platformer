@@ -2,6 +2,7 @@ module objects {
     export class GameObject extends createjs.Sprite {
         private _width: number;
         private _height: number;
+        protected _updateDistance: number = 450;
         protected _isDead: boolean = false;
         protected _footSensorL: Vector2;
         protected _footSensorR: Vector2;
@@ -19,6 +20,7 @@ module objects {
         set height(h: number) { this._height = h; }
 
         get isDead(): boolean { return this._isDead; }
+        get updateDistance(): number { return this._updateDistance; }
 
         //to make the collision class more readable
         get topLine(): number {
@@ -69,8 +71,8 @@ module objects {
 
             this._footSensorL.x = this._sideSensorL.x + 2;
             this._footSensorR.x = this._sideSensorR.x - 2;
-            this._footSensorL.y = (this.y + this.height / 2) - 2;
-            this._footSensorR.y = (this.y + this.height / 2) - 2;
+            this._footSensorL.y = (this.y + this.height / 2) + 1;
+            this._footSensorR.y = (this.y + this.height / 2) + 1;
         }
 
         public checkCollisionWithGrid(tileGrid: Tile[][]) { }
@@ -80,6 +82,6 @@ module objects {
         public collideWithGround(groundHeight: number, angle: number): void { }
         public collideWithRightWall(x: number) { }
         public collideWithLeftWall(x: number) { }
-        public checkOneMoreCollision(posY:number, posX:number, sensor:Vector2) { }
+        public checkOneMoreCollision(posY: number, posX: number, sensor: Vector2) { }
     }
 }

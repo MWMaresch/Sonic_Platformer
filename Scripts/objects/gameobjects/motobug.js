@@ -36,7 +36,7 @@ var objects;
         checkCollisionWithPlayer(player) {
             if (collision.boxCheck(player, this)) {
                 if (player.isRolling) {
-                    player.bounce();
+                    player.rebound(this.y);
                     this._isDead = true;
                     return true;
                 }

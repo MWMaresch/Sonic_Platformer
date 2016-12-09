@@ -102,10 +102,10 @@ module objects {
         //TODO: create and use a more accurate detection method using the sensor and side heightmaps
         public onLeftWallCollision(other: GameObject, sensor: Vector2) {
             if (this._isSolid) {
-                var arrayIndex = Math.floor(sensor.y - this.y);
-                var hmVal = this._rightHeightmap[arrayIndex];
+                //var arrayIndex = Math.floor(sensor.y - this.y);
+                var hmVal = this._rightHeightmap[Math.floor(sensor.y - this.y)];
                 if (hmVal > 0 && sensor.x  - this.x < hmVal) {
-                    console.log("colliding with left wall at (" + this.x + ", " + this.y + "), index is " + arrayIndex + ", value is " + hmVal + ", angles are " + this.getAngles());
+                    //console.log("colliding with left wall at (" + this.x + ", " + this.y + "), index is " + arrayIndex + ", value is " + hmVal + ", angles are " + this.getAngles());
                     other.collideWithLeftWall(this.x + hmVal);
                 }
 
@@ -116,10 +116,10 @@ module objects {
 
         public onRightWallCollision(other: GameObject, sensor: Vector2) {
             if (this._isSolid) {
-                var arrayIndex = Math.floor(sensor.y - this.y);
-                var hmVal = this._leftHeightmap[arrayIndex];
+                //var arrayIndex = Math.floor(sensor.y - this.y);
+                var hmVal = this._leftHeightmap[Math.floor(sensor.y - this.y)];
                 if (hmVal < 16 && sensor.x  - this.x > hmVal) {
-                    console.log("colliding with right wall at (" + this.x + ", " + this.y + "), index is " + arrayIndex + ", value is " + hmVal + ", angles are " + this.getAngles());
+                    //console.log("colliding with right wall at (" + this.x + ", " + this.y + "), index is " + arrayIndex + ", value is " + hmVal + ", angles are " + this.getAngles());
                     other.collideWithRightWall(this.x + hmVal);
                 }
             }

@@ -6,6 +6,7 @@ var objects;
             this._spinTimer = 0;
             this._isSpinning = false;
             this._alreadyPassed = false;
+            this._updateDistance = 1000;
         }
         update() {
             if (this._isSpinning) {

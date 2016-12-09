@@ -177,7 +177,7 @@ function init() {
         [1489, 1571, 256, 256], // GHZ29
         [1750, 1571, 256, 256], // GHZ30
         [1228, 788, 256, 256], // GHZ31
-        [452, 330, 43, 32], [500, 330, 46, 32], [503, 365, 46, 32], [514, 403, 48, 31], // crabmeat enemy
+        [451, 331, 48, 31], [499, 331, 48, 31], [502, 365, 48, 31], [515, 403, 48, 31], // crabmeat enemy
         [2272, 1571, 256, 256], // GHZ32
         [1750, 527, 256, 256], // GHZ33
         [2011, 527, 256, 256], // GHZ34
@@ -185,7 +185,9 @@ function init() {
         [1489, 1049, 256, 256], // GHZ36
         [1228, 1310, 256, 256], // GHZ37
         [2011, 2615, 256, 256], // GHZ38
-        [989, 268, 48, 48], [1042, 268, 48, 48], [1095, 268, 48, 48],[1148, 268, 48, 48],[989, 325, 48, 48]], // goal plate
+        [989, 268, 48, 48], [1042, 268, 48, 48], [1095, 268, 48, 48],[1148, 268, 48, 48],[989, 325, 48, 48], // goal plate
+        [557, 316, 12, 12], [557, 332, 12, 12], [557, 348, 12, 12], // projectiles
+        [1226, 3637, 64, 30]], // floating platform
 
 
 
@@ -245,7 +247,7 @@ function init() {
             "ghz30": { frames: [90] },
             "ghz31": { frames: [91] },
             "crabmeat_idle": { frames: [92] },
-            "crabmeat_move": { frames: [92, 93, 94], speed : 1/8},
+            "crabmeat_move": { frames: [92, 93, 94], speed : 1/16},
             "crabmeat_shoot": { frames: [95] },
             "ghz32": { frames: [96] },
             "ghz33": { frames: [97] },
@@ -257,7 +259,10 @@ function init() {
             "goal": { frames: [103] },
             "goalSpin1": { frames: [103, 104, 105, 106], speed: 0.5 },
             "goalSpin2": { frames: [107, 104, 105, 106], speed: 0.5 },
-            "goalEnd": { frames: [107] }
+            "goalEnd": { frames: [107] },
+            "redProjectile": { frames: [109, 110], speed: 0.5 },
+            "yellowProjectile": { frames: [108, 110], speed: 0.5 },
+            "platform": { frames: [111] },
         },
 
         "texturepacker": [
@@ -336,6 +341,8 @@ function gameLoop(event: createjs.Event): void {
     }
 
     stage.update();
+    //console.log("measured fps: "+Math.floor(createjs.Ticker.getMeasuredFPS()));
+    //console.log("measured tick time: "+createjs.Ticker.getMeasuredTickTime());
 
 }
 

@@ -39,6 +39,7 @@ module scenes {
         protected _alreadyWon: boolean = false;
         protected _tileGrids: Array<Array<Array<objects.Tile>>>; //objects.Tile[][] = [];
         protected _finished: boolean = false;
+        protected _camBottomBoundaries: number[];
 
         public start() {
             this._tileSpriteContainer = new createjs.SpriteContainer(spriteAtlas);
@@ -92,7 +93,7 @@ module scenes {
             }
             else {
                 for (let obj of this._objects) {
-                    if (Math.abs(obj.x - this._player.x) < 450 && !obj.isDead) {
+                    if (Math.abs(obj.x - this._player.x) < obj.updateDistance && !obj.isDead) {
                         obj.update();
                         obj.checkCollisionWithGrid(this._tileGrids[0]);
                         if (obj.checkCollisionWithPlayer(this._player))
@@ -125,7 +126,12 @@ module scenes {
 
         protected updateHUD(): void {
             this._timer += createjs.Ticker.interval;
-            this._timeText.text = "TIME  " + Math.floor((this._timer / 1000) / 60).toString() + ":" + Math.floor(((this._timer / 1000) % 60));
+            var time = this._timer / 1000;
+            var seconds = Math.floor(time % 60);
+            //if (seconds < 10)
+            this._timeText.text = createjs.Ticker.getMeasuredTickTime().toString();//"TIME  " + Math.floor(time / 60) + ":0" + seconds;
+            // else
+            //this._timeText.text = "TIME  " + Math.floor(time / 60) + ":" + seconds;
             this._ringsText.text = "RINGS  " + this._player.numRings;
         }
 
@@ -183,6 +189,7 @@ module scenes {
             }
             this._camRightBoundary = this._tileGrids[0].length * -16 + config.Screen.WIDTH;
             this._camBottomBoundary = this._tileGrids[0][0].length * -16 + config.Screen.HEIGHT;
+            console.log("max cam b boundary should be " + this._camBottomBoundary);
             this._spriteContainer.addChild(this._tileSpriteContainer);
 
             //increasing performance slightly more by disabling ticking for the tiles, which shouldn't move anyway
@@ -192,7 +199,15 @@ module scenes {
         }
 
         protected createGridsFromTileGroups(numGrids: Array<Array<Array<number>>>) {//, tileGroup: Array<Array<objects.Tile>>) {
-
+            this._camBottomBoundaries = Array<number>();
+            for (var x = 0; x < numGrids[0][0].length; x++) {
+                for (var y = 0; y < numGrids[0].length; y++) {
+                    if (numGrids[0][y][x] != 0) {
+                        //this._camBottomBoundaries[x] = y;
+                        this._camBottomBoundaries[x] =  ((y+1) * -256)+config.Screen.HEIGHT;
+                    }
+                }
+            }
             this._tileGrids = new Array<Array<Array<objects.Tile>>>();
             for (var g = 0; g < numGrids.length; g++) {
                 this._tileGrids[g] = new Array<Array<objects.Tile>>(numGrids[0][0].length * 16);
@@ -266,6 +281,11 @@ module scenes {
             return this._spriteContainer;
         }
 
+        public addObject(obj: objects.GameObject): void {
+            this._objects.push(obj);
+            this._spriteContainer.addChild(obj);
+        }
+
         protected updateCamera(): void {
             this._camDifR = this._spriteContainer.x - (this._rightCamBorder - this._player.x);
             this._camDifL = this._spriteContainer.x - (this._leftCamBorder - this._player.x);
@@ -306,17 +326,20 @@ module scenes {
                 else if (this._camDifD > 0)
                     this._spriteContainer.y -= Math.max(this._camDifD, -this._maxCamSpeed)
             }
-            //side wall boundarys
+            //side wall boundaries
             if (this._spriteContainer.x > 0)
                 this._spriteContainer.x = 0;
             else if (this._spriteContainer.x < this._camRightBoundary)
                 this._spriteContainer.x = this._camRightBoundary;
-            //upper and lower boundarys
+
+            //upper and lower boundaries
+            this._camBottomBoundary = this._camBottomBoundaries[Math.floor(-this._spriteContainer.x/256)];
             if (this._spriteContainer.y > 0)
                 this._spriteContainer.y = 0;
             else if (this._spriteContainer.y < this._camBottomBoundary)
                 this._spriteContainer.y = this._camBottomBoundary;
 
+            
             //move the background(s) in relation to everything else
             //when the background is made to scroll vertically as well, this code will be moved to its own method
             this._bg1.x = (Math.floor(-this._spriteContainer.x / this._bgWidth) * this._bgWidth);

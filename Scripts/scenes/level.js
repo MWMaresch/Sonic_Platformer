@@ -62,7 +62,7 @@ var scenes;
             }
             else {
                 for (let obj of this._objects) {
-                    if (Math.abs(obj.x - this._player.x) < 450 && !obj.isDead) {
+                    if (Math.abs(obj.x - this._player.x) < obj.updateDistance && !obj.isDead) {
                         obj.update();
                         obj.checkCollisionWithGrid(this._tileGrids[0]);
                         if (obj.checkCollisionWithPlayer(this._player))
@@ -90,7 +90,12 @@ var scenes;
         }
         updateHUD() {
             this._timer += createjs.Ticker.interval;
-            this._timeText.text = "TIME  " + Math.floor((this._timer / 1000) / 60).toString() + ":" + Math.floor(((this._timer / 1000) % 60));
+            var time = this._timer / 1000;
+            var seconds = Math.floor(time % 60);
+            //if (seconds < 10)
+            this._timeText.text = createjs.Ticker.getMeasuredTickTime().toString(); //"TIME  " + Math.floor(time / 60) + ":0" + seconds;
+            // else
+            //this._timeText.text = "TIME  " + Math.floor(time / 60) + ":" + seconds;
             this._ringsText.text = "RINGS  " + this._player.numRings;
         }
         createHUD() {
@@ -145,6 +150,7 @@ var scenes;
             }
             this._camRightBoundary = this._tileGrids[0].length * -16 + config.Screen.WIDTH;
             this._camBottomBoundary = this._tileGrids[0][0].length * -16 + config.Screen.HEIGHT;
+            console.log("max cam b boundary should be " + this._camBottomBoundary);
             this._spriteContainer.addChild(this._tileSpriteContainer);
             //increasing performance slightly more by disabling ticking for the tiles, which shouldn't move anyway
             this._tileSpriteContainer.tickEnabled = false;
@@ -152,6 +158,15 @@ var scenes;
             this._spriteContainer.snapToPixel = true;
         }
         createGridsFromTileGroups(numGrids) {
+            this._camBottomBoundaries = Array();
+            for (var x = 0; x < numGrids[0][0].length; x++) {
+                for (var y = 0; y < numGrids[0].length; y++) {
+                    if (numGrids[0][y][x] != 0) {
+                        //this._camBottomBoundaries[x] = y;
+                        this._camBottomBoundaries[x] = ((y + 1) * -256) + config.Screen.HEIGHT;
+                    }
+                }
+            }
             this._tileGrids = new Array();
             for (var g = 0; g < numGrids.length; g++) {
                 this._tileGrids[g] = new Array(numGrids[0][0].length * 16);
@@ -218,6 +233,10 @@ var scenes;
         getSpriteContainer() {
             return this._spriteContainer;
         }
+        addObject(obj) {
+            this._objects.push(obj);
+            this._spriteContainer.addChild(obj);
+        }
         updateCamera() {
             this._camDifR = this._spriteContainer.x - (this._rightCamBorder - this._player.x);
             this._camDifL = this._spriteContainer.x - (this._leftCamBorder - this._player.x);
@@ -257,12 +276,13 @@ var scenes;
                 else if (this._camDifD > 0)
                     this._spriteContainer.y -= Math.max(this._camDifD, -this._maxCamSpeed);
             }
-            //side wall boundarys
+            //side wall boundaries
             if (this._spriteContainer.x > 0)
                 this._spriteContainer.x = 0;
             else if (this._spriteContainer.x < this._camRightBoundary)
                 this._spriteContainer.x = this._camRightBoundary;
-            //upper and lower boundarys
+            //upper and lower boundaries
+            this._camBottomBoundary = this._camBottomBoundaries[Math.floor(-this._spriteContainer.x / 256)];
             if (this._spriteContainer.y > 0)
                 this._spriteContainer.y = 0;
             else if (this._spriteContainer.y < this._camBottomBoundary)

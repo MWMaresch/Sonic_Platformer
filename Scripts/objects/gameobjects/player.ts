@@ -55,14 +55,15 @@ module objects {
         private _rightMostGround: number;
         private _mode: number = Quadrant.Floor;
         private _alreadyCollided: boolean = false;
+        private _lowerDeathBoundary: number;
         public camOffsetY: number = 0;
 
-        constructor(imageString: string, x: number, y: number) {
+        constructor(imageString: string, x: number, y: number, deathBoundary?: number) {
             super(imageString, x, y);
             this._footSensorL = new Vector2(0, 0);
             this._footSensorR = new Vector2(0, 0);
-
-            this.width = 18;
+            this._lowerDeathBoundary = deathBoundary;
+            this.width = 14;
             this.height = 40;
             this._rings = 0;
             window.onkeydown = this._onKeyDown;
@@ -74,7 +75,6 @@ module objects {
                 //console.log("gspeed before rolling: " + this._gSpeed);
                 this._isRolling = true;
                 this.height = 30;
-                this.width = 14;
                 this._curFootDist = 15;
                 this.y += 5;
                 this.regY = 15;
@@ -92,7 +92,6 @@ module objects {
                 this._isJumping = false;
                 this._isRolling = false;
                 this.height = 40;
-                this.width = 18;
                 this._curFootDist = 20;
                 this.y -= 5;
                 this.regY = 20;
@@ -134,7 +133,7 @@ module objects {
             if (this._rings == 0) {
                 this.triggerDeath();
             }
-            //TODO: add rebound and hurt animation when we actually have rings
+            //TODO: add knockback and hurt animation when we actually have rings
         }
 
         public triggerDeath(): void {
@@ -144,12 +143,29 @@ module objects {
             this.gotoAndStop("dead");
         }
 
-        public bounce(): void {
-            this._velY = -Math.abs(this._velY);
+        public addVelocity(x: number, y: number) {
+            this.x += x;
+            this.y += y;
+            //this._gSpeed += x;
+            //this._velX += x;
+            //this._velY += y;
+        }
+
+        public rebound(y: number): void {
+            if (this.y > y || this._velY < 0) {
+                this._velY -= Math.sign(this._velY);
+            }
+            else if (this.y < y && this._velY > 0) {
+                //if we're holding jump or if we rolled off a platform onto the enemy, we bounce a bit higher
+                if (this._pressedJump || !this._isJumping)
+                    this._velY *= -1;
+                else
+                    this._velY = Math.max(-this._velY, -1);
+            }
         }
 
         public update(): void {
-            console.log("frame advance");
+            //console.log("frame advance");
             //super.update(); //reserved for other gameobjects, would just interfere with what we already have here
             if (!this._isDead) {
                 this._sensorsInAir = 0;
@@ -207,13 +223,14 @@ module objects {
             //check for and apply air movement
             if (!this._isGrounded) {
                 this._velY += this._GRAVITY;
-                if (this._isJumping || !this._isRolling) {
+                //the following is left in for future reference in case something goes wrong enough that I must resort back to it
+                /*if (this._isJumping || !this._isRolling) {
                     if (Math.abs(this._velX) > this._MAXRUNSPEED)
                         this._velX = this._MAXRUNSPEED * Math.sign(this._velX);
                 }
                 else
                     if (Math.abs(this._velX) > this._TERMINALVELOCITY)
-                        this._velX = this._TERMINALVELOCITY * Math.sign(this._velX);
+                        this._velX = this._TERMINALVELOCITY * Math.sign(this._velX);*/
                 //weird air drag
                 if (this._velY < 0 && this._velY > -4 && Math.abs(this._velX) >= 0.125)
                     this._velX *= this._AIRDRAG;
@@ -266,9 +283,9 @@ module objects {
                     this.spriteSheet.getAnimation("jump").speed = Math.min(1, Math.max(0, 1 / (5 - Math.abs(this._gSpeed))));
                 }
 
-                if (Math.abs(this._gSpeed) > 16) {
+                if (Math.abs(this._gSpeed) > this._TERMINALVELOCITY) {
                     console.log("reaching terminal velocity at " + this._gSpeed);
-                    this._gSpeed = Math.sign(this._gSpeed) * 16;
+                    this._gSpeed = Math.sign(this._gSpeed) * this._TERMINALVELOCITY;
                 }
 
                 this._velX = this._gSpeed * Math.cos(this._angleRadians);
@@ -342,10 +359,10 @@ module objects {
                     this._checkHeadCollision(-this._footSensorLength, this._topSensorL, tileGrid);
                 }
                 else {
-                    this._checkTunnelCollision(-10, this._topSensorR, tileGrid);
-                    this._checkTunnelCollision(-10, this._topSensorL, tileGrid);
-                    this._checkTunnelCollision(-20, this._topSensorR, tileGrid);
-                    this._checkTunnelCollision(-20, this._topSensorL, tileGrid);
+                    //this._checkTunnelCollision(-10, this._topSensorR, tileGrid);
+                    //this._checkTunnelCollision(-10, this._topSensorL, tileGrid);
+                    //this._checkTunnelCollision(-20, this._topSensorR, tileGrid);
+                    //this._checkTunnelCollision(-20, this._topSensorL, tileGrid);
                 }
 
                 //always check if our feet would hit something
@@ -354,10 +371,15 @@ module objects {
                     this._checkFootCollision(this._footSensorLength, this._footSensorL, tileGrid);
                 }
 
-                if (this.y > tileGrid[0].length * 16) {
+                /*if (this.y > this._lowerDeathBoundary) {
                     this.triggerDeath();
-                }
+                }*/
             }
+        }
+
+        public checkDeathBoundary(boundary:number):void{
+            if (this.y > boundary && !this._isDead)
+                this.triggerDeath();
         }
 
         private _checkTunnelCollision(length: number, sensorPos: Vector2, tileGrid: Tile[][]) {
@@ -383,12 +405,15 @@ module objects {
             //we actually need to check a multiple tiles that extend below us for when we run down a steep slope
             //only execute code from the first tile we detect, though
             if (this._mode == Quadrant.Floor) {
-                if (tileGrid[px][Math.floor((sensorPos.y + (this._curFootDist - 1)) / 16)] != null)
+                if (tileGrid[px][Math.floor((sensorPos.y + (this._curFootDist - 1)) / 16)] != null) {
                     tileGrid[px][Math.floor((sensorPos.y + (this._curFootDist - 1)) / 16)].onFloorCollision(this, sensorPos);
-                else if (tileGrid[px][Math.floor((sensorPos.y + 20) / 16)] != null)
-                    tileGrid[px][Math.floor((sensorPos.y + 20) / 16)].onFloorCollision(this, sensorPos);
-                else if (tileGrid[px][Math.floor((sensorPos.y + length) / 16)] != null)
+                }
+                else if (tileGrid[px][Math.floor((sensorPos.y + 28) / 16)] != null) {
+                    tileGrid[px][Math.floor((sensorPos.y + 28) / 16)].onFloorCollision(this, sensorPos);
+                }
+                else if (tileGrid[px][Math.floor((sensorPos.y + length) / 16)] != null) {
                     tileGrid[px][Math.floor((sensorPos.y + length) / 16)].onFloorCollision(this, sensorPos);
+                }
                 else if (!this._alreadyCollided) //if we detect no tile, then this foot must be in the air 
                     this._setAirSensor();
             }
@@ -581,7 +606,7 @@ module objects {
                         if (this._gSpeed < 0)
                             //we use a different (higher) value when turning around so we can stop quickly
                             this._gSpeed += this._DECELERATION;
-                        else
+                        else if (this._gSpeed < this._MAXRUNSPEED)
                             this._gSpeed += this._GROUNDACCELERATION;
                         this._accelerating = true;
                         this.scaleX = 1;
@@ -591,8 +616,10 @@ module objects {
                     this._gSpeed += 0.125;
             }
             else {
-                this._velX += this._AIRACCELERATION;
-                this._gSpeed += this._AIRACCELERATION;
+                if (this._velX < this._MAXRUNSPEED) {
+                    this._velX += this._AIRACCELERATION;
+                    this._gSpeed += this._AIRACCELERATION;
+                }
                 this._accelerating = true;
                 this.scaleX = 1;
             }
@@ -604,7 +631,7 @@ module objects {
                     if (this._hcLockTimer <= 0) {
                         if (this._gSpeed > 0)
                             this._gSpeed -= this._DECELERATION;
-                        else
+                        else if (this._gSpeed > -this._MAXRUNSPEED)
                             this._gSpeed -= this._GROUNDACCELERATION;
                         this._accelerating = true;
                         //we're facing left
@@ -615,8 +642,10 @@ module objects {
                     this._gSpeed -= 0.125;
             }
             else {
-                this._velX -= this._AIRACCELERATION;
-                this._gSpeed -= this._AIRACCELERATION;
+                if (this._velX > -this._MAXRUNSPEED) {
+                    this._velX -= this._AIRACCELERATION;
+                    this._gSpeed -= this._AIRACCELERATION;
+                }
                 this._accelerating = true;
                 this.scaleX = -1;
             }

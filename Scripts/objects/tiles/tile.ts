@@ -202,17 +202,14 @@ module objects {
 
         //so we don't need to do any bounding box or radius if statements
         public onFloorCollision(other: GameObject, sensor: Vector2): void {
-            console.log("colliding with empty tile");
         }
         public onFloorCollisionR(player: Player, sensor: Vector2): void { }
         public onFloorCollisionU(player: Player, sensor: Vector2): void { }
         public onFloorCollisionL(player: Player, sensor: Vector2): void { }
         public onCeilingCollision(player: Player, sensor: Vector2): void { }
         public onLeftWallCollision(other: GameObject, sensor: Vector2): void {
-            console.log("colliding with empty tile");
         }
         public onRightWallCollision(other: GameObject, sensor: Vector2): void {
-            console.log("colliding with empty tile");
         }
     }
 }

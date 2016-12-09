@@ -1,7 +1,7 @@
 var objects;
 (function (objects) {
     class Player extends objects.GameObject {
-        constructor(imageString, x, y) {
+        constructor(imageString, x, y, deathBoundary) {
             super(imageString, x, y);
             //constant variables
             //if only the const or readonly keywords could be used here
@@ -47,7 +47,8 @@ var objects;
             this.camOffsetY = 0;
             this._footSensorL = new objects.Vector2(0, 0);
             this._footSensorR = new objects.Vector2(0, 0);
-            this.width = 18;
+            this._lowerDeathBoundary = deathBoundary;
+            this.width = 14;
             this.height = 40;
             this._rings = 0;
             window.onkeydown = this._onKeyDown;
@@ -58,7 +59,6 @@ var objects;
                 //console.log("gspeed before rolling: " + this._gSpeed);
                 this._isRolling = true;
                 this.height = 30;
-                this.width = 14;
                 this._curFootDist = 15;
                 this.y += 5;
                 this.regY = 15;
@@ -74,7 +74,6 @@ var objects;
                 this._isJumping = false;
                 this._isRolling = false;
                 this.height = 40;
-                this.width = 18;
                 this._curFootDist = 20;
                 this.y -= 5;
                 this.regY = 20;
@@ -106,7 +105,7 @@ var objects;
             if (this._rings == 0) {
                 this.triggerDeath();
             }
-            //TODO: add rebound and hurt animation when we actually have rings
+            //TODO: add knockback and hurt animation when we actually have rings
         }
         triggerDeath() {
             this._velX = 0;
@@ -114,11 +113,27 @@ var objects;
             this._isDead = true;
             this.gotoAndStop("dead");
         }
-        bounce() {
-            this._velY = -Math.abs(this._velY);
+        addVelocity(x, y) {
+            this.x += x;
+            this.y += y;
+            //this._gSpeed += x;
+            //this._velX += x;
+            //this._velY += y;
+        }
+        rebound(y) {
+            if (this.y > y || this._velY < 0) {
+                this._velY -= Math.sign(this._velY);
+            }
+            else if (this.y < y && this._velY > 0) {
+                //if we're holding jump or if we rolled off a platform onto the enemy, we bounce a bit higher
+                if (this._pressedJump || !this._isJumping)
+                    this._velY *= -1;
+                else
+                    this._velY = Math.max(-this._velY, -1);
+            }
         }
         update() {
-            console.log("frame advance");
+            //console.log("frame advance");
             //super.update(); //reserved for other gameobjects, would just interfere with what we already have here
             if (!this._isDead) {
                 this._sensorsInAir = 0;
@@ -169,12 +184,14 @@ var objects;
             //check for and apply air movement
             if (!this._isGrounded) {
                 this._velY += this._GRAVITY;
-                if (this._isJumping || !this._isRolling) {
+                //the following is left in for future reference in case something goes wrong enough that I must resort back to it
+                /*if (this._isJumping || !this._isRolling) {
                     if (Math.abs(this._velX) > this._MAXRUNSPEED)
                         this._velX = this._MAXRUNSPEED * Math.sign(this._velX);
                 }
-                else if (Math.abs(this._velX) > this._TERMINALVELOCITY)
-                    this._velX = this._TERMINALVELOCITY * Math.sign(this._velX);
+                else
+                    if (Math.abs(this._velX) > this._TERMINALVELOCITY)
+                        this._velX = this._TERMINALVELOCITY * Math.sign(this._velX);*/
                 //weird air drag
                 if (this._velY < 0 && this._velY > -4 && Math.abs(this._velX) >= 0.125)
                     this._velX *= this._AIRDRAG;
@@ -224,9 +241,9 @@ var objects;
                         this._gSpeed -= (this._FRICTION / 2) * Math.sign(this._gSpeed);
                     this.spriteSheet.getAnimation("jump").speed = Math.min(1, Math.max(0, 1 / (5 - Math.abs(this._gSpeed))));
                 }
-                if (Math.abs(this._gSpeed) > 16) {
+                if (Math.abs(this._gSpeed) > this._TERMINALVELOCITY) {
                     console.log("reaching terminal velocity at " + this._gSpeed);
-                    this._gSpeed = Math.sign(this._gSpeed) * 16;
+                    this._gSpeed = Math.sign(this._gSpeed) * this._TERMINALVELOCITY;
                 }
                 this._velX = this._gSpeed * Math.cos(this._angleRadians);
                 this._velY = this._gSpeed * -Math.sin(this._angleRadians);
@@ -294,20 +311,17 @@ var objects;
                     this._checkHeadCollision(-this._footSensorLength, this._topSensorL, tileGrid);
                 }
                 else {
-                    this._checkTunnelCollision(-10, this._topSensorR, tileGrid);
-                    this._checkTunnelCollision(-10, this._topSensorL, tileGrid);
-                    this._checkTunnelCollision(-20, this._topSensorR, tileGrid);
-                    this._checkTunnelCollision(-20, this._topSensorL, tileGrid);
                 }
                 //always check if our feet would hit something
                 if (this._velY >= 0 || this._isGrounded) {
                     this._checkFootCollision(this._footSensorLength, this._footSensorR, tileGrid);
                     this._checkFootCollision(this._footSensorLength, this._footSensorL, tileGrid);
                 }
-                if (this.y > tileGrid[0].length * 16) {
-                    this.triggerDeath();
-                }
             }
+        }
+        checkDeathBoundary(boundary) {
+            if (this.y > boundary && !this._isDead)
+                this.triggerDeath();
         }
         _checkTunnelCollision(length, sensorPos, tileGrid) {
             if (tileGrid[Math.floor(sensorPos.x / 16)][Math.floor((length + sensorPos.y) / 16)] != null) {
@@ -331,12 +345,15 @@ var objects;
             //we actually need to check a multiple tiles that extend below us for when we run down a steep slope
             //only execute code from the first tile we detect, though
             if (this._mode == Quadrant.Floor) {
-                if (tileGrid[px][Math.floor((sensorPos.y + (this._curFootDist - 1)) / 16)] != null)
+                if (tileGrid[px][Math.floor((sensorPos.y + (this._curFootDist - 1)) / 16)] != null) {
                     tileGrid[px][Math.floor((sensorPos.y + (this._curFootDist - 1)) / 16)].onFloorCollision(this, sensorPos);
-                else if (tileGrid[px][Math.floor((sensorPos.y + 20) / 16)] != null)
-                    tileGrid[px][Math.floor((sensorPos.y + 20) / 16)].onFloorCollision(this, sensorPos);
-                else if (tileGrid[px][Math.floor((sensorPos.y + length) / 16)] != null)
+                }
+                else if (tileGrid[px][Math.floor((sensorPos.y + 28) / 16)] != null) {
+                    tileGrid[px][Math.floor((sensorPos.y + 28) / 16)].onFloorCollision(this, sensorPos);
+                }
+                else if (tileGrid[px][Math.floor((sensorPos.y + length) / 16)] != null) {
                     tileGrid[px][Math.floor((sensorPos.y + length) / 16)].onFloorCollision(this, sensorPos);
+                }
                 else if (!this._alreadyCollided)
                     this._setAirSensor();
             }
@@ -513,7 +530,7 @@ var objects;
                         if (this._gSpeed < 0)
                             //we use a different (higher) value when turning around so we can stop quickly
                             this._gSpeed += this._DECELERATION;
-                        else
+                        else if (this._gSpeed < this._MAXRUNSPEED)
                             this._gSpeed += this._GROUNDACCELERATION;
                         this._accelerating = true;
                         this.scaleX = 1;
@@ -523,8 +540,10 @@ var objects;
                     this._gSpeed += 0.125;
             }
             else {
-                this._velX += this._AIRACCELERATION;
-                this._gSpeed += this._AIRACCELERATION;
+                if (this._velX < this._MAXRUNSPEED) {
+                    this._velX += this._AIRACCELERATION;
+                    this._gSpeed += this._AIRACCELERATION;
+                }
                 this._accelerating = true;
                 this.scaleX = 1;
             }
@@ -535,7 +554,7 @@ var objects;
                     if (this._hcLockTimer <= 0) {
                         if (this._gSpeed > 0)
                             this._gSpeed -= this._DECELERATION;
-                        else
+                        else if (this._gSpeed > -this._MAXRUNSPEED)
                             this._gSpeed -= this._GROUNDACCELERATION;
                         this._accelerating = true;
                         //we're facing left
@@ -546,8 +565,10 @@ var objects;
                     this._gSpeed -= 0.125;
             }
             else {
-                this._velX -= this._AIRACCELERATION;
-                this._gSpeed -= this._AIRACCELERATION;
+                if (this._velX > -this._MAXRUNSPEED) {
+                    this._velX -= this._AIRACCELERATION;
+                    this._gSpeed -= this._AIRACCELERATION;
+                }
                 this._accelerating = true;
                 this.scaleX = -1;
             }

@@ -162,17 +162,14 @@ var objects;
         update() { }
         //so we don't need to do any bounding box or radius if statements
         onFloorCollision(other, sensor) {
-            console.log("colliding with empty tile");
         }
         onFloorCollisionR(player, sensor) { }
         onFloorCollisionU(player, sensor) { }
         onFloorCollisionL(player, sensor) { }
         onCeilingCollision(player, sensor) { }
         onLeftWallCollision(other, sensor) {
-            console.log("colliding with empty tile");
         }
         onRightWallCollision(other, sensor) {
-            console.log("colliding with empty tile");
         }
     }
     objects.Tile = Tile;

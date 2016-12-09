@@ -34,9 +34,7 @@ module scenes {
 
             //push whatever you want into the objects list here and it will automatically be updated every frame
             //enemies
-            this._objects.push(new objects.Motobug(813, 925));
-            this._objects.push(new objects.Crabmeat(2208, 831));
-            this._objects.push(new objects.Crabmeat(2400, 752));
+
             this._objects.push(new objects.Spike(3368, 883));
             this._objects.push(new objects.Spike(3416, 886));
             this._objects.push(new objects.Spike(3464, 887));
@@ -57,6 +55,9 @@ module scenes {
             this._objects.push(new objects.Rock(4056, 626));
             this._objects.push(new objects.Rock(7544, 1142));
             this._objects.push(new objects.Rock(8400, 880));
+            this._objects.push(new objects.Motobug(813, 925));
+            this._objects.push(new objects.Crabmeat(2208, 831));
+            this._objects.push(new objects.Crabmeat(2400, 752));
 
             //pathswitchers for foreground and background layers
             //whenever we detect a loop in the grid, put pathswitchers around it
@@ -79,7 +80,7 @@ module scenes {
                 this._spriteContainer.addChild(obj);
 
             //adding everything to a single sprite container reduces the amount of times we need to draw things to the stage, therefore drastically increasing performance
-            this._player = new objects.Player("stand", 80, 940);
+            this._player = new objects.Player("stand", 80, 940, this._act1Grids[0].length*16*16);
             //this._player = new objects.Player("stand", 5800, 588);
             //this._player = new objects.Player("stand", 9000, 1088);
             this._spriteContainer.addChild(this._player);
@@ -94,7 +95,6 @@ module scenes {
 
         public start(): void {
             super.start();
-
         }
 
         public update(): void {
@@ -135,7 +135,7 @@ module scenes {
     export class GreenHillZone2 extends scenes.Level {
         private _returnBtn: objects.Button;
 
-        private _act1Grids: number[][][];
+        private _act2Grids: number[][][];
 
         constructor() {
             super();
@@ -159,7 +159,7 @@ module scenes {
 
             //push whatever you want into the objects list here and it will automatically be updated every frame
             //enemies
-            this._objects.push(new objects.Motobug(813, 925));
+            this._objects.push(new objects.FloatingPlatform(200,630,true,false));
 
             //pathswitchers for foreground and background layers
             //whenever we detect a loop in the grid, put pathswitchers around it
@@ -182,7 +182,7 @@ module scenes {
                 this._spriteContainer.addChild(obj);
 
             //adding everything to a single sprite container reduces the amount of times we need to draw things to the stage, therefore drastically increasing performance
-            this._player = new objects.Player("jump", 80, 300);
+            this._player = new objects.Player("stand", 80, 300, this._act2Grids[0].length * 16 *16);
             //this._player = new objects.Player("stand", 5800, 588);
             //this._player = new objects.Player("stand", 9000, 1088);
             this._spriteContainer.addChild(this._player);
@@ -204,6 +204,7 @@ module scenes {
                 this.updateCamera();
                 this.updateObjects();
                 this._player.checkCollisionWithGrid(this._tileGrids[this._player.curLayer]);
+                this._player.checkDeathBoundary(-this._camBottomBoundary + config.Screen.HEIGHT);
             }
             else if (!this._alreadyWon) {
                 //we only want this to execute once when sonic wins, so we do a check first
