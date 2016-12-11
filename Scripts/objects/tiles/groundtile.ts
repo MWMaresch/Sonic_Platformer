@@ -59,6 +59,7 @@ module objects {
         public onFloorCollision(other: GameObject, sensor: Vector2): void {
             var px = sensor.x / 16;
             var h = (px - Math.floor(px)) * 16;
+            //console.log("running on ground at (" + this.x + ", " + this.y + "), angles are " + this.getAngles());
             if (this._topHeightmap[Math.floor(h)] < 16)
                 other.collideWithGround(this.y + this._topHeightmap[Math.floor(h)], this._topAngle);
             else {
@@ -70,6 +71,7 @@ module objects {
         public onFloorCollisionR(player: Player, sensor: Vector2): void {
             var py = sensor.y / 16;
             var h = (py - Math.floor(py)) * 16;
+            //console.log("running on right wall at (" + this.x + ", " + this.y + "), angles are " + this.getAngles());
             player.collideWithRightGround(this.x + this._leftHeightmap[Math.floor(h)], this._lSideAngle);
         }
 
@@ -77,6 +79,7 @@ module objects {
         public onFloorCollisionU(player: Player, sensor: Vector2): void {
             var px = sensor.x / 16;
             var h = (px - Math.floor(px)) * 16;
+            //console.log("running on upper wall at (" + this.x + ", " + this.y + "), angles are " + this.getAngles());
             player.collideWithUpperGround(this.y + this._bottomHeightmap[Math.floor(h)], this._bottomAngle);
         }
 
@@ -84,6 +87,7 @@ module objects {
         public onFloorCollisionL(player: Player, sensor: Vector2): void {
             var py = sensor.y / 16;
             var h = (py - Math.floor(py)) * 16;
+            //console.log("running on left wall at (" + this.x + ", " + this.y + "), angles are " + this.getAngles());
             player.collideWithLeftGround(this.x + this._rightHeightmap[Math.floor(h)], this._rSideAngle);
         }
 
@@ -99,7 +103,6 @@ module objects {
         }
 
         //the player moved into this block from the side
-        //TODO: create and use a more accurate detection method using the sensor and side heightmaps
         public onLeftWallCollision(other: GameObject, sensor: Vector2) {
             if (this._isSolid) {
                 //var arrayIndex = Math.floor(sensor.y - this.y);

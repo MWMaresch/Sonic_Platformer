@@ -6,10 +6,6 @@ var objects;
             this._velX = 0;
             this._velY = 0;
             this._speed = 1;
-            this.start();
-        }
-        start() {
-            super.start();
             this._velX = -this._speed;
         }
         update() {
@@ -37,11 +33,10 @@ var objects;
             if (collision.boxCheck(player, this)) {
                 if (player.isRolling) {
                     player.rebound(this.y);
-                    this._isDead = true;
-                    return true;
+                    this.destroy();
                 }
                 else
-                    player.getHurt();
+                    player.getHurt(this.x);
             }
         }
     }

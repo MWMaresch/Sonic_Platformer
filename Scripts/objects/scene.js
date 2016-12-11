@@ -25,8 +25,8 @@ var objects;
         stopTimer() { }
         endLevel() { }
         showScore() { }
-        addObject(obj) {
-        }
+        addObject(obj) { }
+        removeObject(obj) { }
     }
     objects.Scene = Scene;
 })(objects || (objects = {}));

@@ -6,8 +6,8 @@ module objects {
             super("empty", x, y);
             this.width = width;
             this.height = height;
-            this.x += width/2;
-            this.y += height/2;
+            this.x += width / 2;
+            this.y += height / 2;
             this._layerSwitch = layer;
             this.visible = false;
         }
@@ -17,9 +17,14 @@ module objects {
         public update(): void { }
 
         public checkCollisionWithPlayer(player: objects.Player) {
-            if (collision.boxCheck(player, this)) {
-                currentScene.getSpriteContainer().setChildIndex(player, (currentScene.getSpriteContainer().numChildren - 1) - ((currentScene.getSpriteContainer().numChildren - 1) * this._layerSwitch));
-                player.curLayer = this._layerSwitch;
+            if (player.curLayer != this._layerSwitch) {
+                if (collision.boxCheck(player, this)) {
+                    if (this._layerSwitch == 1)
+                        currentScene.getSpriteContainer().setChildIndex(player, 1);
+                    else
+                        currentScene.getSpriteContainer().setChildIndex(player, (currentScene.getSpriteContainer().numChildren - 1));
+                    player.curLayer = this._layerSwitch;
+                }
             }
         }
     }

@@ -4,7 +4,6 @@ var objects;
         constructor(x, y, velX, velY, useGravity) {
             super("yellowProjectile", x, y);
             this._GRAVITY = 0.21875;
-            this.start();
             this._velX = velX;
             this._velY = velY;
             this._useGravity = useGravity;
@@ -12,13 +11,13 @@ var objects;
                 this.gotoAndPlay("redProjectile");
         }
         update() {
-            super.update();
             if (this._useGravity)
                 this._velY += this._GRAVITY;
+            super.update();
         }
         checkCollisionWithPlayer(player) {
             if (collision.boxCheck(player, this)) {
-                player.getHurt();
+                player.getHurt(this.x);
             }
         }
     }

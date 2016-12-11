@@ -30,7 +30,7 @@ module objects {
         public stopTimer() : void {}
         public endLevel(): void{}
         public showScore(): void{}
-        public addObject(obj: objects.GameObject): void {
-        }
+        public addObject(obj: objects.GameObject): void {}
+        public removeObject(obj: objects.GameObject): void {}
     }
 }

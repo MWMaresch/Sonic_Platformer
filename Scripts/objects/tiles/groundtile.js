@@ -53,6 +53,7 @@ var objects;
         onFloorCollision(other, sensor) {
             var px = sensor.x / 16;
             var h = (px - Math.floor(px)) * 16;
+            //console.log("running on ground at (" + this.x + ", " + this.y + "), angles are " + this.getAngles());
             if (this._topHeightmap[Math.floor(h)] < 16)
                 other.collideWithGround(this.y + this._topHeightmap[Math.floor(h)], this._topAngle);
             else {
@@ -63,18 +64,21 @@ var objects;
         onFloorCollisionR(player, sensor) {
             var py = sensor.y / 16;
             var h = (py - Math.floor(py)) * 16;
+            //console.log("running on right wall at (" + this.x + ", " + this.y + "), angles are " + this.getAngles());
             player.collideWithRightGround(this.x + this._leftHeightmap[Math.floor(h)], this._lSideAngle);
         }
         //the player is running on the bottom of this block
         onFloorCollisionU(player, sensor) {
             var px = sensor.x / 16;
             var h = (px - Math.floor(px)) * 16;
+            //console.log("running on upper wall at (" + this.x + ", " + this.y + "), angles are " + this.getAngles());
             player.collideWithUpperGround(this.y + this._bottomHeightmap[Math.floor(h)], this._bottomAngle);
         }
         //the player is running on the left side of this block
         onFloorCollisionL(player, sensor) {
             var py = sensor.y / 16;
             var h = (py - Math.floor(py)) * 16;
+            //console.log("running on left wall at (" + this.x + ", " + this.y + "), angles are " + this.getAngles());
             player.collideWithLeftGround(this.x + this._rightHeightmap[Math.floor(h)], this._rSideAngle);
         }
         //TODO: if the heightmap returned is at the very far edge, tell the player to check below the tile
@@ -87,7 +91,6 @@ var objects;
             }
         }
         //the player moved into this block from the side
-        //TODO: create and use a more accurate detection method using the sensor and side heightmaps
         onLeftWallCollision(other, sensor) {
             if (this._isSolid) {
                 //var arrayIndex = Math.floor(sensor.y - this.y);

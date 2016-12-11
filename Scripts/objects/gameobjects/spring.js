@@ -1,10 +1,11 @@
 var objects;
 (function (objects) {
-    class Rock extends objects.GameObject {
+    class Spring extends objects.GameObject {
         constructor(x, y) {
-            super("rock", x, y);
-            this.width = 32;
+            super("yellowSpring", x, y);
+            this.y -= 9;
         }
+        get topLine() { return this.y; }
         update() { }
         checkCollisionWithPlayer(player) {
             if (collision.sensorBoxCheck(player.leftSideSensor, this)) {
@@ -15,10 +16,11 @@ var objects;
             }
             else if (player.velY >= 0 && (collision.sensorBoxCheck(player.leftFootSensor, this)
                 || collision.sensorBoxCheck(player.rightFootSensor, this))) {
-                player.collideWithGround(this.topLine, 0);
+                this.gotoAndPlay("yellowSpringAnim1");
+                player.bounce(0, -10);
             }
         }
     }
-    objects.Rock = Rock;
+    objects.Spring = Spring;
 })(objects || (objects = {}));
-//# sourceMappingURL=rock.js.map
+//# sourceMappingURL=spring.js.map

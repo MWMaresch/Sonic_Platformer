@@ -25,6 +25,9 @@
 /// <reference path="../objects/gameobjects/goalplate.ts" />
 /// <reference path="../objects/gameobjects/projectile.ts" />
 /// <reference path="../objects/gameobjects/floatingplatform.ts" />
+/// <reference path="../objects/gameobjects/ring.ts" />
+/// <reference path="../objects/gameobjects/spring.ts" />
+/// <reference path="../objects/gameobjects/poof.ts" />
 
 /// <reference path="../managers/collision.ts" />
 

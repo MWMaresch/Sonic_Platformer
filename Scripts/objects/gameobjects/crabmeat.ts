@@ -8,17 +8,11 @@ module objects {
 
         constructor(x: number, y: number) {
             super("crabmeat_move", x, y);
-            this.start();
+            this._velX = -this._speed;
             this.width = 35;
         }
 
-        public start(): void {
-            super.start();
-            this._velX = -this._speed;
-        }
-
         public update(): void {
-            super.update();
             this._idleTimer--;
             if (this._idleTimer == 60) {
                 //if we shoot the first time, it would be very hard to speedrun the game
@@ -34,9 +28,10 @@ module objects {
                 this.gotoAndPlay("crabmeat_move");
                 this._velX = this._speed * this._direction;
             }
+            super.update();
         }
 
-        private _stopAndWait(direction: number) {
+        private _stopAndTurn(direction: number) {
             if (this._direction != direction) {
                 this._velX = 0;
                 this._idleTimer = 120;
@@ -47,31 +42,30 @@ module objects {
 
         protected detectLeftLedge() {
             super.detectLeftLedge();
-            this._stopAndWait(1);
+            this._stopAndTurn(1);
         }
 
         protected detectRightLedge() {
             super.detectRightLedge();
-            this._stopAndWait(-1);
+            this._stopAndTurn(-1);
         }
 
         public collideWithRightWall(x: number) {
-            this._stopAndWait(-1);
+            this._stopAndTurn(-1);
         }
 
         public collideWithLeftWall(x: number) {
-            this._stopAndWait(1);
+            this._stopAndTurn(1);
         }
 
         public checkCollisionWithPlayer(player: objects.Player) {
             if (collision.boxCheck(player, this)) {
                 if (player.isRolling) {
                     player.rebound(this.y);
-                    this._isDead = true;
-                    return true;
+                    this.destroy();
                 }
                 else
-                    player.getHurt();
+                    player.getHurt(this.x);
             }
         }
     }

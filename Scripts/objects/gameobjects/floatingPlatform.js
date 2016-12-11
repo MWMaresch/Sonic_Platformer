@@ -50,8 +50,7 @@ var objects;
                 if (this._movementTimer >= 60)
                     this._velY += 0.21;
             }
-            this.x += this._velX;
-            this.y += this._velY;
+            super.update();
         }
         checkCollisionWithPlayer(player) {
             if (player.velY >= 0 && player.y < this.topLine && (collision.sensorBoxCheck(player.leftFootSensor, this)

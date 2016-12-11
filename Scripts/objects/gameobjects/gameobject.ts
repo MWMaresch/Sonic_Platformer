@@ -11,6 +11,8 @@ module objects {
         protected _velX: number = 0;
         protected _velY: number = 0;
         protected _higherGround: number;
+        protected _deathAnim: string = "poof";
+        protected _deathTimer: number = 40;
 
         // PUBLIC PROPERTIES
         get width(): number { return this._width }
@@ -23,25 +25,16 @@ module objects {
         get updateDistance(): number { return this._updateDistance; }
 
         //to make the collision class more readable
-        get topLine(): number {
-            return this.y - this.height / 2;
-        }
-        get bottomLine(): number {
-            return this.y + this.height / 2;
-        }
-        get rightLine(): number {
-            return this.x + this.width / 2;
-        }
-        get leftLine(): number {
-            return this.x - this.width / 2;
-        }
+        get topLine(): number { return this.y - this.height / 2; }
+        get bottomLine(): number { return this.y + this.height / 2; }
+        get rightLine(): number { return this.x + this.width / 2; }
+        get leftLine(): number { return this.x - this.width / 2; }
 
         constructor(imageString: string, x?: number, y?: number) {
             super(spriteAtlas, imageString);
             this._initialize(imageString);
             this.x = x;
             this.y = y;
-            this.start();
         }
 
         private _initialize(imageString: string): void {
@@ -51,28 +44,14 @@ module objects {
             this.regY = this.height / 2;
         }
 
-        public start(): void {
-            this._sideSensorL = new Vector2(this.x - this.width / 2, (this.y + this.height / 2) - 14);
-            this._sideSensorR = new Vector2(this.x + this.width / 2, (this.y + this.height / 2) - 14);
-            this._footSensorL = new Vector2(this._sideSensorL.x + 2, (this.y + this.height / 2) - 2)
-            this._footSensorR = new Vector2(this._sideSensorR.x - 2, (this.y + this.height / 2) - 2)
-        }
-
         public update(): void {
-            //updating position
             this.x += this._velX;
             this.y += this._velY;
+        }
 
-            //updating sensor positions
-            this._sideSensorL.x = this.x - this.width / 2;
-            this._sideSensorR.x = this.x + this.width / 2;
-            this._sideSensorL.y = (this.y + this.height / 2) - 14;
-            this._sideSensorR.y = (this.y + this.height / 2) - 14;
-
-            this._footSensorL.x = this._sideSensorL.x + 2;
-            this._footSensorR.x = this._sideSensorR.x - 2;
-            this._footSensorL.y = (this.y + this.height / 2) + 1;
-            this._footSensorR.y = (this.y + this.height / 2) + 1;
+        public destroy(): void {
+            currentScene.addObject(new Poof(this._deathAnim, this.x, this.y, this._deathTimer));
+            currentScene.removeObject(this);
         }
 
         public checkCollisionWithGrid(tileGrid: Tile[][]) { }

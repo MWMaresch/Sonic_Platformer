@@ -26,13 +26,18 @@ module scenes {
         protected _ringsText: createjs.BitmapText;
 
         //background
-        protected _bg1: createjs.Sprite;
-        protected _bg2: createjs.Sprite;
-        protected _bgWidth: number;
+        //protected _bg1: createjs.Sprite;
+        protected _bgWallImages: createjs.Sprite[];
+        protected _bgSkyImages: createjs.Sprite[];
+        protected _bgWaterImages: createjs.Sprite[];
+        //protected _bgWaterImage: createjs.Sprite;
+        //protected _bgWidth: number;
 
         //sprite containers
         protected _tileSpriteContainer: createjs.SpriteContainer;
         protected _spriteContainer: createjs.SpriteContainer;
+        protected _bgContainer: createjs.SpriteContainer;
+        protected _bgSkyContainer: createjs.SpriteContainer;
         protected _hudContainer: createjs.SpriteContainer;
 
         //other variables
@@ -44,8 +49,13 @@ module scenes {
         public start() {
             this._tileSpriteContainer = new createjs.SpriteContainer(spriteAtlas);
             this._spriteContainer = new createjs.SpriteContainer(spriteAtlas);
+            this._bgContainer = new createjs.SpriteContainer(spriteAtlas);
+            this._bgSkyContainer = new createjs.SpriteContainer(spriteAtlas);
             this._hudContainer = new createjs.SpriteContainer(fontSpriteSheet);
             this._objects = [];
+            this._bgWallImages = [];
+            this._bgSkyImages = [];
+            this._bgWaterImages = [];
             this._timer = 0;
             canPause = true;
             gameWon = false;
@@ -84,8 +94,8 @@ module scenes {
         protected updateObjects(): void {
             if (this._player.isDead) {
                 for (let obj of this._objects) {
+                    obj.update();
                     if (!obj.isDead) {
-                        obj.update();
                         obj.checkCollisionWithGrid(this._tileGrids[0]);
                     }
                 }
@@ -93,11 +103,12 @@ module scenes {
             }
             else {
                 for (let obj of this._objects) {
-                    if (Math.abs(obj.x - this._player.x) < obj.updateDistance && !obj.isDead) {
+                    if (Math.abs(obj.x - this._player.x) < obj.updateDistance) {
                         obj.update();
-                        obj.checkCollisionWithGrid(this._tileGrids[0]);
-                        if (obj.checkCollisionWithPlayer(this._player))
-                            this._spriteContainer.removeChild(obj);
+                        if (!obj.isDead) {
+                            obj.checkCollisionWithGrid(this._tileGrids[0]);
+                            obj.checkCollisionWithPlayer(this._player);
+                        }
                     }
                 }
             }
@@ -116,23 +127,85 @@ module scenes {
         }
 
         protected createBackground(): void {
+            for (let i = 0; i < 3; i++) {
+                this._bgWaterImages[i] = new createjs.Sprite(spriteAtlas, "ghzWater");
+                this._bgWaterImages[i].y = 112;
+                this._bgWaterImages[i].x = 256 * i;
+                this._bgContainer.addChild(this._bgWaterImages[i]);
+            }
+
+            this._bgWallImages.push(
+                new createjs.Sprite(spriteAtlas, "ghzbg0"),
+                new createjs.Sprite(spriteAtlas, "ghzbg1"),
+                new createjs.Sprite(spriteAtlas, "ghzbg2"),
+                new createjs.Sprite(spriteAtlas, "ghzbg3"),
+                new createjs.Sprite(spriteAtlas, "ghzbg1"),
+                new createjs.Sprite(spriteAtlas, "ghzbg4"),
+                new createjs.Sprite(spriteAtlas, "ghzbg5"),
+                new createjs.Sprite(spriteAtlas, "ghzbg6"),
+                new createjs.Sprite(spriteAtlas, "ghzbg0"),
+                new createjs.Sprite(spriteAtlas, "ghzbg2"),
+                new createjs.Sprite(spriteAtlas, "ghzbg4"),
+                new createjs.Sprite(spriteAtlas, "ghzbg3"),
+                new createjs.Sprite(spriteAtlas, "ghzbg5"),
+                new createjs.Sprite(spriteAtlas, "ghzbg0"),
+                new createjs.Sprite(spriteAtlas, "ghzbg6"),
+                new createjs.Sprite(spriteAtlas, "ghzbg6"),
+                //then it loops
+                new createjs.Sprite(spriteAtlas, "ghzbg0"),
+                new createjs.Sprite(spriteAtlas, "ghzbg1"),
+                new createjs.Sprite(spriteAtlas, "ghzbg2"),
+                new createjs.Sprite(spriteAtlas, "ghzbg3"),
+                new createjs.Sprite(spriteAtlas, "ghzbg1")
+            )
+            for (let img = 0; img < this._bgWallImages.length; img++) {
+                this._bgWallImages[img].x = img * 256;
+                this._bgWallImages[img].y = 74;
+                this._bgContainer.addChild(this._bgWallImages[img]);
+            }
+            this._spriteContainer.addChild(this._bgContainer);
+
+            this._bgSkyImages.push(
+                new createjs.Sprite(spriteAtlas, "ghzsky0"),
+                new createjs.Sprite(spriteAtlas, "ghzsky1"),
+                new createjs.Sprite(spriteAtlas, "ghzsky3"),
+                new createjs.Sprite(spriteAtlas, "ghzsky4"),
+                new createjs.Sprite(spriteAtlas, "ghzsky5"),
+                new createjs.Sprite(spriteAtlas, "ghzsky6"),
+                new createjs.Sprite(spriteAtlas, "ghzsky0"),
+                new createjs.Sprite(spriteAtlas, "ghzsky2"),
+                new createjs.Sprite(spriteAtlas, "ghzsky4"),
+                new createjs.Sprite(spriteAtlas, "ghzsky1"),
+                new createjs.Sprite(spriteAtlas, "ghzsky5"),
+                new createjs.Sprite(spriteAtlas, "ghzsky1"),
+                new createjs.Sprite(spriteAtlas, "ghzsky6"),
+                new createjs.Sprite(spriteAtlas, "ghzsky6"),
+                new createjs.Sprite(spriteAtlas, "ghzsky0")
+            )
+            for (let img = 0; img < this._bgSkyImages.length; img++) {
+                this._bgSkyImages[img].x = img * 256;
+                this._bgSkyImages[img].y = -37.9;
+                this._bgSkyContainer.addChild(this._bgSkyImages[img]);
+            }
+            this._bgContainer.addChild(this._bgSkyContainer);
+
+
+            /*
             this._bg1 = new createjs.Sprite(spriteAtlas, "nightsky");
-            this._bg2 = new createjs.Sprite(spriteAtlas, "nightsky");
             this._bgWidth = this._bg1.getBounds().width - 1;
-            this._bg2.x = this._bgWidth;
             this._spriteContainer.addChild(this._bg1);
-            this._spriteContainer.addChild(this._bg2);
+            */
         }
 
         protected updateHUD(): void {
             this._timer += createjs.Ticker.interval;
             var time = this._timer / 1000;
             var seconds = Math.floor(time % 60);
-            //if (seconds < 10)
-            this._timeText.text = createjs.Ticker.getMeasuredTickTime().toString();//"TIME  " + Math.floor(time / 60) + ":0" + seconds;
-            // else
-            //this._timeText.text = "TIME  " + Math.floor(time / 60) + ":" + seconds;
-            this._ringsText.text = "RINGS  " + this._player.numRings;
+            if (seconds < 10)
+                this._timeText.text = "TIME  " + Math.floor(time / 60) + ":0" + seconds;//createjs.Ticker.getMeasuredTickTime().toString();//
+            else
+                this._timeText.text = "TIME  " + Math.floor(time / 60) + ":" + seconds;
+            this._ringsText.text = "RINGS  " + this._player.rings;
         }
 
         protected createHUD(): void {
@@ -145,7 +218,7 @@ module scenes {
             this._ringsText.x = 18;
             this._ringsText.y = 45;
             this._hudContainer.addChild(this._timeText);
-            //this._hudContainer.addChild(this._ringsText);
+            this._hudContainer.addChild(this._ringsText);
             stage.addChild(this._hudContainer);
         }
 
@@ -204,7 +277,7 @@ module scenes {
                 for (var y = 0; y < numGrids[0].length; y++) {
                     if (numGrids[0][y][x] != 0) {
                         //this._camBottomBoundaries[x] = y;
-                        this._camBottomBoundaries[x] =  ((y+1) * -256)+config.Screen.HEIGHT;
+                        this._camBottomBoundaries[x] = ((y + 1) * -256) + config.Screen.HEIGHT + 32;
                     }
                 }
             }
@@ -286,6 +359,13 @@ module scenes {
             this._spriteContainer.addChild(obj);
         }
 
+        public removeObject(obj: objects.GameObject): void {
+            //console.log("Array before removing: " + this._objects.toString());
+            this._objects.splice(this._objects.indexOf(obj), 1);
+            //console.log("Array after removing: " + this._objects.toString());
+            this._spriteContainer.removeChild(obj);
+        }
+
         protected updateCamera(): void {
             this._camDifR = this._spriteContainer.x - (this._rightCamBorder - this._player.x);
             this._camDifL = this._spriteContainer.x - (this._leftCamBorder - this._player.x);
@@ -303,14 +383,14 @@ module scenes {
             //camera is slightly different when sonic is grounded or in the air
             if (this._player.isGrounded) {
                 if (this._player.velY <= this._maxCamSpeed - 10) {
-                    this._camDifU = this._spriteContainer.y - (-this._player.y + this._groundCamBorder);
+                    this._camDifU = this._spriteContainer.y - (-this._player.camYPosition + this._groundCamBorder);
                     if (Math.abs(this._camDifU) < this._maxCamSpeed - 10)
                         this._spriteContainer.y -= this._camDifU;
                     else
                         this._spriteContainer.y -= (this._maxCamSpeed - 10) * Math.sign(this._camDifU);
                 }
                 else {
-                    this._camDifU = this._spriteContainer.y - (-this._player.y + this._groundCamBorder);
+                    this._camDifU = this._spriteContainer.y - (-this._player.camYPosition + this._groundCamBorder);
                     if (Math.abs(this._camDifU) < this._maxCamSpeed)
                         this._spriteContainer.y -= this._camDifU;
                     else
@@ -318,8 +398,8 @@ module scenes {
                 }
             }
             else {
-                this._camDifU = this._spriteContainer.y - (-this._player.y + this._topCamBorder);
-                this._camDifD = this._spriteContainer.y - (-this._player.y + this._bottomCamBorder);
+                this._camDifU = this._spriteContainer.y - (-this._player.camYPosition + this._topCamBorder);
+                this._camDifD = this._spriteContainer.y - (-this._player.camYPosition + this._bottomCamBorder);
                 if (this._camDifU < 0)
                     this._spriteContainer.y -= Math.min(this._camDifU, this._maxCamSpeed)
 
@@ -333,17 +413,27 @@ module scenes {
                 this._spriteContainer.x = this._camRightBoundary;
 
             //upper and lower boundaries
-            this._camBottomBoundary = this._camBottomBoundaries[Math.floor(-this._spriteContainer.x/256)];
+            this._camBottomBoundary = this._camBottomBoundaries[Math.floor(-this._spriteContainer.x / 256)];
             if (this._spriteContainer.y > 0)
                 this._spriteContainer.y = 0;
             else if (this._spriteContainer.y < this._camBottomBoundary)
                 this._spriteContainer.y = this._camBottomBoundary;
 
-            
+
             //move the background(s) in relation to everything else
             //when the background is made to scroll vertically as well, this code will be moved to its own method
-            this._bg1.x = (Math.floor(-this._spriteContainer.x / this._bgWidth) * this._bgWidth);
-            this._bg2.x = this._bg1.x + this._bgWidth;
+            //this._bg1.x = (Math.floor(-this._spriteContainer.x / this._bgWidth) * this._bgWidth);
+            this._bgContainer.x = -this._spriteContainer.x * 0.4729;
+            this._bgContainer.y = -1 - this._spriteContainer.y - this._spriteContainer.y * 0.04;//0.03125;
+            this._bgSkyContainer.x = this._bgContainer.x * 0.3795;
+            for (let i = 0; i < 3; i++) {
+                if (this._spriteContainer.x + this._bgContainer.x + this._bgWaterImages[i].x <= -256) {
+                    this._bgWaterImages[i].x += 768;
+                }
+                else if (this._spriteContainer.x + this._bgContainer.x + this._bgWaterImages[i].x >= config.Screen.WIDTH) {
+                    this._bgWaterImages[i].x -= 768;
+                }
+            }
         }
 
         protected updateCameraAndTiles(): void {
@@ -379,14 +469,14 @@ module scenes {
             //camera is slightly different when sonic is grounded or in the air
             if (this._player.isGrounded) {
                 if (this._player.velY <= this._maxCamSpeed - 10) {
-                    this._camDifU = this._spriteContainer.y - (-this._player.y + this._groundCamBorder);
+                    this._camDifU = this._spriteContainer.y - (-this._player.camYPosition + this._groundCamBorder);
                     if (Math.abs(this._camDifU) < this._maxCamSpeed - 10)
                         this._spriteContainer.y -= this._camDifU;
                     else
                         this._spriteContainer.y -= (this._maxCamSpeed - 10) * Math.sign(this._camDifU);
                 }
                 else {
-                    this._camDifU = this._spriteContainer.y - (-this._player.y + this._groundCamBorder);
+                    this._camDifU = this._spriteContainer.y - (-this._player.camYPosition + this._groundCamBorder);
                     if (Math.abs(this._camDifU) < this._maxCamSpeed)
                         this._spriteContainer.y -= this._camDifU;
                     else
@@ -394,8 +484,8 @@ module scenes {
                 }
             }
             else {
-                this._camDifU = this._spriteContainer.y - (-this._player.y + this._topCamBorder);
-                this._camDifD = this._spriteContainer.y - (-this._player.y + this._bottomCamBorder);
+                this._camDifU = this._spriteContainer.y - (-this._player.camYPosition + this._topCamBorder);
+                this._camDifD = this._spriteContainer.y - (-this._player.camYPosition + this._bottomCamBorder);
                 if (this._camDifU < 0)
                     this._spriteContainer.y -= Math.min(this._camDifU, this._maxCamSpeed)
 
@@ -414,8 +504,7 @@ module scenes {
                 this._spriteContainer.y = this._camBottomBoundary;
 
             //move the background(s) in relation to everything else
-            this._bg1.x = (Math.floor(-this._spriteContainer.x / this._bgWidth) * this._bgWidth);
-            this._bg2.x = this._bg1.x + this._bgWidth;
+            //this._bg1.x = (Math.floor(-this._spriteContainer.x / this._bgWidth) * this._bgWidth);
         }
     }
 }

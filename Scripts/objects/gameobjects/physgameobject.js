@@ -7,15 +7,28 @@ var objects;
             this._isGrounded = false;
             this._numAirSensors = 0;
             this._terminalVelocity = 16;
-            this.start();
+            this._sideSensorL = new objects.Vector2(this.x - this.width / 2, (this.y + this.height / 2) - 14);
+            this._sideSensorR = new objects.Vector2(this.x + this.width / 2, (this.y + this.height / 2) - 14);
+            this._footSensorL = new objects.Vector2(this._sideSensorL.x + 2, (this.y + this.height / 2) - 2);
+            this._footSensorR = new objects.Vector2(this._sideSensorR.x - 2, (this.y + this.height / 2) - 2);
         }
         update() {
-            super.update();
             this._numAirSensors = 0;
-            if (!this._isGrounded)
+            if (!this._isGrounded) {
                 this._velY += this._gravity;
-            if (this._velY > this._terminalVelocity)
-                this._velY = this._terminalVelocity;
+                if (this._velY > this._terminalVelocity)
+                    this._velY = this._terminalVelocity;
+            }
+            //updating sensor positions
+            this._sideSensorL.x = this.x - this.width / 2;
+            this._sideSensorR.x = this.x + this.width / 2;
+            this._sideSensorL.y = (this.y + this.height / 2) - 14;
+            this._sideSensorR.y = (this.y + this.height / 2) - 14;
+            this._footSensorL.x = this._sideSensorL.x + 2;
+            this._footSensorR.x = this._sideSensorR.x - 2;
+            this._footSensorL.y = (this.y + this.height / 2) + 1;
+            this._footSensorR.y = (this.y + this.height / 2) + 1;
+            super.update();
         }
         _setAirSensor() {
             this._numAirSensors++;

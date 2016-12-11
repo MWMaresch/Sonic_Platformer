@@ -8,26 +8,41 @@ module objects {
 
         constructor(imageString: string, x?: number, y?: number) {
             super(imageString, x, y);
-            this.start();
+            this._sideSensorL = new Vector2(this.x - this.width / 2, (this.y + this.height / 2) - 14);
+            this._sideSensorR = new Vector2(this.x + this.width / 2, (this.y + this.height / 2) - 14);
+            this._footSensorL = new Vector2(this._sideSensorL.x + 2, (this.y + this.height / 2) - 2)
+            this._footSensorR = new Vector2(this._sideSensorR.x - 2, (this.y + this.height / 2) - 2)
         }
 
         public update(): void {
-            super.update();
             this._numAirSensors = 0;
-            if (!this._isGrounded)
+            if (!this._isGrounded) {
                 this._velY += this._gravity;
-            if (this._velY > this._terminalVelocity)
-                this._velY = this._terminalVelocity;
+                if (this._velY > this._terminalVelocity)
+                    this._velY = this._terminalVelocity;
+            }
+            //updating sensor positions
+            this._sideSensorL.x = this.x - this.width / 2;
+            this._sideSensorR.x = this.x + this.width / 2;
+            this._sideSensorL.y = (this.y + this.height / 2) - 14;
+            this._sideSensorR.y = (this.y + this.height / 2) - 14;
+
+            this._footSensorL.x = this._sideSensorL.x + 2;
+            this._footSensorR.x = this._sideSensorR.x - 2;
+            this._footSensorL.y = (this.y + this.height / 2) + 1;
+            this._footSensorR.y = (this.y + this.height / 2) + 1;
+            super.update();
         }
+
         protected _setAirSensor() {
             this._numAirSensors++;
             if (this._numAirSensors >= 2)
                 this._isGrounded = false;
         }
 
-        protected detectLeftLedge() { this._setAirSensor() }
+        protected detectLeftLedge() { this._setAirSensor(); }
 
-        protected detectRightLedge() { this._setAirSensor() }
+        protected detectRightLedge() { this._setAirSensor(); }
 
         public collideWithGround(groundHeight: number, angle: number): void {
             if (groundHeight < this._higherGround) {

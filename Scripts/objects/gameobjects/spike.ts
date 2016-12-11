@@ -7,8 +7,6 @@ module objects {
             super("spikes", x, y);
         }
 
-        public start(): void { }
-
         public update(): void { }
 
         public checkCollisionWithPlayer(player: objects.Player) {
@@ -22,7 +20,8 @@ module objects {
             }
             else if (player.velY > 0 && (collision.sensorBoxCheck(player.leftFootSensor, this)
                 || collision.sensorBoxCheck(player.rightFootSensor, this))) {
-                player.getHurt();
+                player.collideWithGround(this.topLine, 0);
+                player.getHurt(this.x);
             }
         }
 

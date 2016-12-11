@@ -7,15 +7,10 @@ var objects;
             this._direction = -1;
             this._idleTimer = 120;
             this._numshots = 0;
-            this.start();
+            this._velX = -this._speed;
             this.width = 35;
         }
-        start() {
-            super.start();
-            this._velX = -this._speed;
-        }
         update() {
-            super.update();
             this._idleTimer--;
             if (this._idleTimer == 60) {
                 //if we shoot the first time, it would be very hard to speedrun the game
@@ -31,8 +26,9 @@ var objects;
                 this.gotoAndPlay("crabmeat_move");
                 this._velX = this._speed * this._direction;
             }
+            super.update();
         }
-        _stopAndWait(direction) {
+        _stopAndTurn(direction) {
             if (this._direction != direction) {
                 this._velX = 0;
                 this._idleTimer = 120;
@@ -42,27 +38,26 @@ var objects;
         }
         detectLeftLedge() {
             super.detectLeftLedge();
-            this._stopAndWait(1);
+            this._stopAndTurn(1);
         }
         detectRightLedge() {
             super.detectRightLedge();
-            this._stopAndWait(-1);
+            this._stopAndTurn(-1);
         }
         collideWithRightWall(x) {
-            this._stopAndWait(-1);
+            this._stopAndTurn(-1);
         }
         collideWithLeftWall(x) {
-            this._stopAndWait(1);
+            this._stopAndTurn(1);
         }
         checkCollisionWithPlayer(player) {
             if (collision.boxCheck(player, this)) {
                 if (player.isRolling) {
                     player.rebound(this.y);
-                    this._isDead = true;
-                    return true;
+                    this.destroy();
                 }
                 else
-                    player.getHurt();
+                    player.getHurt(this.x);
             }
         }
     }

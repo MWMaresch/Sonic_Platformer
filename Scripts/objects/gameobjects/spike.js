@@ -4,7 +4,6 @@ var objects;
         constructor(x, y) {
             super("spikes", x, y);
         }
-        start() { }
         update() { }
         checkCollisionWithPlayer(player) {
             //otherwise, check if he's colliding with any spikes
@@ -17,7 +16,8 @@ var objects;
             }
             else if (player.velY > 0 && (collision.sensorBoxCheck(player.leftFootSensor, this)
                 || collision.sensorBoxCheck(player.rightFootSensor, this))) {
-                player.getHurt();
+                player.collideWithGround(this.topLine, 0);
+                player.getHurt(this.x);
             }
         }
     }

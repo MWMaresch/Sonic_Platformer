@@ -7,7 +7,6 @@ module objects {
 
         constructor(x: number, y: number, velX: number, velY: number, useGravity: boolean) {
             super("yellowProjectile", x, y);
-            this.start();
             this._velX = velX;
             this._velY = velY;
             this._useGravity = useGravity;
@@ -16,14 +15,14 @@ module objects {
         }
 
         public update(): void {
-            super.update();
             if (this._useGravity)
                 this._velY += this._GRAVITY;
+            super.update();
         }
 
         public checkCollisionWithPlayer(player: objects.Player) {
             if (collision.boxCheck(player, this)) {
-                player.getHurt();
+                player.getHurt(this.x);
             }
         }
     }

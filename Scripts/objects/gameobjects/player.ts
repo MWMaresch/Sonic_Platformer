@@ -11,13 +11,15 @@ module objects {
         private _DECELERATION: number = 0.5;       //applied when turning around
         private _FRICTION: number = 0.046875;      //applied when no horizontal input is detected
         private _MAXRUNSPEED: number = 6;          //should never be more than the size of a single tile, which is 16
-        private _TERMINALVELOCITY: number = 15;    //should never be more than the size of a single tile, which is 16
+        private _TERMINALVELOCITY: number = 17;    //should never be more than the size of a single tile, which is 16
         private _SLOPEFACTOR: number = 0.125;      //slowing sonic when he's on a slope
         private _GRAVITY: number = 0.21875;
+        private _KBGRAVITY: number = 0.1875;
         private _JUMPVELOCITY: number = 6.5;
         private _SHORTJUMPVELOCITY: number = 4;
+        private _invinciFrames: number = 0;
 
-        private _rings: number = 0;
+        public rings: number = 0;
         private _isGrounded: boolean = false;
         private _isRolling: boolean = false;
         private _isJumping: boolean = false;
@@ -38,7 +40,6 @@ module objects {
         private _headOffset: Vector2 = new Vector2(9, 0);//from center
         private _sideOffset: Vector2 = new Vector2(10, 4);//from center
 
-        private _angleThreshold: number = 45;
         private _angleRadians: number = 0;
         public curLayer: number = 0;
 
@@ -65,7 +66,7 @@ module objects {
             this._lowerDeathBoundary = deathBoundary;
             this.width = 14;
             this.height = 40;
-            this._rings = 0;
+            this.rings = 0;
             window.onkeydown = this._onKeyDown;
             window.onkeyup = this._onKeyUp;
         }
@@ -78,7 +79,7 @@ module objects {
                 this._curFootDist = 15;
                 this.y += 5;
                 this.regY = 15;
-                this.camOffsetY = 5;
+                this.camOffsetY = -5;
                 this._footOffset.x = 7;
                 this.gotoAndPlay("jump");
                 //we don't want the animation speed to be below 0 or above 1
@@ -111,29 +112,55 @@ module objects {
         }
 
         get rightSideSensor(): Vector2 { return this._sideSensorR; }
-
         get leftSideSensor(): Vector2 { return this._sideSensorL; }
 
         get leftFootSensor(): Vector2 { return new Vector2(this._footSensorL.x, this.y + this._curFootDist + 1); }
-
         get rightFootSensor(): Vector2 { return new Vector2(this._footSensorR.x, this.y + this._curFootDist + 1); }
 
-        get numRings(): number { return this._rings; }
-
         get isGrounded(): boolean { return this._isGrounded; }
-
         get isRolling(): boolean { return this._isRolling; }
 
-        get velY(): number {
-            return this._velY;
-        }
+        get velY(): number { return this._velY; }
+        get velX(): number { return this._velX; }
 
-        public getHurt(): void {
-            this._startFalling();
-            if (this._rings == 0) {
-                this.triggerDeath();
+        get camYPosition(): number { return this.y - 16 + this.camOffsetY; }
+
+        public getHurt(fromX: number): void {
+            if (this._invinciFrames <= 0) {
+                this._startFalling();
+                if (this.rings == 0) {
+                    this.triggerDeath();
+                }
+                else {
+                    //get knocked back
+                    this._velY = -4;
+                    var a = Math.sign(this.x - fromX);
+                    console.log("a is " + a);
+                    if (a == 0)
+                        a = 1;
+                    this._velX = 2 * a;
+                    this._invinciFrames = 120;
+                    this.gotoAndStop("hurt");
+                    //lose all our rings
+                    let curRing = 0;
+                    let ang = 101.25;
+                    let spd = 4;
+                    let flip = false;
+                    this.rings = Math.min(this.rings, 32);
+                    while (curRing < this.rings) {
+                        if (flip) {
+                            currentScene.addObject(new Ring(true, this.x, this.y, Math.cos(toRadians(ang)) * -spd, Math.sin(toRadians(ang)) * -spd));
+                            ang = ang + 22.5;
+                        } else
+                            currentScene.addObject(new Ring(true, this.x, this.y, Math.cos(toRadians(ang)) * spd, Math.sin(toRadians(ang)) * -spd));
+                        flip = !flip;
+                        curRing++;
+
+                        if (curRing == 16) { spd = 2; ang = 101.25; }
+                    }
+                    this.rings = 0;
+                }
             }
-            //TODO: add knockback and hurt animation when we actually have rings
         }
 
         public triggerDeath(): void {
@@ -164,6 +191,21 @@ module objects {
             }
         }
 
+        public bounce(x: number, y: number): void {
+            this._isJumping = false;
+            if (x != 0)
+                this._velX = x;
+            if (y != 0)
+                this._velY = y;
+        }
+
+        public collectRing(amount: number, ring: objects.Ring): void {
+            if (this._invinciFrames != 120) {
+                this.rings += amount;
+                ring.destroy();
+            }
+        }
+
         public update(): void {
             //console.log("frame advance");
             //super.update(); //reserved for other gameobjects, would just interfere with what we already have here
@@ -174,14 +216,27 @@ module objects {
                 //TODO: rework higherground and lowerground to make more sense
                 this._higherGround = 90000;
                 this._lowerGround = -90000;
-                this._updateControls();
-                this.updateMovement();
+                if (this._invinciFrames != 120) {
+                    this._updateControls();
+                    this.updateMovement();
+                }
+                else
+                    this._updateKnockedBackMovement();
                 this._updateSensors();
             }
             else {
                 this.y += this._velY;
                 this._velY += this._GRAVITY;
             }
+        }
+
+        private _updateKnockedBackMovement() {
+            if (this._isGrounded)
+                this._invinciFrames--;
+            else
+                this._velY += this._KBGRAVITY;
+            this.x += this._velX;
+            this.y += this._velY;
         }
 
         private _updateControls() {
@@ -204,8 +259,10 @@ module objects {
             else {
                 //sonic's jump shortens if we let go of the button
                 this._pressedJump = false;
-                if (!this._isGrounded && this._isJumping && this._velY < -this._SHORTJUMPVELOCITY)
+                if (!this._isGrounded && this._isJumping && this._velY < -this._SHORTJUMPVELOCITY) {
                     this._velY = -this._SHORTJUMPVELOCITY;
+                    console.log("shorthop");
+                }
             }
         }
 
@@ -221,8 +278,15 @@ module objects {
 
         protected updateMovement() {
             //check for and apply air movement
+            if (this._invinciFrames > 0) {
+                this._invinciFrames--;
+                if (this._invinciFrames % 4 == 0)
+                    this.visible = !this.visible;
+            }
             if (!this._isGrounded) {
                 this._velY += this._GRAVITY;
+                if (this._velY > this._TERMINALVELOCITY)
+                    this._velY = this._TERMINALVELOCITY;
                 //the following is left in for future reference in case something goes wrong enough that I must resort back to it
                 /*if (this._isJumping || !this._isRolling) {
                     if (Math.abs(this._velX) > this._MAXRUNSPEED)
@@ -282,17 +346,12 @@ module objects {
                         this._gSpeed -= (this._FRICTION / 2) * Math.sign(this._gSpeed);
                     this.spriteSheet.getAnimation("jump").speed = Math.min(1, Math.max(0, 1 / (5 - Math.abs(this._gSpeed))));
                 }
-
                 if (Math.abs(this._gSpeed) > this._TERMINALVELOCITY) {
                     console.log("reaching terminal velocity at " + this._gSpeed);
                     this._gSpeed = Math.sign(this._gSpeed) * this._TERMINALVELOCITY;
                 }
-
                 this._velX = this._gSpeed * Math.cos(this._angleRadians);
                 this._velY = this._gSpeed * -Math.sin(this._angleRadians);
-
-                if (Math.abs(this._velY) > this._TERMINALVELOCITY)
-                    this._velY = this._TERMINALVELOCITY * Math.sign(this._velY);
 
                 //if we're too slow when running on walls, we fall
                 if (this._mode != Quadrant.Floor && Math.abs(this._gSpeed) < 2.5 && this._hcLockTimer <= 0) {
@@ -307,7 +366,7 @@ module objects {
 
         private _updateSensors(): void {
             //move all sensors to their correct locations relating to sonic
-            if (this._angle < this._angleThreshold && this._angle >= -this._angleThreshold || this._angle >= 315) {
+            if (this._angle < 45 && this._angle >= -45 || this._angle > 315) {
                 this._mode = Quadrant.Floor;
                 //this.rotation = 0;
                 this._footSensorL.x = this.x - this._footOffset.x;
@@ -315,7 +374,7 @@ module objects {
                 this._footSensorL.y = this.y + this._footOffset.y;
                 this._footSensorR.y = this.y + this._footOffset.y;
             }
-            else if (this._angle < this._angleThreshold * 3) {
+            else if (this._angle < 135) {
                 this._mode = Quadrant.RightWall;
                 //this.rotation = -90;
                 this._footSensorL.x = this.x + this._footOffset.y;
@@ -323,7 +382,7 @@ module objects {
                 this._footSensorL.y = this.y + this._footOffset.x;
                 this._footSensorR.y = this.y - this._footOffset.x;
             }
-            else if (this._angle < this._angleThreshold * 5) {
+            else if (this._angle < 225) {
                 this._mode = Quadrant.Ceiling;
                 this._footSensorL.x = this.x + this._footOffset.x;
                 this._footSensorR.x = this.x - this._footOffset.x;
@@ -359,8 +418,8 @@ module objects {
                     this._checkHeadCollision(-this._footSensorLength, this._topSensorL, tileGrid);
                 }
                 else {
-                    //this._checkTunnelCollision(-10, this._topSensorR, tileGrid);
-                    //this._checkTunnelCollision(-10, this._topSensorL, tileGrid);
+                    this._checkTunnelCollision(-10, this._topSensorR, tileGrid);
+                    this._checkTunnelCollision(-10, this._topSensorL, tileGrid);
                     //this._checkTunnelCollision(-20, this._topSensorR, tileGrid);
                     //this._checkTunnelCollision(-20, this._topSensorL, tileGrid);
                 }
@@ -377,7 +436,7 @@ module objects {
             }
         }
 
-        public checkDeathBoundary(boundary:number):void{
+        public checkDeathBoundary(boundary: number): void {
             if (this.y > boundary && !this._isDead)
                 this.triggerDeath();
         }

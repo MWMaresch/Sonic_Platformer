@@ -7,11 +7,6 @@ module objects {
 
         constructor(x: number, y: number) {
             super("motobug", x, y);
-            this.start();
-        }
-
-        public start(): void {
-            super.start();
             this._velX = -this._speed;
         }
 
@@ -42,11 +37,10 @@ module objects {
             if (collision.boxCheck(player, this)) {
                 if (player.isRolling) {
                     player.rebound(this.y);
-                    this._isDead = true;
-                    return true;
+                    this.destroy();
                 }
                 else
-                    player.getHurt();
+                    player.getHurt(this.x);
             }
         }
     }

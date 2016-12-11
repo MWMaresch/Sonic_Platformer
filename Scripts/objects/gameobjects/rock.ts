@@ -6,8 +6,6 @@ module objects {
             this.width = 32;
         }
 
-        public start(): void { }
-
         public update(): void { }
 
         public checkCollisionWithPlayer(player: objects.Player) {

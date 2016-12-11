@@ -13,9 +13,14 @@ var objects;
         start() { }
         update() { }
         checkCollisionWithPlayer(player) {
-            if (collision.boxCheck(player, this)) {
-                currentScene.getSpriteContainer().setChildIndex(player, (currentScene.getSpriteContainer().numChildren - 1) - ((currentScene.getSpriteContainer().numChildren - 1) * this._layerSwitch));
-                player.curLayer = this._layerSwitch;
+            if (player.curLayer != this._layerSwitch) {
+                if (collision.boxCheck(player, this)) {
+                    if (this._layerSwitch == 1)
+                        currentScene.getSpriteContainer().setChildIndex(player, 1);
+                    else
+                        currentScene.getSpriteContainer().setChildIndex(player, (currentScene.getSpriteContainer().numChildren - 1));
+                    player.curLayer = this._layerSwitch;
+                }
             }
         }
     }
