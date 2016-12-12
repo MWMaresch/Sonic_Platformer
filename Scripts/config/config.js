@@ -9,6 +9,7 @@ var config;
     Scene.INSTRUCTIONS = 1;
     Scene.GHZ1 = 2;
     Scene.GHZ2 = 3;
+    Scene.GHZ3 = 4;
     config.Scene = Scene;
     class Screen {
     }

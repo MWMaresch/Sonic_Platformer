@@ -3,10 +3,10 @@ module objects {
 
         constructor(x: number, y: number) {
             super("yellowSpring", x, y);
-            this.y -= 9;
+            this.y -= 8;
         }
 
-        get topLine(): number { return this.y; }
+        get topLine(): number { return this.y - 1; }
 
         public update(): void { }
 

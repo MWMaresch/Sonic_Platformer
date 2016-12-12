@@ -13,6 +13,8 @@ var scenes;
         start() {
             //all we do is display a picture and give them 2 buttons
             console.log("Menu Scene Started");
+            createjs.Sound.stop();
+            createjs.Sound.play("TitleMusic");
             this._bgContainer = new createjs.SpriteContainer(spriteAtlas);
             this._sonicContainer = new createjs.SpriteContainer(spriteAtlas);
             //create sky at the back
@@ -91,11 +93,13 @@ var scenes;
             }
         }
         _playBtnClick(event) {
+            createjs.Sound.stop();
             stage.removeAllChildren();
             scene = config.Scene.GHZ1;
             changeScene();
         }
         _instBtnClick(event) {
+            createjs.Sound.stop();
             stage.removeAllChildren();
             scene = config.Scene.INSTRUCTIONS;
             changeScene();

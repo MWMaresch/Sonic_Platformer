@@ -11,7 +11,7 @@ module objects {
         private _DECELERATION: number = 0.5;       //applied when turning around
         private _FRICTION: number = 0.046875;      //applied when no horizontal input is detected
         private _MAXRUNSPEED: number = 6;          //should never be more than the size of a single tile, which is 16
-        private _TERMINALVELOCITY: number = 17;    //should never be more than the size of a single tile, which is 16
+        private _TERMINALVELOCITY: number = 16.5;    //should never be more than the size of a single tile, which is 16
         private _SLOPEFACTOR: number = 0.125;      //slowing sonic when he's on a slope
         private _GRAVITY: number = 0.21875;
         private _KBGRAVITY: number = 0.1875;
@@ -26,6 +26,7 @@ module objects {
         //private _isDead: boolean = false;
         private _accelerating: boolean = false;
         private _pressedJump: boolean = false;
+        private _isStopped: boolean = false;
 
         /*private _footSensorL : Vector2;
         private _footSensorR : Vector2;
@@ -90,6 +91,7 @@ module objects {
 
         private _stopRolling(): void {
             if (this._isRolling) {
+                this._isStopped = false;
                 this._isJumping = false;
                 this._isRolling = false;
                 this.height = 40;
@@ -127,11 +129,13 @@ module objects {
 
         public getHurt(fromX: number): void {
             if (this._invinciFrames <= 0) {
+                this._isStopped = false;
                 this._startFalling();
                 if (this.rings == 0) {
                     this.triggerDeath();
                 }
                 else {
+                    createjs.Sound.play("LoseRingsSnd");
                     //get knocked back
                     this._velY = -4;
                     var a = Math.sign(this.x - fromX);
@@ -164,6 +168,7 @@ module objects {
         }
 
         public triggerDeath(): void {
+            createjs.Sound.play("DeathSnd");
             this._velX = 0;
             this._velY = -7;
             this._isDead = true;
@@ -179,6 +184,7 @@ module objects {
         }
 
         public rebound(y: number): void {
+            createjs.Sound.play("ReboundSnd");
             if (this.y > y || this._velY < 0) {
                 this._velY -= Math.sign(this._velY);
             }
@@ -192,6 +198,7 @@ module objects {
         }
 
         public bounce(x: number, y: number): void {
+            createjs.Sound.play("SpringSnd");
             this._isJumping = false;
             if (x != 0)
                 this._velX = x;
@@ -201,6 +208,7 @@ module objects {
 
         public collectRing(amount: number, ring: objects.Ring): void {
             if (this._invinciFrames != 120) {
+                createjs.Sound.play("RingSnd", "none", 0, 0, 0, 0.5);
                 this.rings += amount;
                 ring.destroy();
             }
@@ -284,6 +292,8 @@ module objects {
                     this.visible = !this.visible;
             }
             if (!this._isGrounded) {
+                this.x += this._velX;
+                this.y += this._velY;
                 this._velY += this._GRAVITY;
                 if (this._velY > this._TERMINALVELOCITY)
                     this._velY = this._TERMINALVELOCITY;
@@ -298,18 +308,20 @@ module objects {
                 //weird air drag
                 if (this._velY < 0 && this._velY > -4 && Math.abs(this._velX) >= 0.125)
                     this._velX *= this._AIRDRAG;
+
             }
             else {
                 //update animations and their speeds
                 if (!this._isRolling) {
                     if (this._gSpeed != 0) {
+                        this._isStopped = false;
                         if (Math.abs(this._gSpeed) >= this._MAXRUNSPEED) {
                             if (this.currentAnimation != "run")
                                 this.gotoAndPlay("run");
                             this.spriteSheet.getAnimation("run").speed = 1 / Math.max(8 - Math.abs(this._gSpeed), 1);
                             this._gSpeed = this._MAXRUNSPEED * Math.sign(this._gSpeed);
                         }
-                        else if (this.currentAnimation != "walk")
+                        else if (this.currentAnimation != "walk" && this.currentAnimation != "push")
                             this.gotoAndPlay("walk");
                         this.spriteSheet.getAnimation("walk").speed = 1 / Math.max(8 - Math.abs(this._gSpeed), 1);
                     }
@@ -321,7 +333,10 @@ module objects {
                     if (!this._accelerating) {
                         if (Math.abs(this._gSpeed) < this._FRICTION) {
                             this._gSpeed = 0;
-                            this.gotoAndStop("stand");
+                            if (!this._isStopped) {
+                                this.gotoAndPlay("stand");
+                                this._isStopped = true;
+                            }
                         }
                         else
                             this._gSpeed -= this._FRICTION * Math.sign(this._gSpeed);
@@ -339,17 +354,15 @@ module objects {
 
                     if (Math.abs(this._gSpeed) < this._FRICTION) {
                         this._gSpeed = 0;
-                        this.gotoAndStop("stand");
+                        this.gotoAndPlay("stand");
+                        this._isStopped = true;
                         this._stopRolling();
                     }
                     else
                         this._gSpeed -= (this._FRICTION / 2) * Math.sign(this._gSpeed);
                     this.spriteSheet.getAnimation("jump").speed = Math.min(1, Math.max(0, 1 / (5 - Math.abs(this._gSpeed))));
                 }
-                if (Math.abs(this._gSpeed) > this._TERMINALVELOCITY) {
-                    console.log("reaching terminal velocity at " + this._gSpeed);
-                    this._gSpeed = Math.sign(this._gSpeed) * this._TERMINALVELOCITY;
-                }
+
                 this._velX = this._gSpeed * Math.cos(this._angleRadians);
                 this._velY = this._gSpeed * -Math.sin(this._angleRadians);
 
@@ -359,9 +372,14 @@ module objects {
                     console.log("fell because we're too slow");
                     this._startFalling();
                 }
+
+                this.x += this._velX;
+                this.y += this._velY;
+                if (Math.abs(this._gSpeed) > this._TERMINALVELOCITY) {
+                    console.log("reaching terminal velocity at " + this._gSpeed);
+                    this._gSpeed = Math.sign(this._gSpeed) * this._TERMINALVELOCITY;
+                }
             }
-            this.x += this._velX;
-            this.y += this._velY;
         }
 
         private _updateSensors(): void {
@@ -444,14 +462,17 @@ module objects {
         private _checkTunnelCollision(length: number, sensorPos: Vector2, tileGrid: Tile[][]) {
             if (tileGrid[Math.floor(sensorPos.x / 16)][Math.floor((length + sensorPos.y) / 16)] != null) {
                 this._pressedJump = true;
-                if (tileGrid[Math.floor(sensorPos.x / 16)][Math.floor((length + sensorPos.y) / 16)].isTunnel) {
-                    this._startRolling();
-                    if (this._mode == Quadrant.Floor && Math.abs(this._gSpeed) <= 0.3) {
-                        if (this._gSpeed == 0) {
-                            this._gSpeed = 3;
+                if (!this._isRolling) {
+                    if (tileGrid[Math.floor(sensorPos.x / 16)][Math.floor((length + sensorPos.y) / 16)].isTunnel) {
+                        createjs.Sound.play("RollSnd", "none", 0, 0, 0, 0.5);
+                        this._startRolling();
+                        if (this._mode == Quadrant.Floor && Math.abs(this._gSpeed) <= 0.3) {
+                            if (this._gSpeed == 0) {
+                                this._gSpeed = 3;
+                            }
+                            else
+                                this._gSpeed *= 10;
                         }
-                        else
-                            this._gSpeed *= 10;
                     }
                 }
             }
@@ -637,6 +658,8 @@ module objects {
             this._gSpeed = 0;
             this._velX = 0;
             this.x = x + this._sideOffset.x;
+            if (this._isGrounded && this.currentAnimation != "push")
+                this.gotoAndPlay("push");
             this._updateSensors();
         }
 
@@ -644,6 +667,9 @@ module objects {
             this._gSpeed = 0;
             this._velX = 0;
             this.x = x - this._sideOffset.x;
+            console.log("collided when angle was " + this._angle);
+            if (this._isGrounded && this.currentAnimation != "push")
+                this.gotoAndPlay("push");
             this._updateSensors();
         }
 
@@ -652,8 +678,10 @@ module objects {
         }
 
         public crouch() {
-            if (this._isGrounded && Math.abs(this._gSpeed) > 0.53125)
+            if (!this._isRolling && this._isGrounded && Math.abs(this._gSpeed) > 0.53125) {
+                createjs.Sound.play("RollSnd", "none", 0, 0, 0, 0.5);
                 this._startRolling();
+            }
             //TODO: crouching and spindash
         }
 
@@ -662,11 +690,18 @@ module objects {
             if (this._isGrounded) {
                 if (!this._isRolling) {
                     if (this._hcLockTimer <= 0) {
-                        if (this._gSpeed < 0)
+                        if (this._gSpeed < 0) {
+                            //createjs.Sound.play("BrakeSnd", createjs.Sound.INTERRUPT_LATE,);
+
                             //we use a different (higher) value when turning around so we can stop quickly
                             this._gSpeed += this._DECELERATION;
-                        else if (this._gSpeed < this._MAXRUNSPEED)
+                            this.gotoAndPlay("walk");//brake
+                        }
+                        else if (this._gSpeed < this._MAXRUNSPEED) {
+                            if (this._gSpeed == 0)
+                                this.gotoAndPlay("walk");
                             this._gSpeed += this._GROUNDACCELERATION;
+                        }
                         this._accelerating = true;
                         this.scaleX = 1;
                     }
@@ -688,10 +723,15 @@ module objects {
             if (this._isGrounded) {
                 if (!this._isRolling) {
                     if (this._hcLockTimer <= 0) {
-                        if (this._gSpeed > 0)
+                        if (this._gSpeed > 0) {
                             this._gSpeed -= this._DECELERATION;
-                        else if (this._gSpeed > -this._MAXRUNSPEED)
+                            this.gotoAndPlay("walk");//brake
+                        }
+                        else if (this._gSpeed > -this._MAXRUNSPEED) {
+                            if (this._gSpeed == 0)
+                                this.gotoAndPlay("walk");
                             this._gSpeed -= this._GROUNDACCELERATION;
+                        }
                         this._accelerating = true;
                         //we're facing left
                         this.scaleX = -1;
@@ -713,6 +753,7 @@ module objects {
         public jump() {
             //the player must let go of the button and press it again to jump
             if (this._isGrounded && !this._pressedJump) {
+                createjs.Sound.play("JumpSnd");
                 this._isJumping = true;
                 this._startRolling();
                 this._startFalling();

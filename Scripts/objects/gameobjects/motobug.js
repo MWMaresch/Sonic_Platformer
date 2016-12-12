@@ -22,12 +22,16 @@ var objects;
             this.scaleX = 1;
         }
         collideWithRightWall(x) {
+            this.x = x - this.width / 2;
             this._velX = -this._speed;
             this.scaleX = 1;
+            this.updateSensors();
         }
         collideWithLeftWall(x) {
+            this.x = x + this.width / 2;
             this._velX = this._speed;
             this.scaleX = -1;
+            this.updateSensors();
         }
         checkCollisionWithPlayer(player) {
             if (collision.boxCheck(player, this)) {

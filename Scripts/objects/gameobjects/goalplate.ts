@@ -30,6 +30,7 @@ module objects {
 
         public checkCollisionWithPlayer(player: objects.Player) {
             if (player.x > this.x && !this._alreadyPassed) {
+                createjs.Sound.play("GoalSnd");
                 currentScene.stopTimer();
                 this.gotoAndPlay("goalSpin1");
                 this._spinTimer = 124;

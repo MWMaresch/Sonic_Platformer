@@ -8,7 +8,7 @@ var objects;
             this._idleTimer = 120;
             this._numshots = 0;
             this._velX = -this._speed;
-            this.width = 35;
+            this.width = 32;
         }
         update() {
             this._idleTimer--;

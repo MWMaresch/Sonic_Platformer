@@ -26,12 +26,16 @@ module objects {
         }
 
         public collideWithRightWall(x: number) {
+            this.x = x - this.width/2;
             this._velX = - this._speed;
             this.scaleX = 1;
+            this.updateSensors();
         }
         public collideWithLeftWall(x: number) {
+            this.x = x + this.width/2;
             this._velX = this._speed;
             this.scaleX = -1;
+            this.updateSensors();
         }
         public checkCollisionWithPlayer(player: objects.Player) {
             if (collision.boxCheck(player, this)) {

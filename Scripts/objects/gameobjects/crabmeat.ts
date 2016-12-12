@@ -9,7 +9,7 @@ module objects {
         constructor(x: number, y: number) {
             super("crabmeat_move", x, y);
             this._velX = -this._speed;
-            this.width = 35;
+            this.width = 32;
         }
 
         public update(): void {

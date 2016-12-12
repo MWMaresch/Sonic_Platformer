@@ -7,6 +7,7 @@ module config {
         public static INSTRUCTIONS : number = 1;
         public static GHZ1 : number = 2;
         public static GHZ2 : number = 3;
+        public static GHZ3 : number = 4;
     }
 
     export class Screen {

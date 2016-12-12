@@ -48,16 +48,30 @@ var assetData = [
     { id: "StrBtn", src: "../../Assets/images/Start.png" },
     { id: "Tiles", src: "../../Assets/images/metalblocks.png" },
     { id: "Font", src: "../../Assets/images/HUDfont.png" },
-    { id: "Sonic", src: "../../Assets/images/SonicSprites.png" }
+    { id: "Sonic", src: "../../Assets/images/SonicSprites.png" },
+    { id: "TitleMusic", src: "../../Assets/sounds/title.mp3" },
+    { id: "GHZ", src: "../../Assets/sounds/GHZ.mp3" },
+    { id: "JumpSnd", src: "../../Assets/sounds/jump.wav" },
+    { id: "RollSnd", src: "../../Assets/sounds/roll.wav" },
+    { id: "RingSnd", src: "../../Assets/sounds/ring2.wav" },
+    { id: "LoseRingsSnd", src: "../../Assets/sounds/loserings.wav" },
+    { id: "SpringSnd", src: "../../Assets/sounds/spring.wav" },
+    { id: "ReboundSnd", src: "../../Assets/sounds/rebound.wav" },
+    { id: "DeathSnd", src: "../../Assets/sounds/death.wav" },
+    { id: "SpikeSnd", src: "../../Assets/sounds/spikedeath.wav" },
+    { id: "GoalSnd", src: "../../Assets/sounds/goalspin.wav" },
+    { id: "BrakeSnd", src: "../../Assets/sounds/brake.wav" }
 ];
 function preload() {
     // Create a queue for assets being loaded
     assets = new createjs.LoadQueue(false);
+    assets.installPlugin(createjs.Sound);
     // Register callback function to be run when assets complete loading.
     assets.on("complete", init, this);
     assets.loadManifest(assetData);
 }
 function exitBtnClick(event) {
+    console.log("clicked exit button");
     stage.tickEnabled = true;
     stage.removeAllChildren();
     canPause = false;
@@ -78,7 +92,6 @@ function togglePause() {
     if (!paused && canPause) {
         stage.addChild(pauseBg);
         stage.addChild(exitBtn);
-        exitBtn.on("click", exitBtnClick, this);
         paused = true;
         stage.tickEnabled = false;
     }
@@ -95,6 +108,7 @@ function toRadians(angle) {
 function init() {
     pauseBg = new createjs.Bitmap(assets.getResult("Pause"));
     exitBtn = new objects.Button("ExitBtn", 0, 0, 177, 84);
+    exitBtn.on("click", exitBtnClick, this);
     // Reference to canvas element
     canvas = document.getElementById("canvas");
     stage = new createjs.SpriteStage("canvas", false, false);
@@ -200,10 +214,26 @@ function init() {
             [1489, 527, 256, 256],
             [2011, 788, 256, 256],
             [2272, 1049, 256, 256],
-            [2272, 1310, 256, 256] // GHZ46
+            [2272, 1310, 256, 256],
+            [781, 406, 40, 39], [821, 406, 40, 39], [901, 406, 40, 39],
+            [941, 406, 40, 39],
+            [981, 451, 40, 16],
+            [981, 406, 54, 16], [981, 430, 48, 16],
+            [728, 276, 39, 39],
+            [768, 276, 39, 39],
+            [808, 276, 39, 39],
+            [41, 6, 39, 40],
+            [81, 6, 39, 40],
+            [121, 6, 39, 40], [161, 6, 39, 40],
+            [12, 568, 39, 40], [52, 568, 39, 40], [91, 568, 39, 40], [127, 568, 39, 40],
+            [2272, 788, 256, 256],
+            [1750, 1310, 256, 256],
+            [2272, 1832, 256, 256],
+            [1228, 2615, 256, 256],
+            [1489, 2615, 256, 256] // GHZ51
         ],
         animations: {
-            "stand": { frames: [0] },
+            "stand": { frames: [0], next: "wait1", speed: 1 / 288 },
             "lookup": { frames: [1, 2] },
             "crouch": { frames: [3, 4] },
             "walk": { frames: [5, 6, 7, 8, 9, 10], speed: 1 / 8 },
@@ -304,7 +334,22 @@ function init() {
             "ghz43": { frames: [163] },
             "ghz44": { frames: [164] },
             "ghz45": { frames: [165] },
-            "ghz46": { frames: [166] }
+            "ghz46": { frames: [166] },
+            "bNewtronAppear": { frames: [167, 168, 169, 170], next: "bNewtronFall", speed: 1 / 20 },
+            "bNewtronFall": { frames: [171] },
+            "bNewtronMove": { frames: [172, 173] },
+            "gNewtronAppear": { frames: [174] },
+            "gNewtronIdle": { frames: [175] },
+            "gNewtronShoot": { frames: [176] },
+            "wait1": { frames: [177], next: "wait2", speed: 1 / 24 },
+            "wait2": { frames: [178], next: "wait3", speed: 1 / 72 },
+            "wait3": { frames: [179, 180], speed: 1 / 24 },
+            "push": { frames: [181, 182, 183, 184], speed: 1 / 32 },
+            "ghz47": { frames: [185] },
+            "ghz48": { frames: [186] },
+            "ghz49": { frames: [187] },
+            "ghz50": { frames: [188] },
+            "ghz51": { frames: [189] }
         },
         "texturepacker": [
             "SmartUpdateHash: $TexturePacker:SmartUpdate:013a2fc3dc6ba39276db3e6758d1ddbd:84789f29f2d01b3ea1c113a3b2d1bfdc:e696b1a5c9e543dbf26d7c8d29a6d04f$",
@@ -365,6 +410,7 @@ function init() {
     spriteAtlas = new createjs.SpriteSheet(spriteData);
     objects.TileGroup.initialize();
     scene = config.Scene.MENU;
+    console.log("about to start menu scene");
     changeScene();
 }
 function gameLoop(event) {
@@ -394,6 +440,11 @@ function changeScene() {
             stage.removeAllChildren();
             currentScene = new scenes.GreenHillZone2();
             console.log("Starting ACT 2");
+            break;
+        case config.Scene.GHZ3:
+            stage.removeAllChildren();
+            currentScene = new scenes.GreenHillZone3();
+            console.log("Starting ACT 3");
             break;
         case config.Scene.INSTRUCTIONS:
             stage.removeAllChildren();

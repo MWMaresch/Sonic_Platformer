@@ -3,9 +3,9 @@ var objects;
     class Spring extends objects.GameObject {
         constructor(x, y) {
             super("yellowSpring", x, y);
-            this.y -= 9;
+            this.y -= 8;
         }
-        get topLine() { return this.y; }
+        get topLine() { return this.y - 1; }
         update() { }
         checkCollisionWithPlayer(player) {
             if (collision.sensorBoxCheck(player.leftSideSensor, this)) {

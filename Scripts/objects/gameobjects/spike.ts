@@ -18,12 +18,12 @@ module objects {
             else if (collision.sensorBoxCheck(player.rightSideSensor, this)) {
                 player.collideWithRightWall(this.leftLine);
             }
-            else if (player.velY > 0 && (collision.sensorBoxCheck(player.leftFootSensor, this)
+            else if (player.velY >= 0 && (collision.sensorBoxCheck(player.leftFootSensor, this)
                 || collision.sensorBoxCheck(player.rightFootSensor, this))) {
                 player.collideWithGround(this.topLine, 0);
                 player.getHurt(this.x);
+                //createjs.Sound.play("SpikeSnd");
             }
         }
-
     }
 }

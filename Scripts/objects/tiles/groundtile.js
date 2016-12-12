@@ -106,7 +106,7 @@ var objects;
                 //var arrayIndex = Math.floor(sensor.y - this.y);
                 var hmVal = this._leftHeightmap[Math.floor(sensor.y - this.y)];
                 if (hmVal < 16 && sensor.x - this.x > hmVal) {
-                    //console.log("colliding with right wall at (" + this.x + ", " + this.y + "), index is " + arrayIndex + ", value is " + hmVal + ", angles are " + this.getAngles());
+                    console.log("colliding with right wall at (" + this.x + ", " + this.y + ", angles are " + this.getAngles());
                     other.collideWithRightWall(this.x + hmVal);
                 }
             }

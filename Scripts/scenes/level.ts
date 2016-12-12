@@ -47,6 +47,8 @@ module scenes {
         protected _camBottomBoundaries: number[];
 
         public start() {
+            createjs.Sound.stop();
+            createjs.Sound.play("GHZ","none", 0, 0, -1,0.6);
             this._tileSpriteContainer = new createjs.SpriteContainer(spriteAtlas);
             this._spriteContainer = new createjs.SpriteContainer(spriteAtlas);
             this._bgContainer = new createjs.SpriteContainer(spriteAtlas);

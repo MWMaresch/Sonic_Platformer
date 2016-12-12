@@ -7,27 +7,29 @@ module scenes {
     export class Menu extends objects.Scene {
 
         // Private instance variables
-        private _sonicImage : createjs.Sprite;
-        private _emblemImage : createjs.Sprite;
-        private _waterImage : createjs.Sprite;
-        private _waterImage2 : createjs.Sprite;
-        private _waterHeight : number;
-        private _skyImage : createjs.Sprite;
-        private _wallImage : createjs.Sprite;
-        private _bgContainer : createjs.SpriteContainer;
-        private _sonicContainer : createjs.SpriteContainer;
-        private _playBtn : objects.Button;
-        private _instBtn : objects.Button;        
-        private _sonicAnimFrameCounter : number = 0;
-        private _scrollFrameCounter : number;
+        private _sonicImage: createjs.Sprite;
+        private _emblemImage: createjs.Sprite;
+        private _waterImage: createjs.Sprite;
+        private _waterImage2: createjs.Sprite;
+        private _waterHeight: number;
+        private _skyImage: createjs.Sprite;
+        private _wallImage: createjs.Sprite;
+        private _bgContainer: createjs.SpriteContainer;
+        private _sonicContainer: createjs.SpriteContainer;
+        private _playBtn: objects.Button;
+        private _instBtn: objects.Button;
+        private _sonicAnimFrameCounter: number = 0;
+        private _scrollFrameCounter: number;
         // Menu Class Contructor
         constructor() {
             super();
         }
 
-        public start() : void {
+        public start(): void {
             //all we do is display a picture and give them 2 buttons
             console.log("Menu Scene Started");
+            createjs.Sound.stop();
+            createjs.Sound.play("TitleMusic");
             this._bgContainer = new createjs.SpriteContainer(spriteAtlas);
             this._sonicContainer = new createjs.SpriteContainer(spriteAtlas);
 
@@ -62,13 +64,13 @@ module scenes {
             this._emblemImage = new createjs.Sprite(spriteAtlas, "emblem");
             this._emblemImage.regX = this._emblemImage.getBounds().width / 2;
             this._emblemImage.regY = 0;
-            this._emblemImage.x = config.Screen.WIDTH/2;
+            this._emblemImage.x = config.Screen.WIDTH / 2;
             this._emblemImage.y = 35;
             this._sonicContainer.addChild(this._emblemImage);
             //create animated sonic
             this._sonicImage = new createjs.Sprite(spriteAtlas, "title1");
             this._sonicImage.regX = 45;
-            this._sonicImage.x = config.Screen.WIDTH/2;
+            this._sonicImage.x = config.Screen.WIDTH / 2;
             this._sonicImage.y = this._emblemImage.y - 7;
             this._sonicContainer.addChild(this._sonicImage);
             stage.addChild(this._sonicContainer);
@@ -85,13 +87,13 @@ module scenes {
         }
 
 
-        public update() : void {
+        public update(): void {
             if (this._sonicImage.currentAnimation == "title2")
-                this._scrollFrameCounter --;
+                this._scrollFrameCounter--;
             if (this._scrollFrameCounter < 0 && this._bgContainer.x >= -593 + 320) {
                 this._updateWater();
                 this._wallImage.x -= 0.25;
-                this._bgContainer.x-=0.75;
+                this._bgContainer.x -= 0.75;
             }
             this._checkSonicAnimationEnd();
         }
@@ -110,19 +112,21 @@ module scenes {
         private _checkSonicAnimationEnd() {
             if (this._sonicImage.currentAnimation == "title3") {
                 if (this._sonicAnimFrameCounter < 288)
-                    this._sonicAnimFrameCounter ++;
+                    this._sonicAnimFrameCounter++;
                 else
                     this._sonicImage.stop();
             }
         }
 
-        private _playBtnClick(event : createjs.MouseEvent) {
+        private _playBtnClick(event: createjs.MouseEvent) {
+            createjs.Sound.stop();
             stage.removeAllChildren();
             scene = config.Scene.GHZ1;
             changeScene();
         }
 
-        private _instBtnClick(event : createjs.MouseEvent) {
+        private _instBtnClick(event: createjs.MouseEvent) {
+            createjs.Sound.stop();
             stage.removeAllChildren();
             scene = config.Scene.INSTRUCTIONS;
             changeScene();
