@@ -46,6 +46,7 @@ var assetData = [
     { id: "InstBtn", src: "../../Assets/images/Instructions.png" },
     { id: "InstScreen", src: "../../Assets/images/InstrScreen.png" },
     { id: "StrBtn", src: "../../Assets/images/Start.png" },
+    { id: "ReturnBtn", src: "../../Assets/images/returnBtn.png" },
     { id: "Tiles", src: "../../Assets/images/metalblocks.png" },
     { id: "Font", src: "../../Assets/images/HUDfont.png" },
     { id: "Sonic", src: "../../Assets/images/SonicSprites.png" },
@@ -58,9 +59,8 @@ var assetData = [
     { id: "SpringSnd", src: "../../Assets/sounds/spring.wav" },
     { id: "ReboundSnd", src: "../../Assets/sounds/rebound.wav" },
     { id: "DeathSnd", src: "../../Assets/sounds/death.wav" },
-    { id: "SpikeSnd", src: "../../Assets/sounds/spikedeath.wav" },
-    { id: "GoalSnd", src: "../../Assets/sounds/goalspin.wav" },
-    { id: "BrakeSnd", src: "../../Assets/sounds/brake.wav" }
+    //{ id: "SpikeSnd", src: "../../Assets/sounds/spikedeath.wav" },
+    { id: "GoalSnd", src: "../../Assets/sounds/goalspin.wav" }
 ];
 function preload() {
     // Create a queue for assets being loaded
